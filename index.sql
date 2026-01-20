@@ -46,3 +46,45 @@ CREATE TABLE `libros` (
     `preview_link` VARCHAR(255),
     `fecha_importacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE usuarios(
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR (100) NOT NULL,
+    `email` VARCHAR(150) UNIQUE NOT NULL, 
+    `contrasena` VARCHAR (200) NOT NULL,
+    `rol` ENUM('admin', 'usuario') DEFAULT 'usuario',
+    `pais`VARCHAR(100) NOT NULL
+
+);
+
+CREATE TABLE comentarios ( 
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    usuario_id INT NOT NULL, 
+    FOREIGN KEY (id_libro) REFERENCES libros(id) NULL,
+    FOREIGN KEY(id_pelicula) REFERENCES peliculas(id) NULL,  
+    texto TEXT NOT NULL, 
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) 
+    );
+
+    CREATE TABLE peliculas ( 
+        id INT PRIMARY KEY, 
+        titulo VARCHAR(200) NOT NULL, 
+        año INT, 
+        portada VARCHAR(255), 
+        descripcion TEXT(1000) 
+        genero VARCHAR(100)
+        
+        );
+
+    
+    --(listas personalizadas del usuario)
+CREATE TABLE listas ( 
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    usuario_id INT NOT NULL, 
+    nombre VARCHAR(150) NOT NULL, 
+    descripcion TEXT, 
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) 
+    );
