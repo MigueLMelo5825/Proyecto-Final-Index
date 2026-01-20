@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__).'/libs/Config.php';
+
 class Database {
 
     private static ? PDO $instance = null;

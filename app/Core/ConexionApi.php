@@ -1,5 +1,7 @@
 <?php
 
+require dirname(__DIR__).'/Models/Libros.php';
+
 function buscarEImportar($query, $pdo) {
     // Reemplaza con la clave que generaste en la consola de Google
     $apiKey = "AIzaSyAlkkQV1zi0_2WmtJV1l680lzw9moBat6g"; 
