@@ -2,25 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>INDEX – Login</title>
+    <title>INDEX  Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <main>
-        <h1>Iniciar sesión</h1>
+<div class="login">
+    
+      <div class="login-container">
+        <h2>Iniciar sesión</h2>
 
-        <form>
-            <label>Email</label>
-            <input type="email">
+        <form action="" method="">
+           <label> Usuario o email
+ <input type="text" name="usuario" placeholder="Usuario" required>
 
-            <label>Contraseña</label>
-            <input type="password">
+           </label> 
+           
+
+            <label> Contraseña
+                 <input type="password" name="password" placeholder="Contraseña" required>
+            </label>
+           
 
             <button type="submit">Entrar</button>
+
         </form>
 
-        <p>¿No tienes cuenta? <a href="#">Regístrate</a></p>
-    </main>
+        <div class="login-footer">
+            <p>¿No tienes cuenta? <a href="#">Regístrate</a></p>
+            <p>Olvidado la contraseña <a href=""> Recuperar la contraseña</a></p>
+           
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
