@@ -57,5 +57,21 @@ function importarLibro($item, $pdo) {
         return false;
     }
 }
+function obtenerLibros($pdo) {
+    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link FROM libros ORDER BY titulo ASC LIMIT 20";
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll();
+}
+
+
+function obtenerTopLibros($pdo) {
+    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
+            FROM libros 
+            ORDER BY fecha_importacion DESC 
+            LIMIT 5";
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll();
+}
+
 
 ?>
