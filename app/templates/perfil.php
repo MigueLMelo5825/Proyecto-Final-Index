@@ -23,7 +23,7 @@ $usuario = [
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
-    <link rel="stylesheet" href="/INDEX_proyecto/web/css/styleperfil.css">
+    <link rel="stylesheet" href="../../web/css/stylePerfil.css">
 </head>
 <body>
 
