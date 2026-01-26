@@ -30,7 +30,8 @@ $usuario = [
 <header>
     <nav>
         <h1>INDEX</h1>
-        <ul>
+        <input type="text" id="buscador" placeholder="Buscar libros y Peliculas">
+        <ul> 
             <li><a href="index.php">Inicio</a></li>
             <li><a href="perfil.php">Perfil</a></li>
             <li><a href="login.php">Salir</a></li>

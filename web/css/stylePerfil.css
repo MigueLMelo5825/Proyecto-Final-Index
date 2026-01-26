@@ -54,6 +54,16 @@ nav {
     align-items: center;
 }
 
+#buscador{
+    
+    width: 15%;
+    height: 15%;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    
+}
+
 nav h1 {
     font-size: 26px;
     font-weight: 700;
