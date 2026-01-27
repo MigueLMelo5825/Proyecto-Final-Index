@@ -31,6 +31,7 @@ $usuario = [
     <nav>
         <h1>INDEX</h1>
         <input type="text" id="buscador" placeholder="Buscar libros y Peliculas">
+        <div id="librosEncontrados" style="display: none;"></div>
         <ul> 
             <li><a href="index.php">Inicio</a></li>
             <li><a href="perfil.php">Perfil</a></li>
@@ -144,5 +145,6 @@ $usuario = [
 
 </main>
 
+<script src="../../web/js/cargarLibros.js"></script>
 </body>
 </html>
