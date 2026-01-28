@@ -1,40 +1,3 @@
-<?php
-
-// Cargar controladores
-require_once __DIR__.'/app/Controllers/UsuarioController.php';
-require_once __DIR__.'/app/Controllers/PeliculasController.php';
-
-// Obtener parámetros de la URL
-$controllerName = $_GET['controller'] ?? 'usuario';
-$action = $_GET['action'] ?? 'perfil';
-
-// Normalizar nombre del controlador
-$controllerName = strtolower($controllerName);
-
-// Crear instancia del controlador correspondiente
-switch ($controllerName) {
-    case 'usuario':
-        $controller = new UsuarioController();
-        break;
-
-    case 'peliculas':
-        $controller = new PeliculasController();
-        break;
-
-    default:
-        die("Controlador no encontrado.");
-}
-
-// Verificar que la acción existe
-if (!method_exists($controller, $action)) {
-    die("Acción '$action' no encontrada en el controlador '$controllerName'.");
-}
-
-// Ejecutar acción
-$controller->$action();
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,7 +11,7 @@ $controller->$action();
     <nav>
         <h1>Actividad</h1>
         <ul>
-            <li><a href="perfil.php">Perfil</a></li>
+            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
             <li><a href="">Listas</a></li>
             <li><a href="">Salir</a></li>
         </ul>

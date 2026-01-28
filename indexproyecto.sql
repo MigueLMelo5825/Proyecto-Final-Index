@@ -20,11 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `index`
 --
-CREATE DATABASE IF NOT EXISTS `index`;
--- --------------------------------------------------------
-
-USE `index`;
--- --------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `indexproyecto`;
+USE `indexproyecto`;
 
 --
 -- Estructura de tabla para la tabla `comentarios`
