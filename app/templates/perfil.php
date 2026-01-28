@@ -1,21 +1,15 @@
 <?php
-require_once dirname(__DIR__).'/Core/Database.php';
-require_once dirname(__DIR__).'/Models/Libros.php';
-require_once dirname(__DIR__).'/Models/Peliculas.php';
+// Fallback para evitar errores si alguien abre la vista directamente
+if (!isset($usuario)) {
+    $usuario = [
+        'nombre' => 'Usuario invitado',
+        'bio' => '',
+        'foto' => '/INDEX_proyecto/web/img/default.jpg'
+    ];
+}
 
-// Conexión
-$pdo = Database::getConnection();
-
-// Datos
-$topLibros = obtenerTopLibros($pdo);
-$topPeliculas = obtenerTopPeliculas($pdo);
-
-// Usuario simulado
-$usuario = [
-    'nombre' => 'Isabel Paredes',
-    'bio' => 'De Alfara del Patriarca',
-    'foto' => '/INDEX_proyecto/web/img/default.jpg'
-];  
+if (!isset($topLibros)) $topLibros = [];
+if (!isset($topPeliculas)) $topPeliculas = [];
 ?>
 
 <!DOCTYPE html>
@@ -23,19 +17,17 @@ $usuario = [
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
-    <link rel="stylesheet" href="../../web/css/stylePerfil.css">
+    <link rel="stylesheet" href="/INDEX_proyecto/web/css/styleperfil.css">
 </head>
 <body>
 
 <header>
     <nav>
         <h1>INDEX</h1>
-        <input type="text" id="buscador" placeholder="Buscar libros y Peliculas">
-        <div id="librosEncontrados" style="display: none;"></div>
-        <ul> 
+        <ul>
+            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
+            <li><a href="index.php?controller=peliculas&action=cargarPeliculas">Cargar Películas</a></li>
             <li><a href="index.php">Inicio</a></li>
-            <li><a href="perfil.php">Perfil</a></li>
-            <li><a href="login.php">Salir</a></li>
         </ul>
     </nav>
 </header>
@@ -94,57 +86,7 @@ $usuario = [
 
     </div>
 
-    <!-- LISTAS -->
-    <section id="listas">
-        <h3>Mis Listas</h3>
-
-        <div class="listas-dos-columnas">
-
-            <!-- LISTAS DE LIBROS -->
-            <div class="columna-listas">
-                <h4>Listas de Libros</h4>
-
-                <div class="lista-card">
-                    <h4>Favoritos</h4>
-                    <p>12 libros</p>
-                </div>
-
-                <div class="lista-card">
-                    <h4>Pendientes</h4>
-                    <p>8 libros</p>
-                </div>
-
-                <div class="lista-card nueva-lista">
-                    <span>+</span>
-                    <p>Crear nueva lista</p>
-                </div>
-            </div>
-
-            <!-- LISTAS DE PELÍCULAS -->
-            <div class="columna-listas">
-                <h4>Listas de Películas</h4>
-
-                <div class="lista-card">
-                    <h4>Favoritas</h4>
-                    <p>6 películas</p>
-                </div>
-
-                <div class="lista-card">
-                    <h4>Pendientes</h4>
-                    <p>10 películas</p>
-                </div>
-
-                <div class="lista-card nueva-lista">
-                    <span>+</span>
-                    <p>Crear nueva lista</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
 </main>
 
-<script src="../../web/js/cargarLibros.js"></script>
 </body>
 </html>

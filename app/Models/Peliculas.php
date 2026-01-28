@@ -1,4 +1,8 @@
 <?php
+
+// ------------------------------------------------------
+//  OBTENER NOMBRE DEL GÉNERO (MAPEO DE TMDB → TEXTO)
+// ------------------------------------------------------
 function obtenerNombreGenero($id) {
     $generos = [
         28 => "Acción",
@@ -26,34 +30,27 @@ function obtenerNombreGenero($id) {
 }
 
 
-// Obtener top 5 películas para el perfil
+// ------------------------------------------------------
+//  OBTENER TOP 5 PELÍCULAS PARA EL PERFIL
+// ------------------------------------------------------
 function obtenerTopPeliculas($pdo) {
     $sql = "SELECT id, titulo, genero, portada, descripcion, anio 
             FROM peliculas 
             ORDER BY id DESC 
             LIMIT 5";
+
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
-// Importar películas desde TMDB
-function importarPeliculasTMDB($pdo, $cantidad = 20) {
+// ------------------------------------------------------
+//  GUARDAR PELÍCULAS IMPORTADAS DESDE TMDB
+// ------------------------------------------------------
+function guardarPeliculas($peliculas, $pdo, $cantidad) {
 
-    // TU API KEY v3
-    $apiKey = "1af9c7bfbe2d47b30483f4c7ab743391";
-
-    // Endpoint de TMDB
-    $url = "https://api.themoviedb.org/3/movie/popular?api_key={$apiKey}&language=es-ES&page=1";
-
-    $json = file_get_contents($url);
-    $data = json_decode($json, true);
-
-    if (!isset($data['results'])) {
-        return false;
-    }
-
-    $peliculas = array_slice($data['results'], 0, $cantidad);
+    // Limitar a la cantidad solicitada
+    $peliculas = array_slice($peliculas, 0, $cantidad);
 
     $sql = "INSERT INTO peliculas (titulo, anio, portada, descripcion, genero)
             VALUES (:titulo, :anio, :portada, :descripcion, :genero)";
@@ -68,10 +65,7 @@ function importarPeliculasTMDB($pdo, $cantidad = 20) {
         $descripcion = $p['overview'];
 
         // Guardamos solo el primer género
-        $genero = "";
-        if (!empty($p['genre_ids'])) {
-            $genero = $p['genre_ids'][0];
-        }
+        $genero = $p['genre_ids'][0] ?? null;
 
         $stmt->execute([
             ':titulo' => $titulo,
