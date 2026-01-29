@@ -1,4 +1,3 @@
-<<<<<<< HEAD:app/templates/index.php
 <?php
 
 // Cargar controladores
@@ -36,8 +35,6 @@ $controller->$action();
 
 ?>
 
-=======
->>>>>>> beded5899fcbab8857a0f641396037fdcf1fcdbb:app/templates/timeline.php
 <!DOCTYPE html>
 <html lang="es">
 <head>
