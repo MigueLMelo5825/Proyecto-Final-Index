@@ -1,16 +1,18 @@
 <?php
 
-function importarLibro($item, $pdo) {
-    // 1. Extraemos la información básica del nodo volumeInfo
+// ------------------------------------------------------
+//  IMPORTAR LIBRO DESDE GOOGLE BOOKS
+// ------------------------------------------------------
+function importarLibro($item, PDO $pdo) {
+
     $info = $item['volumeInfo'] ?? null;
     if (!$info) return false;
 
-    // 2. Procesamos los autores (Google los da como Array, los convertimos a String)
     $autores = isset($info['authors']) ? implode(", ", $info['authors']) : 'Autor Desconocido';
 
-    // 3. Extraemos los ISBNs recorriendo el sub-array industryIdentifiers
     $isbn10 = null;
     $isbn13 = null;
+
     if (isset($info['industryIdentifiers'])) {
         foreach ($info['industryIdentifiers'] as $id) {
             if ($id['type'] === 'ISBN_10') $isbn10 = $id['identifier'];
@@ -18,10 +20,8 @@ function importarLibro($item, $pdo) {
         }
     }
 
-    // 4. Limpiamos la descripción (Google a veces envía etiquetas HTML)
     $descripcion = isset($info['description']) ? strip_tags($info['description']) : null;
 
-    // 5. Preparamos la sentencia SQL con nombres de parámetros (:param)
     $sql = "INSERT IGNORE INTO libros (
                 id, titulo, subtitulo, autores, editorial, 
                 fecha_publicacion, descripcion, isbn_10, isbn_13, 
@@ -34,10 +34,9 @@ function importarLibro($item, $pdo) {
 
     try {
         $stmt = $pdo->prepare($sql);
-        
-        // 6. Ejecutamos pasando el array de datos
+
         return $stmt->execute([
-            ':id'         => $item['id'], // El ID único de Google (ej: "zyTCAlS7fS8C")
+            ':id'         => $item['id'],
             ':titulo'     => $info['title'] ?? 'Sin título',
             ':subtitulo'  => $info['subtitle'] ?? null,
             ':autores'    => $autores,
@@ -52,26 +51,41 @@ function importarLibro($item, $pdo) {
             ':idioma'     => $info['language'] ?? null,
             ':link'       => $info['previewLink'] ?? null
         ]);
+
     } catch (PDOException $e) {
         error_log($e->getMessage());
         return false;
     }
 }
-function obtenerLibros($pdo) {
-    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link FROM libros ORDER BY titulo ASC LIMIT 20";
+
+
+// ------------------------------------------------------
+//  OBTENER LISTA GENERAL DE LIBROS
+// ------------------------------------------------------
+function obtenerLibros(PDO $pdo) {
+    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
+            FROM libros 
+            ORDER BY titulo ASC 
+            LIMIT 20";
+
     $stmt = $pdo->query($sql);
-    return $stmt->fetchAll();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
-function obtenerTopLibros($pdo) {
+// ------------------------------------------------------
+//  OBTENER TOP 5 LIBROS PARA EL PERFIL
+// ------------------------------------------------------
+function obtenerTopLibros(PDO $pdo) {
+
+    // Tu tabla SÍ tiene fecha_importacion → perfecto
     $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
             FROM libros 
             ORDER BY fecha_importacion DESC 
             LIMIT 5";
-    $stmt = $pdo->query($sql);
-    return $stmt->fetchAll();
-}
 
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 ?>

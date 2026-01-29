@@ -33,7 +33,7 @@ function obtenerNombreGenero($id) {
 // ------------------------------------------------------
 //  OBTENER TOP 5 PELÍCULAS PARA EL PERFIL
 // ------------------------------------------------------
-function obtenerTopPeliculas($pdo) {
+function obtenerTopPeliculas(PDO $pdo) {
     $sql = "SELECT id, titulo, genero, portada, descripcion, anio 
             FROM peliculas 
             ORDER BY id DESC 
@@ -47,9 +47,8 @@ function obtenerTopPeliculas($pdo) {
 // ------------------------------------------------------
 //  GUARDAR PELÍCULAS IMPORTADAS DESDE TMDB
 // ------------------------------------------------------
-function guardarPeliculas($peliculas, $pdo, $cantidad) {
+function guardarPeliculas(array $peliculas, PDO $pdo, int $cantidad) {
 
-    // Limitar a la cantidad solicitada
     $peliculas = array_slice($peliculas, 0, $cantidad);
 
     $sql = "INSERT INTO peliculas (titulo, anio, portada, descripcion, genero)
@@ -63,8 +62,6 @@ function guardarPeliculas($peliculas, $pdo, $cantidad) {
         $anio = substr($p['release_date'], 0, 4);
         $portada = "https://image.tmdb.org/t/p/w300" . $p['poster_path'];
         $descripcion = $p['overview'];
-
-        // Guardamos solo el primer género
         $genero = $p['genre_ids'][0] ?? null;
 
         $stmt->execute([
@@ -78,3 +75,5 @@ function guardarPeliculas($peliculas, $pdo, $cantidad) {
 
     return true;
 }
+
+?>

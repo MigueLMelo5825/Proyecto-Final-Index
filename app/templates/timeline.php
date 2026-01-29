@@ -1,3 +1,4 @@
+<<<<<<< HEAD:app/templates/index.php
 <?php
 
 // Cargar controladores
@@ -35,6 +36,8 @@ $controller->$action();
 
 ?>
 
+=======
+>>>>>>> beded5899fcbab8857a0f641396037fdcf1fcdbb:app/templates/timeline.php
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,7 +51,7 @@ $controller->$action();
     <nav>
         <h1>Actividad</h1>
         <ul>
-            <li><a href="perfil.php">Perfil</a></li>
+            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
             <li><a href="">Listas</a></li>
             <li><a href="">Salir</a></li>
         </ul>
