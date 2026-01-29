@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Recuperar contraseña</title>
-
-  <style>
-    * {
+* {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -15,7 +7,7 @@
     body {
       font-family: sans-serif;
       background: #ffffff;
-      color: #010102;
+      color: #1f2937;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -35,12 +27,7 @@
       font-weight: 600;
     }
 
-    p {
-      color: #6b7280;
-      margin-bottom: 24px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
+    
 
     form {
       display: flex;
@@ -49,10 +36,11 @@
     }
 
     label {
-      font-size: 0.85rem;
+      font-size: 20px;
       font-weight: 500;
       margin-bottom: 4px;
       display: block;
+
     }
 
     input {
@@ -103,27 +91,3 @@
     .footer a:hover {
       text-decoration: underline;
     }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <h1>Recuperar contraseña</h1>
-    <br>
-    <p>Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
-
-    <form>
-      <div>
-        <label for="email">Correo electrónico</label>
-        <input type="email" id="email" required />
-      </div>
-
-      <button type="submit">Enviar enlace</button>
-    </form>
-
-    <div class="footer">
-      ¿Recordaste tu contraseña? <a href="login.html">Inicia sesión</a>
-    </div>
-  </div>
-</body>
-</html>

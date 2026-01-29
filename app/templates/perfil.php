@@ -4,7 +4,7 @@ if (!isset($usuario)) {
     $usuario = [
         'nombre' => 'Usuario invitado',
         'bio' => '',
-        'foto' => '/INDEX_proyecto/web/img/default.jpg'
+        'foto' => '/Proyecto/web/img/default.jpg'
     ];
 }
 
@@ -17,7 +17,10 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
-    <link rel="stylesheet" href="/INDEX_proyecto/web/css/styleperfil.css">
+    
+
+    
+<link rel="stylesheet" href="/Proyecto/web/css/styleperfil.css">
 </head>
 <body>
 

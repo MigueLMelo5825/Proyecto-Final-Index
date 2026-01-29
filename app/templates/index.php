@@ -33,7 +33,7 @@ if (!method_exists($controller, $action)) {
 // Ejecutar acción
 $controller->$action();
 
-
+?>
 
 <!DOCTYPE html>
 <html lang="es">

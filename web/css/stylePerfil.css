@@ -1,11 +1,9 @@
-/* --------------------------------------------------
+/* 
    TIPOGRAFÍAS (LORA + SOURCE SANS PRO)
--------------------------------------------------- */
+ */
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
 
-/* --------------------------------------------------
-   VARIABLES DE DISEÑO
--------------------------------------------------- */
+/* VARIABLES DE DISEÑO */
 :root {
     --primary: #C47A4A;        /* Terracota elegante */
     --bg: #FAF8F5;             /* Blanco cálido editorial */
@@ -16,9 +14,8 @@
     --radius: 10px;            /* Redondeado suave */
 }
 
-/* --------------------------------------------------
-   RESET BÁSICO
--------------------------------------------------- */
+/* RESET BÁSICO
+*/
 * {
     margin: 0;
     padding: 0;
@@ -38,9 +35,7 @@ h1, h2, h3, h4 {
     font-family: "Lora", serif;
 }
 
-/* --------------------------------------------------
-   NAVEGACIÓN
--------------------------------------------------- */
+/* NAVEGACIÓN */
 header {
     width: 100%;
     padding: 20px 0;
@@ -87,17 +82,17 @@ nav a:hover {
     color: var(--primary);
 }
 
-/* --------------------------------------------------
+/* 
    CONTENIDO PRINCIPAL
--------------------------------------------------- */
+ */
 main {
     max-width: 1100px;
     margin: 0 auto;
 }
 
-/* --------------------------------------------------
+/* 
    PERFIL
--------------------------------------------------- */
+ */
 #perfil {
     background: var(--card-bg);
     padding: 30px;
@@ -126,9 +121,9 @@ main {
     color: var(--text-soft);
 }
 
-/* --------------------------------------------------
+/* 
    ESTADÍSTICAS DEL PERFIL
--------------------------------------------------- */
+ */
 #estadisticas {
     display: flex;
     justify-content: center;
@@ -146,9 +141,9 @@ main {
     color: var(--text-soft);
 }
 
-/* --------------------------------------------------
+/* 
    TOP 5 LIBROS / PELÍCULAS
--------------------------------------------------- */
+ */
 .top-container {
     display: flex;
     gap: 40px;
@@ -197,9 +192,9 @@ main {
     margin-top: 4px;
 }
 
-/* --------------------------------------------------
+/*
    LISTAS PERSONALIZADAS
--------------------------------------------------- */
+*/
 #listas {
     margin-top: 60px;
 }
