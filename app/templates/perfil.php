@@ -17,7 +17,11 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
+<<<<<<< HEAD
 <link rel="stylesheet" href="/Proyecto/web/css/stylePerfil.css">
+=======
+    <link rel="stylesheet" href="/INDEX_proyecto/web/css/styleperfil.css">
+>>>>>>> 778022a518ea1c570315cc2e7a8c8f58e0d462c6
 </head>
 <body>
 
