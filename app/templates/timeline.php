@@ -42,7 +42,7 @@ $controller->$action();
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Timeline</title>
-    <link rel="stylesheet" href="/Proyecto/web/css/styleTimeline.css">
+    <link rel="stylesheet" href="../../web/css/styleTimeline.css">
 </head>
 <body>
 
