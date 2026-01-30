@@ -49,14 +49,72 @@ nav {
     align-items: center;
 }
 
-#buscador{
-    
-    width: 15%;
-    height: 15%;
-    border: 2px solid black;
-    border-radius: 5px;
-    padding: 5px;
-    
+#buscador {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: relative; /* IMPORTANTE: Para que la lista flote respecto a esto */
+}
+
+/* LA VENTANA FLOTANTE DE RESULTADOS */
+#libroOPeliculaEncontrada {
+    position: absolute;
+    top: 100%;       /* Aparece justo debajo del input */
+    left: 0;
+    width: 350px;    /* Ancho de la ventana de resultados */
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Sombra para dar profundidad */
+    z-index: 999;    /* Para que esté por encima de todo */
+    max-height: 400px;
+    overflow-y: auto; /* Scroll si hay muchos resultados */
+    margin-top: 5px;
+    display: none;    /* Se activa por JS */
+}
+
+/* Ajustes del diseño interno de la lista */
+#infoLibro ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block; /* Sobrescribimos el flex del nav */
+}
+
+#infoLibro li {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#infoLibro li:hover, #infoLibro li:focus {
+    background-color: #f0f0f0;
+    outline: none;
+}
+
+#infoLibro img {
+    width: 50px;      /* Tamaño miniatura */
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Ajuste de los textos dentro de la lista flotante */
+#infoLibro div p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.2;
+    color: var(--text-soft);
+}
+
+#infoLibro div p strong {
+    color: var(--text);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
 }
 
 nav h1 {

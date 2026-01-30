@@ -1,11 +1,11 @@
 //creo la funcion para cargar los archivos al buscador
 
 //url del php para obtener los libros
-const urlPhp = "../../app/templates/busca_Libro.php";
+const urlPhp = "../../app/templates/buscador_Libros.php";
 
 //obtengo lasvariables globables del archivo html
-const inputLibro = document.getElementById("buscador");
-const divLibrosEncontrados = document.getElementById("librosEncontrados");
+const inputLibro = document.getElementById("inputLibro");
+const divLibrosEncontrados = document.getElementById("libroOPeliculaEncontrada");
 
 
 //variables de control
@@ -64,6 +64,8 @@ async function cargarLibro(textoLibro){
 
         const libros = await peticionPHP.json();
 
+        console.log(libros);
+
         divLibrosEncontrados.innerHTML = "";
 
         //el php devuelve un array el cual se puede validar directamente
@@ -77,10 +79,16 @@ async function cargarLibro(textoLibro){
 
         libros.forEach(libro =>{
             arrayLibros.push({
-                nombre:libro
+                id: libro.id,
+                nombre: libro.titulo,
+                autores: libro.autores,
+                categoria: libro.categoria,
+                imagen_url: libro.imagen_url
             })
         });
 
+
+        console.log(arrayLibros)
         //guardamos la palabra buscada en el cache junto el array encontrado
         cache[inputLibro.value] = arrayLibros;
 
@@ -103,19 +111,57 @@ Array.prototype.crearLista = function (){
 
     divLibrosEncontrados.innerHTML = "";
 
+    //creamos el div que estara dentro del div de libros y peliculas encontradas, esto con el fin de que cada libro encontrado sea un div con su informacion
+    const divLibro = document.createElement("div");
+    divLibro.id = "infoLibro";
+
+    //agregamos este div al 
+
+    //estos seran los elementos dentro del div info
     const ul = document.createElement("ul");
+
+
 
         this.forEach(m =>{
 
             const li = document.createElement("li");
-            li.textContent = m.nombre;
+            li.style.display = "flex"
 
+            //creamos los valores que guardaran los resultados y los mostrara en pantalla
+            const img = document.createElement("img");
+            li.dataset.id = m.id;
+            const divTexto = document.createElement("div");
+            const pTitulo = document.createElement("p");
+            const pAutores = document.createElement("p");
+            const pCategoria = document.createElement("p");
+            
+            //asignamos los valores para mostrar
+            id = m.id;
+            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "fallback.jpg";
+
+            pTitulo.innerHTML = `<strong>${m.nombre}</strong>`;
+            pAutores.textContent = "Autor: " + (m.autores || "Desconocido");
+            pCategoria.textContent = "Categoría: " + (m.categoria || "N/A");
+
+
+            // agregamos los valores al div texto
+            divTexto.appendChild(pTitulo);
+            divTexto.appendChild(pAutores);
+            divTexto.appendChild(pCategoria);
+
+            //agregamos los valores al li
+            li.appendChild(img);
+            li.appendChild(divTexto);
+            
+            //agregamos al ul para mostrar en el div de informacion
             ul.appendChild(li);
+            
         });
 
         //activamos el div y mostramos las sugerencias
         divLibrosEncontrados.style.display = "block";
-        divLibrosEncontrados.appendChild(ul);
+        divLibrosEncontrados.appendChild(divLibro);
+        divLibro.appendChild(ul);
 
         funcionesLista();
 
@@ -202,6 +248,13 @@ function funcionesLista(){
                 //mensaje.style.display = "none";
             }
         })
+
+        // Si el clic no es dentro del buscador, cerramos la lista
+        document.addEventListener("click", (event) => {
+            if (!document.getElementById("infoLibro").contains(event.target)) {
+            divLibrosEncontrados.style.display = "none";
+            }
+        });
     })
 }
 
