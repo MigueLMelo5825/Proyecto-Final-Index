@@ -1,13 +1,14 @@
 <?php
 
+require_once dirname(__DIR__).'/Core/Database.php';
+require_once dirname(__DIR__).'/Core/ConexionApiLibros.php';
+
 try {
     $pdo = Database::getConnection();
 
     $temas = [
-        "Cocina", "Historia", "Tecnología", "Deportes", "Ciencia Ficcion", 
-        "Aventura", "Fantasias", "Misterio", "No ficcion", "Terror",
-        "Documentales", "Crimenes", "Romantico", "Humor", "Juvenil",
-        "Juegos","Crepusculo"
+        "fucbol", "guerra", "roma", "dioses", "olimpo", 
+        "dragones"
     ];
 
     echo "<h2>Iniciando Importación Masiva</h2>";

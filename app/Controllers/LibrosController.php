@@ -1,4 +1,7 @@
 <?php
+
+require_once dirname(__DIR__).'/Core/Database.php';
+require_once dirname(__DIR__).'/Core/ConexionApiLibros.php';
 class LibrosController {
 
     public function cargarLibros() {
