@@ -7,7 +7,7 @@ try {
     $pdo = Database::getConnection();
 
     $temas = [
-        "fucbol", "guerra", "roma", "dioses", "olimpo", 
+        "futbol", "guerra", "roma", "dioses", "olimpo", 
         "dragones"
     ];
 
