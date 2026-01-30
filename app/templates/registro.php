@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registro</title>
 
-<link rel="stylesheet" href="/Proyecto/web/css/styleRegistro.css">
-
+<link rel="stylesheet" href="../../web/css/styleRegistro.css">
+<script src="/Proyecto/web/js/validacionRegistro.js"></script>
 </head>
 
 <body>

@@ -7,9 +7,14 @@
     
 
 
-<link rel="stylesheet" href="/Proyecto/web/css/styleLogin.css">
+<link rel="stylesheet" href="../../web/css/styleLogin.css">
+
+<script src=""></script>
 </head>
 <body>
+
+
+
 
 <div class="login">
     <div class="login-container">
@@ -30,8 +35,8 @@
         </form>
 
         <div class="login-footer">
-            <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
-            <p>¿Olvidaste la contraseña? <a href="recupero.php">Recuperar la contraseña</a></p>
+            <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p> <!-- poner enlace a index-->
+            <p>¿Olvidaste la contraseña? <a href="recupero.php">Recuperar la contraseña</a></p> <!-- poner enlace a index-->
         </div>
     </div>
 </div>

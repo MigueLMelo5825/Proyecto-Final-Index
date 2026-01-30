@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../core/Database.php';
-require_once __DIR__ . '/../Models/Libros.php';
-require_once __DIR__ . '/../Models/Peliculas.php';
+// require_once __DIR__ . '/../core/Database.php';
+// require_once __DIR__ . '/../Models/Libros.php';
+// require_once __DIR__ . '/../Models/Peliculas.php';
 
 class UsuarioController {
 

@@ -20,7 +20,7 @@ if (!isset($topPeliculas)) $topPeliculas = [];
     
 
     
-<link rel="stylesheet" href="/Proyecto/web/css/styleperfil.css">
+<link rel="stylesheet" href="../../web/css/styleperfil.css">
 </head>
 <body>
 
