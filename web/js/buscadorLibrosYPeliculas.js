@@ -64,7 +64,7 @@ async function cargarLibro(textoLibro){
 
         const libros = await peticionPHP.json();
 
-        console.log(libros);
+        //console.log(libros);
 
         divLibrosEncontrados.innerHTML = "";
 
@@ -88,7 +88,9 @@ async function cargarLibro(textoLibro){
         });
 
 
-        console.log(arrayLibros)
+        //console.log(arrayLibros)
+        
+        
         //guardamos la palabra buscada en el cache junto el array encontrado
         cache[inputLibro.value] = arrayLibros;
 
@@ -130,14 +132,14 @@ Array.prototype.crearLista = function (){
             //creamos los valores que guardaran los resultados y los mostrara en pantalla
             const img = document.createElement("img");
             li.dataset.id = m.id;
+            li.dataset.type = "libro";
             const divTexto = document.createElement("div");
             const pTitulo = document.createElement("p");
             const pAutores = document.createElement("p");
             const pCategoria = document.createElement("p");
             
             //asignamos los valores para mostrar
-            id = m.id;
-            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "fallback.jpg";
+            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "../../web/img/fallback.png";
 
             pTitulo.innerHTML = `<strong>${m.nombre}</strong>`;
             pAutores.textContent = "Autor: " + (m.autores || "Desconocido");
@@ -195,67 +197,73 @@ function funcionesLista(){
 
         li.addEventListener("keydown", event => {
 
-            //obtenemos el elemento enfocado
-            const elementoActual = document.activeElement;
-
             switch(event.key){
                 case "ArrowDown":
                     event.preventDefault();
-                    const siguiente = elementoActual.nextElementSibling;
-                    if(siguiente) siguiente.focus();
+                    
+                    li.nextElementSibling?.focus();
                 break;
                 case "ArrowUp":
                     event.preventDefault();
-                    const anterior = elementoActual.previousElementSibling;
-                    if(anterior) anterior.focus();
+                    
+                    li.previousElementSibling?.focus();
                 break;
                 case "Enter":
                     event.preventDefault();
 
-                    if(inputLibro.value !== ""){
-                        //lo limpiamos
-                        inputLibro.value = "";
-                            
-                        //agregamos el valor
-                        inputLibro.value = li.textContent;
-                    }else{
-
-                        //agregamos el valor directamente
-                        inputLibro.value = li.textContent;
-                        divLibrosEncontrados.style.display = "none";
-                        //mensaje.style.display = "none";
-                    }
+                    seleccionarLibro(li);
                 break;
-                default:
-                    return;
             }
         })
 
+        //agregamos evento al dar click sobre el objeto libro
         li.addEventListener("click", event => {
+
             event.preventDefault();
-                
-            if(inputLibro.value !== ""){
-                //lo limpiamos
-                inputLibro.value = "";
-                            
-                //agregamos el valor
-                inputLibro.value = li.textContent;
-            }else{
 
-                //agregamos el valor directamente
-                inputLibro.value = li.textContent;
-                divLibrosEncontrados.style.display = "none";
-                //mensaje.style.display = "none";
+            const liLibro = event.target.closest("li[data-id]");
+            if(!liLibro) return;
+
+            // Validar que no haga nada con texto vacio
+            if (inputLibro.value.trim() === "") {
+                return;
             }
+
+            seleccionarLibro(liLibro);
         })
-
-        // Si el clic no es dentro del buscador, cerramos la lista
-        document.addEventListener("click", (event) => {
-            if (!document.getElementById("infoLibro").contains(event.target)) {
-            divLibrosEncontrados.style.display = "none";
-            }
-        });
     })
+}
+
+function seleccionarLibro(li){
+
+    //colocamos el texto del libro seleccionado en el inputLibro
+    inputLibro.value = li.textContent.trim();
+
+    //ocultamos el buscado al tener un libro ya seleccionado y borramos el input 
+    inputLibro.textContent = "";
+    divLibrosEncontrados.style.display = "none";
+
+    //obtenemos el id del libro desde el atributo oculto data-id como el tipo si es libro/pelicula
+    const idLibro = li.dataset.id;
+    const typeLibro = li.dataset.type;
+
+    //si no existe el id cancelamos el proceso de redireccion al igual que el tipo
+    if(!idLibro && !typeLibro) return;
+
+    //construimos la url de redireccion
+    const urlPhp = `../../app/templates/ficha_Libro_Y_Peliculas.php?=id${encodeURIComponent(idLibro)}?type=${encodeURIComponent(typeLibro)}`;
+
+    //redireccionamos a la ficha de libro o pelicula
+    window.location.href = urlPhp;
+
+}
+
+//creamos funcion para que al momento de dar click fuera del buscado se cierre la ventana
+function cerrarBuscador(event){
+    
+    if(document.getElementById("infoLibro").contains(event.target)){
+        divLibrosEncontrados.style.display = "none";
+    }
 }
 
 window.onload = function (){
