@@ -1,39 +1,68 @@
 <?php
+// -------------------------------------------------------------
+// Front Controller del mini-framework
+// -------------------------------------------------------------
 
-// Cargar controladores
-require_once __DIR__ . '/app/Controllers/UsuarioController.php';
-require_once __DIR__ . '/app/Controllers/PeliculasController.php';
-require_once __DIR__ . '/app/Controllers/LibrosController.php'; // si lo usas
+require_once __DIR__ . '/../app/libs/Config.php';
+require_once __DIR__ . '/../app/libs/bGeneral.php';
+require_once __DIR__ . '/../app/libs/bSeguridad.php';
+require_once __DIR__ . '/../app/core/autoload.php';
 
-// Obtener parámetros de la URL
-$controllerName = $_GET['controller'] ?? 'usuario';
-$action = $_GET['action'] ?? 'timeline'; // acción por defecto
 
-// Normalizar nombre del controlador
-$controllerName = strtolower($controllerName);
+// -------------------------------------------------------------
+// Sesión segura
+// -------------------------------------------------------------
+$session = new SessionManager(
+    loginPage: 'index.php?ctl=inicio',
+    timeout: 600
+);
 
-// Crear instancia del controlador correspondiente
-switch ($controllerName) {
-    case 'usuario':
-        $controller = new UsuarioController();
-        break;
+// Comprobaciones de seguridad (fingerprint + timeout)
+$session->checkSecurity();
 
-    case 'peliculas':
-        $controller = new PeliculasController();
-        break;
+// -------------------------------------------------------------
+// Mapa de rutas
+// -------------------------------------------------------------
+$map = [
+  
+    'inicio'            => ['controller' => 'InicioController',        'action' => 'inicio',          'nivel' => 1]
+    
+];
 
-    case 'libros':
-        $controller = new LibrosController();
-        break;
+// -------------------------------------------------------------
+// Resolución de ruta
+// -------------------------------------------------------------
+$ruta = $_GET['ctl'] ?? 'inicio';
 
-    default:
-        die(" Controlador '$controllerName' no encontrado.");
+if (!isset($map[$ruta])) {
+    header("HTTP/1.0 404 Not Found");
+    echo "<h1>Error 404: Ruta '$ruta' no encontrada</h1>";
+    exit;
 }
 
-// Verificar que la acción existe
-if (!method_exists($controller, $action)) {
-    die(" Acción '$action' no encontrada en el controlador '$controllerName'.");
+$controllerName = $map[$ruta]['controller'];
+$actionName     = $map[$ruta]['action'];
+$requiredLevel  = $map[$ruta]['nivel'];
+
+// -------------------------------------------------------------
+// Comprobación de permisos
+// -------------------------------------------------------------
+if (!$session->hasLevel($requiredLevel)) {
+    header("HTTP/1.0 403 Forbidden");
+    echo "<h1>403: No tienes permisos para acceder a esta acción</h1>";
+    exit;
 }
 
-// Ejecutar acción
-$controller->$action();
+// -------------------------------------------------------------
+// Ejecución del controlador
+// -------------------------------------------------------------
+$controller = new $controllerName($session);
+
+if (!method_exists($controller, $actionName)) {
+    header("HTTP/1.0 404 Not Found");
+    echo "<h1>Error 404: Acción '$actionName' no encontrada en $controllerName</h1>";
+    exit;
+}
+
+$controller->$actionName();
+?>

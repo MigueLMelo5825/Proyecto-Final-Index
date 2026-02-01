@@ -25,6 +25,17 @@ USE `indexproyecto`;
 
 --
 -- Estructura de tabla para la tabla `comentarios`
+
+CREATE TABLE `peliculas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) NOT NULL,
+  `anio` int(4) DEFAULT NULL,
+  `portada` varchar(255) DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `genero` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 
 CREATE TABLE `comentarios` (

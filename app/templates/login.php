@@ -2,12 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-
-    <title>INDEX Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
     
-
-
-<link rel="stylesheet" href="/Proyecto/web/css/styleLogin.css">
+    <link rel="stylesheet" href="../../web/css/styleLogin.css">
+  
 </head>
 <body>
 
@@ -15,7 +14,7 @@
     <div class="login-container">
         <h2>Iniciar sesión</h2>
 
-        <form id="loginForm">
+        <form id="loginForm" method="POST" action="../../index.php?ctl=login">
             <label> Usuario o email
                 <input type="text" id="usuario" name="usuario" placeholder="Usuario">
                 <p id="errorUsuario" class="error"></p>
@@ -37,11 +36,7 @@
 </div>
 
 
-
-<script src="web/js/validacionLogin.js"></script>
-
-
-</style>
+<script src="../../web/js/validacionLogin.js"></script>
 
 </body>
 </html>

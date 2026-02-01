@@ -1,9 +1,8 @@
 <?php
 
-//traemos los archivos que necesitamos
+//añadimos el archivo Database
 
 require_once dirname(__DIR__).'/Core/Database.php';
-
 
 try {
 
@@ -20,11 +19,11 @@ try {
         // 2. Consulta a la tabla 'libros' (usamos LIKE para buscar coincidencias)
         // El comodín % al final busca libros que COMIENCEN con ese texto
 
-        $stmt = $pdo->prepare("SELECT titulo FROM libros WHERE titulo LIKE ? LIMIT 10");
-        $stmt->execute([$texto . '%']);
+        $stmt = $pdo->prepare("SELECT id, titulo, autores, categoria, imagen_url FROM libros WHERE titulo LIKE ? LIMIT 20");
+        $stmt->execute(['%' . $texto . '%']);
         
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $sugerencias[] = $row['titulo'];
+            $sugerencias[] = $row;
         }
     }
 
@@ -40,9 +39,15 @@ try {
     } else {
         header("Content-Type: application/json");
         echo json_encode($sugerencias);
+        exit;
     }
 
 } catch (PDOException $e) {
-    die("Error: " . $e->getMessage());
+    header("Content-Type: application/json");
+    echo json_encode([
+        "error" => true,
+        "mensaje" => $e->getMessage()
+    ]);
+    exit;
 }
 ?>

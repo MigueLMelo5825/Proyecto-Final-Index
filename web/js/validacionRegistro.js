@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   const form = document.getElementById("form");
 
   form.addEventListener("submit", function (e) {
@@ -36,4 +37,5 @@ document.addEventListener("DOMContentLoaded", () => {
       text: "Tu cuenta ha sido creada."
     }).then(() => form.submit());
   });
+
 });

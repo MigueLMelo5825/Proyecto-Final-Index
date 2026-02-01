@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba03239ee50d2c6d6e0044b3a89df24f17028a45
 <?php
 
 // Cargar controladores
@@ -35,12 +39,16 @@ $controller->$action();
 
 ?>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ba03239ee50d2c6d6e0044b3a89df24f17028a45
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Timeline</title>
-    <link rel="stylesheet" href="/INDEX_proyecto/web/css/styleTimeline.css">
+    <link rel="stylesheet" href="../../web/css/styleTimeline.css">
 </head>
 <body>
 
