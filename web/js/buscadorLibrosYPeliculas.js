@@ -262,7 +262,7 @@ function seleccionarLibro(li){
     if(!idLibro && !typeLibro) return;
 
     //construimos la url de redireccion
-    const urlPhp = `app/templates/ficha_Libro_Y_Peliculas.php?=id${encodeURIComponent(idLibro)}?type=${encodeURIComponent(typeLibro)}`;
+    const urlPhp = `app/templates/ficha_Libro_Y_Peliculas.php?id=${encodeURIComponent(idLibro)}?type=${encodeURIComponent(typeLibro)}`;
 
     //redireccionamos a la ficha de libro o pelicula
     window.location.href = urlPhp;
