@@ -55,33 +55,38 @@ class Libros {
     }
 
     public static function obtenerLibroPelicula(PDO $conexionBD, string $id, string $type): ?array {
-
-        $tabla = ($type === "libro") ? "libros" : "peliculas";
         
-        try{
-
+        $tabla = ($type === "libro") ? "libros" : "peliculas";
+    
+        try {
             
-            if($tabla === "libros"){
-                
-                $consultaLibro = " SELECT id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link
+            if ($tabla === "libros") {
+
+                $consultaSql = "SELECT id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link
                 FROM libros
-                WHERE id = ?
-                LIMIT 1 ";
+                WHERE id = ?";
 
-                $sentencia = $conexionBD->prepare($consultaLibro);
-                $sentencia->execute([$id]);
-
-                $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
-
-                if (!$libro) {
-                    throw new Exception("No se encontró el registro.");
-                }
-            }else{
-
-                
+            } else {
+                //buscamos en la tabla peliculas
+                $consultaSql = "SELECT id, titulo, anio, portada, descripcion, genero
+                FROM peliculas 
+                WHERE id = ?";
             }
-        }catch(Exception $e){
-            error_log($e->getMessage());
+
+            $sentencia = $conexionBD->prepare($consultaSql);
+            $sentencia->execute([$id]);
+            $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+            if (!$resultado) {
+                throw new Exception("No se encontró el registro en la tabla $tabla.");
+            }
+
+            // IMPORTANTE: retornamos el objeto encontrado
+            return $resultado;
+
+        } catch (Exception $e) {
+            error_log("Error en obtenerLibroPelicula: " . $e->getMessage());
+            return null; // Retorna null si algo falla
         }
     }
 }
