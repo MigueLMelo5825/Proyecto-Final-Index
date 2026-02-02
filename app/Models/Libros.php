@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 class Libros {
 
     private PDO $pdo;
@@ -52,21 +54,34 @@ class Libros {
         return true;
     }
 
-    public static function obtenerLibroPorId(PDO $conexionBD, string $idLibro): ?array {
+    public static function obtenerLibroPelicula(PDO $conexionBD, string $id, string $type): ?array {
 
-        $consulta = "
-            SELECT id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link
-            FROM libros
-            WHERE id = :idLibro
-            LIMIT 1 ";
+        $tabla = ($type === "libro") ? "libros" : "peliculas";
+        
+        try{
 
-        $sentencia = $conexionBD->prepare($consulta);
-        $sentencia->execute([
-            ':idLibro' => $idLibro
-        ]);
+            
+            if($tabla === "libros"){
+                
+                $consultaLibro = " SELECT id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link
+                FROM libros
+                WHERE id = ?
+                LIMIT 1 ";
 
-        $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
+                $sentencia = $conexionBD->prepare($consultaLibro);
+                $sentencia->execute([$id]);
 
-        return $libro ?: null;
+                $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+                if (!$libro) {
+                    throw new Exception("No se encontró el registro.");
+                }
+            }else{
+
+                
+            }
+        }catch(Exception $e){
+            error_log($e->getMessage());
+        }
     }
 }

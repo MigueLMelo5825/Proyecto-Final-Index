@@ -2,16 +2,18 @@
 require_once dirname(__DIR__) . '/Core/Database.php';
 require_once dirname(__DIR__) . '/Models/Libros.php';
 
-$idLibro = $_GET['id'] ?? '';
+//variables de control
+$id = $_GET['id'] ?? '';
+$type = $_GET['type'] ?? '';
 
-if ($idLibro === '') {
+if ($id === '' || $type === '') {
     http_response_code(400);
-    echo "<h1>Falta el identificador del libro</h1>";
+    echo json_encode(["error" => "ID o Type faltantes"]);
     exit;
 }
 
 $conexionBD = Database::getConnection();
-$libro = Libros::obtenerLibroPorId($conexionBD, $idLibro);
+$libro = Libros::obtenerLibroPorId($conexionBD, $id);
 
 if (!$libro) {
     http_response_code(404);
@@ -28,7 +30,7 @@ if ($urlImagenPortada) {
     $urlImagenPortada = str_replace('http://', 'https://', $urlImagenPortada);
 }
 if (!$urlImagenPortada) {
-    $urlImagenPortada = '../../web/img/fallback.png';
+    $urlImagenPortada = '/web/img/fallback.png';
 }
 ?>
 <!DOCTYPE html>
@@ -36,7 +38,7 @@ if (!$urlImagenPortada) {
 <head>
     <meta charset="UTF-8">
     <title><?= escaparHTML($libro['titulo']) ?></title>
-    <link rel="stylesheet" href="../../web/css/styleperfil.css">
+    <link rel="stylesheet" href="/web/css/styleperfil.css">
    
 
     
