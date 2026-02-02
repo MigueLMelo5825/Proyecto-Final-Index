@@ -1,7 +1,7 @@
 //creo la funcion para cargar los archivos al buscador
 
 //url del php para obtener los libros
-const urlPhp = "../../app/templates/buscador_Libros_Y_Peliculas.php";
+const urlPhp = "app/templates/buscador_Libros_Y_Peliculas.php";
 
 //obtengo lasvariables globables del archivo html
 const inputLibro = document.getElementById("inputLibro");
@@ -24,7 +24,7 @@ function mostrarLibroPelicula(){
         if(textoLibroPelicula.length > 0 ){
 
             divEncontrados.style.display = "block";
-            cargarLibro(textoLibroPelicula);
+            cargarLibroPelicula(textoLibroPelicula);
         
         }else{
 
@@ -77,8 +77,8 @@ async function cargarLibroPelicula(textoLibroPelicula){
         //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibros
         const arrayLibrosPeliculas = [];
 
-        arrayLibrosPeliculas.forEach(lp =>{
-            arrayLibros.push({
+        librosPeliculas.forEach(lp =>{
+            arrayLibrosPeliculas.push({
                 id: lp.id,
                 titulo: lp.titulo,
                 info_extra: lp.info_extra,
@@ -96,13 +96,10 @@ async function cargarLibroPelicula(textoLibroPelicula){
         cache[inputLibro.value] = arrayLibrosPeliculas;
 
         //ordenamos el array para mostrarlo por pantalla
-        arrayLibros.sort((a, b) => a.titulo.localeCompare(b.titulo));
+        arrayLibrosPeliculas.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
         //creamos la lista con la funcion prototype
         arrayLibrosPeliculas.crearLista();
-
-        //cargamos todas las funciones que tiene la lista
-        funcionesLista();
     
     }catch(error){
 
@@ -142,12 +139,23 @@ Array.prototype.crearLista = function (){
             const pCategoria = document.createElement("p");
             
             //asignamos los valores para mostrar
-            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "../../web/img/fallback.png";
+            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "web/img/fallback.png";
 
-            pTitulo.innerHTML = `<strong>${m.nombre}</strong>`;
-            pAutores.textContent = "Autor: " + (m.autores || "Desconocido");
-            pCategoria.textContent = "Categoría: " + (m.categoria || "N/A");
+            pTitulo.innerHTML = `<strong>${m.titulo}</strong>`;
+            
+            if(m.type == "libro"){
+                pAutores.textContent = "Autor: " + (m.info_extra || "Desconocido");
+            
+            }else{
+                pAutores.textContent = "anio: " + (m.info_extra || "Desconocido");
+            }
 
+            if(m.type == "libro"){
+                pCategoria.textContent = "Categoría: " + (m.genero || "N/A");
+            
+            }else{
+                pCategoria.textContent = "genero: " + (m.genero || "N/A");
+            }
 
             // agregamos los valores al div texto
             divTexto.appendChild(pTitulo);
