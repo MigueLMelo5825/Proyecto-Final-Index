@@ -1,4 +1,4 @@
-git rebase --continu<?php
+<?php
 
 class Libros {
 

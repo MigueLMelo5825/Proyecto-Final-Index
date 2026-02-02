@@ -1,54 +1,91 @@
 <?php
+// -------------------------------------------------------------
+// Front Controller del mini-framework
+// -------------------------------------------------------------
 
-class Libros {
+require_once __DIR__ . '/app/Core/autoload.php';
+require_once __DIR__ . '/app/Core/Config.php';
+require_once __DIR__ . '/app/Core/bGeneral.php';
+require_once __DIR__ . '/app/libs/bSeguridad.php';
 
-    private PDO $pdo;
+// -------------------------------------------------------------
+// Sesión segura
+// -------------------------------------------------------------
+$session = new SessionManager(
+    loginPage: 'index.php?ctl=inicio',
+    timeout: 600
+);
 
-    public function __construct() {
-        $this->pdo = Database::getConnection();
-    }
+$session->checkSecurity();
 
-    // Obtener top 5 libros
-    public function obtenerTopLibros(): array {
-        $sql = "SELECT id, titulo, autores, categoria, imagen_url 
-                FROM libros 
-                ORDER BY id DESC 
-                LIMIT 5";
+// -------------------------------------------------------------
+// Mapa de rutas
+// -------------------------------------------------------------
+$map = [
 
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // Página de inicio
+    'inicio' => [
+        'controller' => 'InicioController',
+        'action'     => 'inicio',
+        'nivel'      => 1
+    ],
 
-    // Guardar libros importados desde API
-    public function guardarLibros(array $libros, int $cantidad): bool {
+    // PERFIL DEL USUARIO
+    'perfil' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'perfil',
+        'nivel'      => 1
+    ],
 
-        $libros = array_slice($libros, 0, $cantidad);
+    // TIMELINE
+    'timeline' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'timeline',
+        'nivel'      => 1
+    ],
 
-        $sql = "INSERT INTO libros (titulo, autores, categoria, imagen_url)
-                VALUES (:titulo, :autores, :categoria, :imagen_url)";
+    // Cargar películas
+    'cargarPeliculas' => [
+        'controller' => 'PeliculasController',
+        'action'     => 'cargarPeliculas',
+        'nivel'      => 1
+    ],
 
-        $stmt = $this->pdo->prepare($sql);
+];
 
-        foreach ($libros as $l) {
+// -------------------------------------------------------------
+// Resolución de ruta
+// -------------------------------------------------------------
+$ruta = $_GET['ctl'] ?? 'inicio';
 
-            $titulo = $l['volumeInfo']['title'] ?? 'Sin título';
-            $autores = isset($l['volumeInfo']['authors'])
-                ? implode(', ', $l['volumeInfo']['authors'])
-                : 'Autor desconocido';
-
-            $categoria = $l['volumeInfo']['categories'][0] ?? 'Sin categoría';
-
-            $imagen = $l['volumeInfo']['imageLinks']['thumbnail']
-                ?? 'web/img/fallback.png';
-
-            $stmt->execute([
-                ':titulo' => $titulo,
-                ':autores' => $autores,
-                ':categoria' => $categoria,
-                ':imagen_url' => $imagen
-            ]);
-        }
-
-        return true;
-    }
+if (!isset($map[$ruta])) {
+    header("HTTP/1.0 404 Not Found");
+    echo "<h1>Error 404: Ruta '$ruta' no encontrada</h1>";
+    exit;
 }
+
+$controllerName = $map[$ruta]['controller'];
+$actionName     = $map[$ruta]['action'];
+$requiredLevel  = $map[$ruta]['nivel'];
+
+// -------------------------------------------------------------
+// Comprobación de permisos
+// -------------------------------------------------------------
+if (!$session->hasLevel($requiredLevel)) {
+    header("HTTP/1.0 403 Forbidden");
+    echo "<h1>403: No tienes permisos para acceder a esta acción</h1>";
+    exit;
+}
+
+// -------------------------------------------------------------
+// Ejecución del controlador
+// -------------------------------------------------------------
+$controller = new $controllerName($session);
+
+if (!method_exists($controller, $actionName)) {
+    header("HTTP/1.0 404 Not Found");
+    echo "<h1>Error 404: Acción '$actionName' no encontrada en $controllerName</h1>";
+    exit;
+}
+
+$controller->$actionName();

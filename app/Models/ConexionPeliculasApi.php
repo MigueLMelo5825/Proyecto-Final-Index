@@ -6,7 +6,8 @@ class ConexionPeliculasApi {
 
     private static string $apiKey = "1af9c7bfbe2d47b30483f4c7ab743391";
 
-    public static function importarPeliculas($pdo, $cantidad = 20): bool {
+    public static function importarPeliculas(PDO $pdo, int $cantidad = 20): bool {
+
         $url = "https://api.themoviedb.org/3/movie/popular?api_key=" . self::$apiKey . "&language=es-ES&page=1";
 
         $json = @file_get_contents($url);
@@ -19,6 +20,8 @@ class ConexionPeliculasApi {
             return false;
         }
 
-        return guardarPeliculas($data['results'], $pdo, $cantidad);
+        // ✔ Ahora usamos el modelo Peliculas
+        $peliculasModel = new Peliculas();
+        return $peliculasModel->guardarPeliculas($data['results'], $cantidad);
     }
 }
