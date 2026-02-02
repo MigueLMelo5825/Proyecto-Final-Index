@@ -13,9 +13,9 @@ if ($id === '' || $type === '') {
 }
 
 $conexionBD = Database::getConnection();
-$libro = Libros::obtenerLibroPorId($conexionBD, $id);
+$libroPelicula = Libros::obtenerLibroPelicula($conexionBD, $id, $type);
 
-if (!$libro) {
+if (!$libroPelicula) {
     http_response_code(404);
     echo "<h1>Libro no encontrado</h1>";
     exit;
