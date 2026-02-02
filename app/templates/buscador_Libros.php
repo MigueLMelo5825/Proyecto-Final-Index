@@ -17,7 +17,7 @@ try {
     if ($texto !== "") {
 
         // 2. Consulta a la tabla 'libros' (usamos LIKE para buscar coincidencias)
-        // El comodín % al final busca libros que COMIENCEN con ese texto
+        // El comodín % % para buscar cualquier libro o pelicula relacionadas al texto
 
         $stmt = $pdo->prepare("SELECT id, titulo, autores, categoria, imagen_url FROM libros WHERE titulo LIKE ? LIMIT 20");
         $stmt->execute(['%' . $texto . '%']);

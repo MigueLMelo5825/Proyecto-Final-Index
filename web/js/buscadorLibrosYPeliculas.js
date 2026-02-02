@@ -1,11 +1,11 @@
 //creo la funcion para cargar los archivos al buscador
 
 //url del php para obtener los libros
-const urlPhp = "../../app/templates/buscador_Libros.php";
+const urlPhp = "../../app/templates/buscador_Libros_Y_Peliculas.php";
 
 //obtengo lasvariables globables del archivo html
 const inputLibro = document.getElementById("inputLibro");
-const divLibrosEncontrados = document.getElementById("libroOPeliculaEncontrada");
+const divEncontrados = document.getElementById("libroOPeliculaEncontrada");
 
 
 //variables de control
@@ -19,17 +19,17 @@ function mostrarLibro(){
         event.preventDefault();
 
         //obtenemos el valor de libro
-        var textoLibro = inputLibro.value;
+        let textoLibroPelicula = inputLibro.value;
 
-        if(textoLibro.length > 0 ){
+        if(textoLibroPelicula.length > 0 ){
 
-            divLibrosEncontrados.style.display = "block";
-            cargarLibro(textoLibro);
+            divEncontrados.style.display = "block";
+            cargarLibro(textoLibroPelicula);
         
         }else{
 
-            divLibrosEncontrados.innerHTML = "";
-            divLibrosEncontrados.style.display = "none"
+            divEncontrados.innerHTML = "";
+            divEncontrados.style.display = "none"
         }
     })
 }
@@ -66,11 +66,11 @@ async function cargarLibroPelicula(textoLibro){
 
         //console.log(libros);
 
-        divLibrosEncontrados.innerHTML = "";
+        divEncontrados.innerHTML = "";
 
         //el php devuelve un array el cual se puede validar directamente
         if (libros.length === 0) {
-            divLibrosEncontrados.innerHTML = "<p>No se encontraron libros</p>";
+            divEncontrados.innerHTML = "<p>No se encontraron libros</p>";
             return;
         }
 
@@ -83,7 +83,8 @@ async function cargarLibroPelicula(textoLibro){
                 nombre: libro.titulo,
                 autores: libro.autores,
                 categoria: libro.categoria,
-                imagen_url: libro.imagen_url
+                imagen_url: libro.imagen_url,
+                type: "libro"
             })
         });
 
@@ -113,7 +114,7 @@ async function cargarLibroPelicula(textoLibro){
 
 Array.prototype.crearLista = function (){
 
-    divLibrosEncontrados.innerHTML = "";
+    divEncontrados.innerHTML = "";
 
     //creamos el div que estara dentro del div de libros y peliculas encontradas, esto con el fin de que cada libro encontrado sea un div con su informacion
     const divLibro = document.createElement("div");
@@ -134,7 +135,7 @@ Array.prototype.crearLista = function (){
             //creamos los valores que guardaran los resultados y los mostrara en pantalla
             const img = document.createElement("img");
             li.dataset.id = m.id;
-            li.dataset.type = "libro";
+            li.dataset.type = m.type;
             const divTexto = document.createElement("div");
             const pTitulo = document.createElement("p");
             const pAutores = document.createElement("p");
@@ -163,8 +164,8 @@ Array.prototype.crearLista = function (){
         });
 
         //activamos el div y mostramos las sugerencias
-        divLibrosEncontrados.style.display = "block";
-        divLibrosEncontrados.appendChild(divLibro);
+        divEncontrados.style.display = "block";
+        divEncontrados.appendChild(divLibro);
         divLibro.appendChild(ul);
 
         funcionesLista();
@@ -174,7 +175,7 @@ Array.prototype.crearLista = function (){
 function funcionesLista(){
 
     //creamos eventos en los li para poder ser seleccionados dentro de la lista y dar un foco
-    const liLibros = divLibrosEncontrados.querySelectorAll("li");
+    const liLibros = divEncontrados.querySelectorAll("li");
         
     liLibros.forEach(li => {
 
@@ -243,7 +244,7 @@ function seleccionarLibro(li){
 
     //ocultamos el buscado al tener un libro ya seleccionado y borramos el input 
     inputLibro.textContent = "";
-    divLibrosEncontrados.style.display = "none";
+    divEncontrados.style.display = "none";
 
     //obtenemos el id del libro desde el atributo oculto data-id como el tipo si es libro/pelicula
     const idLibro = li.dataset.id;
@@ -264,7 +265,7 @@ function seleccionarLibro(li){
 function cerrarBuscador(event){
     
     if(document.getElementById("infoLibro").contains(event.target)){
-        divLibrosEncontrados.style.display = "none";
+        divEncontrados.style.display = "none";
     }
 }
 
