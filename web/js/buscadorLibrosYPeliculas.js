@@ -1,106 +1,84 @@
 //creo la funcion para cargar los archivos al buscador
 
 //url del php para obtener los libros
-const urlPhpLibros = "../../app/templates/buscador_Libros.php";
-const urlPhpPeliculas = "../../app/templates/buscador_Peliculas.php";
+const urlPhp = "../../app/templates/buscador_Libros.php";
 
 //obtengo lasvariables globables del archivo html
-const inputLibroPelicula = document.getElementById("inputLibro");
-const divEncontrados = document.getElementById("libroOPeliculaEncontrada");
+const inputLibro = document.getElementById("inputLibro");
+const divLibrosEncontrados = document.getElementById("libroOPeliculaEncontrada");
 
 
 //variables de control
 let contenido = "";
 const cache = {};
 
-function mostrarLibroPelicula(){
+function mostrarLibro(){
 
-    inputLibroPelicula.addEventListener("keyup", event => {
+    inputLibro.addEventListener("keyup", event => {
 
         event.preventDefault();
 
         //obtenemos el valor de libro
-        let textoLibroPelicula = inputLibroPelicula.value;
+        var textoLibro = inputLibro.value;
 
-        if(textoLibroPelicula.length > 0 ){
+        if(textoLibro.length > 0 ){
 
-            divEncontrados.style.display = "block";
-            cargarLibroPelicula(textoLibroPelicula);
+            divLibrosEncontrados.style.display = "block";
+            cargarLibro(textoLibro);
         
         }else{
 
-            divEncontrados.innerHTML = "";
-            divEncontrados.style.display = "none"
+            divLibrosEncontrados.innerHTML = "";
+            divLibrosEncontrados.style.display = "none"
         }
     })
 }
 
 //------------------------------FUNCION QUE TRAE LA INFORMACION DEL PHP-----------------------
 
-async function cargarLibroPelicula(textoLibroPelicula){
+async function cargarLibroPelicula(textoLibro){
 
     try{
 
-        //validamos que el texto buscado no este entre el cache si no esta ejecutamos todo el proceso
-        if(cache[textoLibroPelicula]){
+        if(cache[textoLibro]){
 
-            cache[textoLibroPelicula].crearLista();
+            cache[textoLibro].crearLista();
             funcionesLista();
             return;
         }
 
-        //codigo para obtener los libros y guardalos en el array
-
-        const peticionPHPLibros = await fetch(urlPhpLibros, {
+        const peticionPHP = await fetch(urlPhp, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                libro: textoLibroPelicula
+                libro: textoLibro
             })
         });
 
-        if(!peticionPHPLibros.ok){
+        if(!peticionPHP.ok){
 
-            throw new Error("Error al cargar el archivo php " + peticionPHPLibros.statusText);
+            throw new Error("Error al cargar el archivo php " + peticionPHP.statusText);
         }
 
-        const libros = await peticionPHPLibros.json();
+        const libros = await peticionPHP.json();
 
-        //CODIGO PARA OBTENER LAS PELICULAS ATRAVEZ DEL SERVIDOR PHP
+        //console.log(libros);
 
-        const peticionPhpPeliculas = await fetch(urlPhpPeliculas, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                pelicula: textoLibroPelicula
-            })
-        });
-
-        if(!peticionPhpPeliculas.ok){
-            throw new Error("Error al cargar las peliculas revisar archivo php" + peticionPhpPeliculas.statusText);
-        }
-
-        const peliculas = await peticionPhpPeliculas.json();
-
-        console.log(peliculas);
-
-        divEncontrados.innerHTML = "";
+        divLibrosEncontrados.innerHTML = "";
 
         //el php devuelve un array el cual se puede validar directamente
-        if (libros.length === 0 && peliculas.length === 0) {
-            divEncontrados.innerHTML = "<p>No se encontro ningun libro o pelicula</p>";
+        if (libros.length === 0) {
+            divLibrosEncontrados.innerHTML = "<p>No se encontraron libros</p>";
             return;
         }
 
-        //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibrosPeliculas
-        const arrayLibrosPeliculas = [];
+        //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibros
+        const arrayLibros = [];
 
         libros.forEach(libro =>{
-            arrayLibrosPeliculas.push({
+            arrayLibros.push({
                 id: libro.id,
                 nombre: libro.titulo,
                 autores: libro.autores,
@@ -108,19 +86,19 @@ async function cargarLibroPelicula(textoLibroPelicula){
                 imagen_url: libro.imagen_url
             })
         });
-        
 
-        peliculas.forEach
+
+        //console.log(arrayLibros)
         
         
         //guardamos la palabra buscada en el cache junto el array encontrado
-        cache[inputLibroPelicula.value] = arrayLibrosPeliculas;
+        cache[inputLibro.value] = arrayLibros;
 
         //ordenamos el array para mostrarlo por pantalla
-        arrayLibrosPeliculas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        arrayLibros.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
         //creamos la lista con la funcion prototype
-        arrayLibrosPeliculas.crearLista();
+        arrayLibros.crearLista();
 
         //cargamos todas las funciones que tiene la lista
         funcionesLista();
@@ -135,7 +113,7 @@ async function cargarLibroPelicula(textoLibroPelicula){
 
 Array.prototype.crearLista = function (){
 
-    divEncontrados.innerHTML = "";
+    divLibrosEncontrados.innerHTML = "";
 
     //creamos el div que estara dentro del div de libros y peliculas encontradas, esto con el fin de que cada libro encontrado sea un div con su informacion
     const divLibro = document.createElement("div");
@@ -185,8 +163,8 @@ Array.prototype.crearLista = function (){
         });
 
         //activamos el div y mostramos las sugerencias
-        divEncontrados.style.display = "block";
-        divEncontrados.appendChild(divLibro);
+        divLibrosEncontrados.style.display = "block";
+        divLibrosEncontrados.appendChild(divLibro);
         divLibro.appendChild(ul);
 
         funcionesLista();
@@ -196,7 +174,7 @@ Array.prototype.crearLista = function (){
 function funcionesLista(){
 
     //creamos eventos en los li para poder ser seleccionados dentro de la lista y dar un foco
-    const liLibros = divEncontrados.querySelectorAll("li");
+    const liLibros = divLibrosEncontrados.querySelectorAll("li");
         
     liLibros.forEach(li => {
 
@@ -249,7 +227,7 @@ function funcionesLista(){
             if(!liLibro) return;
 
             // Validar que no haga nada con texto vacio
-            if (inputLibroPelicula.value.trim() === "") {
+            if (inputLibro.value.trim() === "") {
                 return;
             }
 
@@ -260,12 +238,12 @@ function funcionesLista(){
 
 function seleccionarLibro(li){
 
-    //colocamos el texto del libro seleccionado en el inputLibroPelicula
-    inputLibroPelicula.value = li.textContent.trim();
+    //colocamos el texto del libro seleccionado en el inputLibro
+    inputLibro.value = li.textContent.trim();
 
     //ocultamos el buscado al tener un libro ya seleccionado y borramos el input 
-    inputLibroPelicula.textContent = "";
-    divEncontrados.style.display = "none";
+    inputLibro.textContent = "";
+    divLibrosEncontrados.style.display = "none";
 
     //obtenemos el id del libro desde el atributo oculto data-id como el tipo si es libro/pelicula
     const idLibro = li.dataset.id;
@@ -286,7 +264,7 @@ function seleccionarLibro(li){
 function cerrarBuscador(event){
     
     if(document.getElementById("infoLibro").contains(event.target)){
-        divEncontrados.style.display = "none";
+        divLibrosEncontrados.style.display = "none";
     }
 }
 
