@@ -1,33 +1,29 @@
 <?php
 
-// require_once __DIR__ . '/../core/Database.php';
-// require_once __DIR__ . '/../Models/Libros.php';
-// require_once __DIR__ . '/../Models/Peliculas.php';
-
 class UsuarioController {
 
     public function perfil() {
 
-        // Modelos
         $librosModel = new Libros();
         $pelisModel  = new Peliculas();
 
-        // Datos
+        // Obtener datos
         $topLibros = $librosModel->obtenerTopLibros();
         $topPeliculas = $pelisModel->obtenerTopPeliculas();
 
-        // Usuario de prueba
+        // Traducir género ANTES de enviar a la vista
+        foreach ($topPeliculas as &$p) {
+            $p['genero_nombre'] = $pelisModel->obtenerNombreGenero($p['genero']);
+        }
+
+        // Datos del usuario (provisional)
         $usuario = [
-            'nombre' => 'Isabel Paredes',
-            'bio' => 'De Alfara del Patriarca',
-            'foto' => '/Proyecto/web/img/default.jpg'
+            'nombre' => 'Usuario invitado',
+            'bio'    => '',
+            'foto'   => 'web/img/default.jpg'
         ];
 
-        // Vista
-        include __DIR__ . '/../templates/perfil.php';
-    }
-
-    public function timeline() {
-        include __DIR__ . '/../templates/timeline.php';
+        // Cargar vista
+        require __DIR__ . '/../templates/perfil.php';
     }
 }

@@ -1,12 +1,16 @@
-
-
 <?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_startup_errors', 1);
+
 // http://localhost/Proyecto/index.php?ctl=perfil
+
 if (!isset($usuario)) {
     $usuario = [
         'nombre' => 'Usuario invitado',
         'bio' => '',
-        'foto' => '/Proyecto/web/img/default.jpg'
+        'foto' => 'web/img/default.jpg'
     ];
 }
 
@@ -19,11 +23,9 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
-    
 
-    
-<link rel="stylesheet" href="web/css/styleperfil.css">
-    </head>
+    <link rel="stylesheet" href="web/css/styleperfil.css">
+</head>
 <body>
 
 <header>
@@ -43,7 +45,6 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 
 <main>
 
-    <!-- PERFIL -->
     <section id="perfil">
         <img src="<?= $usuario['foto'] ?>" alt="Foto de perfil">
         <h2><?= htmlspecialchars($usuario['nombre']) ?></h2>
@@ -58,10 +59,8 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 
     <hr>
 
-    <!-- TOP 5 LIBROS + TOP 5 PELÍCULAS -->
     <div class="top-container">
 
-        <!-- COLUMNA IZQUIERDA: TOP 5 LIBROS -->
         <div class="top-col">
             <h2>📚 Top 5 Libros</h2>
 
@@ -77,7 +76,6 @@ if (!isset($topPeliculas)) $topPeliculas = [];
             <?php endforeach; ?>
         </div>
 
-        <!-- COLUMNA DERECHA: TOP 5 PELÍCULAS -->
         <div class="top-col">
             <h2>🎬 Top 5 Películas</h2>
 
@@ -86,7 +84,7 @@ if (!isset($topPeliculas)) $topPeliculas = [];
                     <img src="<?= $peli['portada'] ?>" alt="<?= $peli['titulo'] ?>">
                     <div class="top-item-info">
                         <strong><?= $peli['titulo'] ?></strong>
-                        <small><?= obtenerNombreGenero($peli['genero']) ?></small>
+                        <small><?= $peli['genero_nombre'] ?></small>
                         <small><?= $peli['anio'] ?></small>
                     </div>
                 </div>
@@ -96,6 +94,7 @@ if (!isset($topPeliculas)) $topPeliculas = [];
     </div>
 
 </main>
-<script src="../../web/js/buscadorLibrosYPeliculas.js"></script>
+
+<script src="web/js/buscadorLibrosYPeliculas.js"></script>
 </body>
 </html>

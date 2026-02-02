@@ -1,4 +1,4 @@
-<?php
+git rebase --continu<?php
 
 class Libros {
 
@@ -8,142 +8,47 @@ class Libros {
         $this->pdo = Database::getConnection();
     }
 
+    // Obtener top 5 libros
     public function obtenerTopLibros(): array {
-        $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
+        $sql = "SELECT id, titulo, autores, categoria, imagen_url 
                 FROM libros 
-                ORDER BY fecha_importacion DESC 
+                ORDER BY id DESC 
                 LIMIT 5";
 
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerLibros(): array {
-        $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
-                FROM libros 
-                ORDER BY titulo ASC 
-                LIMIT 20";
+    // Guardar libros importados desde API
+    public function guardarLibros(array $libros, int $cantidad): bool {
 
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+        $libros = array_slice($libros, 0, $cantidad);
 
-    public function importarLibro(array $item): bool {
-        $info = $item['volumeInfo'] ?? null;
-        if (!$info) return false;
+        $sql = "INSERT INTO libros (titulo, autores, categoria, imagen_url)
+                VALUES (:titulo, :autores, :categoria, :imagen_url)";
 
-        $autores = isset($info['authors']) ? implode(", ", $info['authors']) : 'Autor Desconocido';
+        $stmt = $this->pdo->prepare($sql);
 
-        $isbn10 = null;
-        $isbn13 = null;
+        foreach ($libros as $l) {
 
-        if (isset($info['industryIdentifiers'])) {
-            foreach ($info['industryIdentifiers'] as $id) {
-                if ($id['type'] === 'ISBN_10') $isbn10 = $id['identifier'];
-                if ($id['type'] === 'ISBN_13') $isbn13 = $id['identifier'];
-            }
-        }
+            $titulo = $l['volumeInfo']['title'] ?? 'Sin título';
+            $autores = isset($l['volumeInfo']['authors'])
+                ? implode(', ', $l['volumeInfo']['authors'])
+                : 'Autor desconocido';
 
-        $descripcion = isset($info['description']) ? strip_tags($info['description']) : null;
+            $categoria = $l['volumeInfo']['categories'][0] ?? 'Sin categoría';
 
-        $sql = "INSERT IGNORE INTO libros (
-                    id, titulo, subtitulo, autores, editorial, 
-                    fecha_publicacion, descripcion, isbn_10, isbn_13, 
-                    paginas, categoria, imagen_url, idioma, preview_link
-                ) VALUES (
-                    :id, :titulo, :subtitulo, :autores, :editorial, 
-                    :fecha, :desc, :isbn10, :isbn13, 
-                    :paginas, :categoria, :imagen, :idioma, :link
-                )";
+            $imagen = $l['volumeInfo']['imageLinks']['thumbnail']
+                ?? 'web/img/fallback.png';
 
-        try {
-            $stmt = $this->pdo->prepare($sql);
-
-            return $stmt->execute([
-                ':id'         => $item['id'],
-                ':titulo'     => $info['title'] ?? 'Sin título',
-                ':subtitulo'  => $info['subtitle'] ?? null,
-                ':autores'    => $autores,
-                ':editorial'  => $info['publisher'] ?? null,
-                ':fecha'      => $info['publishedDate'] ?? null,
-                ':desc'       => $descripcion,
-                ':isbn10'     => $isbn10,
-                ':isbn13'     => $isbn13,
-                ':paginas'    => $info['pageCount'] ?? 0,
-                ':categoria'  => isset($info['categories']) ? $info['categories'][0] : null,
-                ':imagen'     => $info['imageLinks']['thumbnail'] ?? null,
-                ':idioma'     => $info['language'] ?? null,
-                ':link'       => $info['previewLink'] ?? null
+            $stmt->execute([
+                ':titulo' => $titulo,
+                ':autores' => $autores,
+                ':categoria' => $categoria,
+                ':imagen_url' => $imagen
             ]);
-
-        } catch (PDOException $e) {
-            error_log($e->getMessage());
-            return false;
         }
+
+        return true;
     }
 }
-
-
-//  OBTENER LISTA GENERAL DE LIBROS
-
-function obtenerLibros(PDO $pdo) {
-    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
-            FROM libros 
-            ORDER BY titulo ASC 
-            LIMIT 20";
-
-    $stmt = $pdo->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-
-//  OBTENER TOP 5 LIBROS PARA EL PERFIL
-
-function obtenerTopLibros(PDO $pdo) {
-
-    // Tu tabla SÍ tiene fecha_importacion → perfecto
-    $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
-            FROM libros 
-            ORDER BY fecha_importacion DESC 
-            LIMIT 5";
-
-    $stmt = $pdo->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function obtenerLibroPorId(PDO $conexionBD, string $idLibro): ?array {
-
-    $consulta = "
-        SELECT 
-            id,
-            titulo,
-            subtitulo,
-            autores,
-            editorial,
-            fecha_publicacion,
-            descripcion,
-            isbn_10,
-            isbn_13,
-            paginas,
-            categoria,
-            imagen_url,
-            idioma,
-            preview_link
-        FROM libros
-        WHERE id = :idLibro
-        LIMIT 1
-    ";
-
-    $sentencia = $conexionBD->prepare($consulta);
-    $sentencia->execute([
-        ':idLibro' => $idLibro
-    ]);
-
-    $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
-
-    return $libro ?: null;
-}
-
-
-
-?>
