@@ -1,5 +1,7 @@
+
+
 <?php
-// Fallback para evitar errores si alguien abre la vista directamente
+// http://localhost/Proyecto/index.php?ctl=perfil
 if (!isset($usuario)) {
     $usuario = [
         'nombre' => 'Usuario invitado',
@@ -20,8 +22,8 @@ if (!isset($topPeliculas)) $topPeliculas = [];
     
 
     
-<link rel="stylesheet" href="../../web/css/styleperfil.css">
-</head>
+<link rel="stylesheet" href="web/css/styleperfil.css">
+    </head>
 <body>
 
 <header>

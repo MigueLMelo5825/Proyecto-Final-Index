@@ -8,17 +8,22 @@ class UsuarioController {
 
     public function perfil() {
 
-        $pdo = Database::getConnection();
+        // Modelos
+        $librosModel = new Libros();
+        $pelisModel  = new Peliculas();
 
-        $topLibros = obtenerTopLibros($pdo);
-        $topPeliculas = obtenerTopPeliculas($pdo);
+        // Datos
+        $topLibros = $librosModel->obtenerTopLibros();
+        $topPeliculas = $pelisModel->obtenerTopPeliculas();
 
+        // Usuario de prueba
         $usuario = [
             'nombre' => 'Isabel Paredes',
             'bio' => 'De Alfara del Patriarca',
             'foto' => '/Proyecto/web/img/default.jpg'
         ];
 
+        // Vista
         include __DIR__ . '/../templates/perfil.php';
     }
 

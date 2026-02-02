@@ -1,13 +1,17 @@
+<<<<<<< HEAD
 <!-- <?php
 // -------------------------------------------------------------
 // Front Controller del mini-framework
 // -------------------------------------------------------------
+=======
+<?php
+>>>>>>> 0b589a6 (Ajustado perfil y modelos Libros/Peliculas)
 
-require_once __DIR__ . '/../app/libs/Config.php';
-require_once __DIR__ . '/../app/libs/bGeneral.php';
-require_once __DIR__ . '/../app/libs/bSeguridad.php';
-require_once __DIR__ . '/../app/core/autoload.php';
 
+require_once __DIR__ . '/app/Core/autoload.php';
+require_once __DIR__ . '/app/Core/Config.php';
+require_once __DIR__ . '/app/Core/bGeneral.php';
+require_once __DIR__ . '/app/libs/bSeguridad.php';
 
 // -------------------------------------------------------------
 // Sesión segura
@@ -17,16 +21,41 @@ $session = new SessionManager(
     timeout: 600
 );
 
-// Comprobaciones de seguridad (fingerprint + timeout)
 $session->checkSecurity();
 
 // -------------------------------------------------------------
 // Mapa de rutas
 // -------------------------------------------------------------
 $map = [
-  
-    'inicio'            => ['controller' => 'InicioController',        'action' => 'inicio',          'nivel' => 1]
-    
+
+    // Página de inicio
+    'inicio' => [
+        'controller' => 'InicioController',
+        'action'     => 'inicio',
+        'nivel'      => 1
+    ],
+
+    // PERFIL DEL USUARIO
+    'perfil' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'perfil',
+        'nivel'      => 1   // pon 2 si quieres que solo usuarios logueados puedan verlo
+    ],
+
+    // TIMELINE
+    'timeline' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'timeline',
+        'nivel'      => 1
+    ],
+
+    // Cargar películas
+    'cargarPeliculas' => [
+        'controller' => 'PeliculasController',
+        'action'     => 'cargarPeliculas',
+        'nivel'      => 1
+    ],
+
 ];
 
 // -------------------------------------------------------------
@@ -65,4 +94,7 @@ if (!method_exists($controller, $actionName)) {
 }
 
 $controller->$actionName();
+<<<<<<< HEAD
 ?> -->
+=======
+>>>>>>> 0b589a6 (Ajustado perfil y modelos Libros/Peliculas)
