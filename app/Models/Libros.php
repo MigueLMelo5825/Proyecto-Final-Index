@@ -1,12 +1,6 @@
 <?php
 
-<<<<<<< HEAD
-//  IMPORTAR LIBRO DESDE GOOGLE BOOKS
-
-function importarLibro($item, PDO $pdo) {
-=======
 class Libros {
->>>>>>> 0b589a6 (Ajustado perfil y modelos Libros/Peliculas)
 
     private PDO $pdo;
 
@@ -88,7 +82,7 @@ class Libros {
         }
     }
 }
-<<<<<<< HEAD
+
 
 //  OBTENER LISTA GENERAL DE LIBROS
 
@@ -153,5 +147,3 @@ function obtenerLibroPorId(PDO $conexionBD, string $idLibro): ?array {
 
 
 ?>
-=======
->>>>>>> 0b589a6 (Ajustado perfil y modelos Libros/Peliculas)

@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/Core/Database.php';
-require_once dirname(__DIR__) . '/Models/.php';
+require_once dirname(__DIR__) . '/Models/Libros.php';
 
 $idLibro = $_GET['id'] ?? '';
 
