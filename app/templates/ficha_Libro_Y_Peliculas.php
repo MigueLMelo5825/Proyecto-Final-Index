@@ -25,7 +25,7 @@ function escaparHTML(string $texto): string {
     return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
 }
 
-$urlImagenPortada = $libro['imagen_url'] ?? '';
+$urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
 if ($urlImagenPortada) {
     $urlImagenPortada = str_replace('http://', 'https://', $urlImagenPortada);
 }
@@ -37,7 +37,7 @@ if (!$urlImagenPortada) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title><?= escaparHTML($libro['titulo']) ?></title>
+    <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
     <link rel="stylesheet" href="/web/css/styleperfil.css">
    
 
@@ -59,35 +59,35 @@ if (!$urlImagenPortada) {
     <div class="detalle-grid">
 
         <div class="portada-libro">
-            <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libro['titulo']) ?>">
+            <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
         </div>
 
         <div class="contenido-libro">
-            <h2><?= escaparHTML($libro['titulo']) ?></h2>
+            <h2><?= escaparHTML($libroPelicula['titulo']) ?></h2>
 
-            <?php if (!empty($libro['subtitulo'])): ?>
-                <h3><?= escaparHTML($libro['subtitulo']) ?></h3>
+            <?php if (!empty($libroPelicula['subtitulo'])): ?>
+                <h3><?= escaparHTML($libroPelicula['subtitulo']) ?></h3>
             <?php endif; ?>
 
             <div class="info-libro">
-                <p><strong>Autor(es):</strong> <?= escaparHTML($libro['autores'] ?? 'Desconocido') ?></p>
-                <p><strong>Categoría:</strong> <?= escaparHTML($libro['categoria'] ?? 'N/A') ?></p>
-                <p><strong>Editorial:</strong> <?= escaparHTML($libro['editorial'] ?? 'N/A') ?></p>
-                <p><strong>Fecha de publicación:</strong> <?= escaparHTML($libro['fecha_publicacion'] ?? 'N/A') ?></p>
-                <p><strong>Número de páginas:</strong> <?= escaparHTML($libro['paginas'] ?? 'N/A') ?></p>
-                <p><strong>Idioma:</strong> <?= escaparHTML($libro['idioma'] ?? 'N/A') ?></p>
-                <p><strong>ISBN-10:</strong> <?= escaparHTML($libro['isbn_10'] ?? 'N/A') ?></p>
-                <p><strong>ISBN-13:</strong> <?= escaparHTML($libro['isbn_13'] ?? 'N/A') ?></p>
+                <p><strong>Autor(es):</strong> <?= escaparHTML($libroPelicula['autores'] ?? 'Desconocido') ?></p>
+                <p><strong>Categoría:</strong> <?= escaparHTML($libroPelicula['categoria'] ?? 'N/A') ?></p>
+                <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
+                <p><strong>Fecha de publicación:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
+                <p><strong>Número de páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
+                <p><strong>Idioma:</strong> <?= escaparHTML($libroPelicula['idioma'] ?? 'N/A') ?></p>
+                <p><strong>ISBN-10:</strong> <?= escaparHTML($libroPelicula['isbn_10'] ?? 'N/A') ?></p>
+                <p><strong>ISBN-13:</strong> <?= escaparHTML($libroPelicula['isbn_13'] ?? 'N/A') ?></p>
             </div>
 
             <div class="descripcion-libro">
                 <h3>Descripción</h3>
-                <p><?= nl2br(escaparHTML($libro['descripcion'] ?? 'Sin descripción')) ?></p>
+                <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
             </div>
 
-            <?php if (!empty($libro['preview_link'])): ?>
+            <?php if (!empty($libroPelicula['preview_link'])): ?>
                 <a class="boton-externo" 
-                   href="<?= escaparHTML($libro['preview_link']) ?>" 
+                   href="<?= escaparHTML($libroPelicula['preview_link']) ?>" 
                    target="_blank" 
                    rel="noopener">
                    Ver en Google Books
