@@ -51,4 +51,22 @@ class Libros {
 
         return true;
     }
+
+    public static function obtenerLibroPorId(PDO $conexionBD, string $idLibro): ?array {
+
+        $consulta = "
+            SELECT id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link
+            FROM libros
+            WHERE id = :idLibro
+            LIMIT 1 ";
+
+        $sentencia = $conexionBD->prepare($consulta);
+        $sentencia->execute([
+            ':idLibro' => $idLibro
+        ]);
+
+        $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+        return $libro ?: null;
+    }
 }

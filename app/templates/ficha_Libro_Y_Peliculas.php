@@ -11,7 +11,7 @@ if ($idLibro === '') {
 }
 
 $conexionBD = Database::getConnection();
-$libro = obtenerLibroPorId($conexionBD, $idLibro);
+$libro = Libros::obtenerLibroPorId($conexionBD, $idLibro);
 
 if (!$libro) {
     http_response_code(404);
