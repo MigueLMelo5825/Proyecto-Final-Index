@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> ba03239ee50d2c6d6e0044b3a89df24f17028a45
 <?php
 
 // Cargar controladores
@@ -38,11 +34,6 @@ if (!method_exists($controller, $action)) {
 $controller->$action();
 
 ?>
-
-<<<<<<< HEAD
-=======
-
->>>>>>> ba03239ee50d2c6d6e0044b3a89df24f17028a45
 <!DOCTYPE html>
 <html lang="es">
 <head>

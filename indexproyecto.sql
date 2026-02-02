@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-01-2026 a las 19:22:46
+-- Tiempo de generación: 02-02-2026 a las 18:37:18
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,33 +18,26 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `index`
+-- Base de datos: `indexproyecto`
 --
-CREATE DATABASE IF NOT EXISTS `indexproyecto`;
-USE `indexproyecto`;
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `comentarios`
-
-CREATE TABLE `peliculas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(255) NOT NULL,
-  `anio` int(4) DEFAULT NULL,
-  `portada` varchar(255) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `genero` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 
-CREATE TABLE `comentarios` (
+CREATE TABLE IF NOT EXISTS `comentarios` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `id_libro` varchar(20) DEFAULT NULL,
   `id_pelicula` int(11) DEFAULT NULL,
   `texto` text NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp()
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`),
+  KEY `id_libro` (`id_libro`),
+  KEY `id_pelicula` (`id_pelicula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -53,7 +46,7 @@ CREATE TABLE `comentarios` (
 -- Estructura de tabla para la tabla `libros`
 --
 
-CREATE TABLE `libros` (
+CREATE TABLE IF NOT EXISTS `libros` (
   `id` varchar(20) NOT NULL,
   `titulo` varchar(255) NOT NULL,
   `subtitulo` varchar(255) DEFAULT NULL,
@@ -68,7 +61,8 @@ CREATE TABLE `libros` (
   `imagen_url` varchar(255) DEFAULT NULL,
   `idioma` varchar(10) DEFAULT NULL,
   `preview_link` varchar(255) DEFAULT NULL,
-  `fecha_importacion` timestamp NOT NULL DEFAULT current_timestamp()
+  `fecha_importacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -255,34 +249,77 @@ INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fech
 -- Estructura de tabla para la tabla `listas`
 --
 
-CREATE TABLE `listas` (
+CREATE TABLE IF NOT EXISTS `listas` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `nombre` varchar(150) NOT NULL,
   `descripcion` text DEFAULT NULL,
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
--- TABLA: comentarios
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS comentarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    id_libro VARCHAR(20) NULL,
-    id_pelicula INT NULL,
-    texto TEXT NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
+--
+-- Estructura de tabla para la tabla `peliculas`
+--
 
-    FOREIGN KEY (id_libro) REFERENCES libros(id)
-        ON DELETE SET NULL ON UPDATE CASCADE,
+CREATE TABLE IF NOT EXISTS `peliculas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) NOT NULL,
+  `anio` int(11) DEFAULT NULL,
+  `portada` varchar(255) DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `genero` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-    FOREIGN KEY (id_pelicula) REFERENCES peliculas(id)
-        ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB;
+--
+-- Volcado de datos para la tabla `peliculas`
+--
+
+INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `genero`) VALUES
+(1, 'Zootrópolis 2', 2025, 'https://image.tmdb.org/t/p/w300/4fRdfQPjHiuDSkzaxFAV44k7Iem.jpg', 'Después de resolver el caso más importante en la historia de Zootrópolis, los policías novatos Judy Hopps y Nick Wilde descubren que su asociación no es tan sólida como pensaban cuando el Jefe Bogo les ordena unirse al programa de consejería \"Compañeros en Crisis\". Pero no pasa mucho tiempo para que su asociación se ponga a prueba al máximo, cuando la llegada de Gary, la serpiente, pone la ciudad patas arriba.', 16),
+(2, 'El botín', 2026, 'https://image.tmdb.org/t/p/w300/28hTjQCq0ul6WUR22qRsWEeuxlj.jpg', 'El descubrimiento de varios millones de dólares en efectivo en un zulo abandonado de Miami quiebra la confianza de un grupo de policías. Ahora, todo y todos están bajo sospecha.', 28),
+(3, 'Dust Bunny', 2025, 'https://image.tmdb.org/t/p/w300/vobigFZFvbYPf6ElYJu07P9rH8C.jpg', 'Una niña de ocho años le pide ayuda a su insidiosa vecina en su misión para matar al monstruo que vive debajo de su cama, el cual, según ella, devoró a su familia.', 28),
+(4, 'Los hermanos demolición', 2026, 'https://image.tmdb.org/t/p/w300/ttEESBvVrO8ngZr19qp6eBMVS9F.jpg', 'Un improbable dúo de hermanastros, uno un impulsivo detective y el otro un disciplinado, se ven atraídos por el asesinato de su padre en Hawai, lo que les lleva a un peligroso viaje para desenmascarar una conspiración de largo alcance.', 28),
+(5, 'The Shadow\'s Edge', 2025, 'https://image.tmdb.org/t/p/w300/25OeH0GOuEljJqZoF0HoKxOpq0B.jpg', 'Unos astutos y traicioneros ladrones desafian a la Policía Judicial de Macao. La Policía, que se encontraba en una dura batalla, invita de nuevo al experto en rastreo Huang De Zhong, retirado desde hace muchos años, a unir fuerzas con la joven élite del Departamento de Investigación Criminal de la Policía Judicial. Bajo la colisión de las técnicas tradicionales de rastreo y la alta tecnología, la policía y los criminales luchan con ingenio y valentía, y se lanzan a un duelo entre el bien y el mal parecido al juego del gato y el ratón.', 28),
+(6, 'Los desconocidos', 2024, 'https://image.tmdb.org/t/p/w300/qDfvIFGOgwGgyRL7AQtAp7d9MrU.jpg', 'La vida de una mujer frustrada da un giro oscuro tras un encuentro fortuito con un misterioso asesino a sueldo. Su romance relámpago les lleva a una matanza de criminales, pero a medida que profundiza en el tema, empieza a cuestionarse la verdadera naturaleza de su compañero y las sombras que ambos ocultan.', 28),
+(7, 'Predator: Badlands', 2025, 'https://image.tmdb.org/t/p/w300/8nCEJ5hFJt0h8FhXafHGhEhT8d7.jpg', 'Un joven Predator rechazado por su clan encuentra un aliado inesperado en Thia y emprende un peligroso viaje en busca del adversario definitivo.', 28),
+(8, 'Avatar: Fuego y ceniza', 2025, 'https://image.tmdb.org/t/p/w300/4n1U0Mwn7djux6VKNYDRWPgS2x6.jpg', 'Jake Sully y Neytiri enfrentan una nueva amenaza en Pandora: los Ash People, una tribu Na\'vi violenta y sedienta de poder, liderada por la implacable Varang. Tras la devastadora guerra contra la RDA y la pérdida de su hijo mayor, la familia de Jake deberá luchar por su supervivencia y el futuro de Pandora en un conflicto que llevará a los personajes a sus límites emocionales y físicos. Con nuevos y antiguos aliados, esta épica visual y emocional redefine el destino de un mundo al borde del abismo.', 878),
+(9, 'Bob Esponja: Una aventura pirata', 2025, 'https://image.tmdb.org/t/p/w300/xmRdMdHaEfzMlI5H4dxjnk74q1o.jpg', 'Desesperado por ser un gran tipo, Bob Esponja se propone demostrar su valentía al Sr. Krabs siguiendo a The Flying Dutchman, un misterioso pirata fantasma, en una aventura marítima que lo lleva a las profundidades más profundas del mar profundo, donde ninguna Esponja ha ido antes.', 16),
+(10, 'Anaconda', 2025, 'https://image.tmdb.org/t/p/w300/zX1KJPiGTrzpFcjfOWlmqdRgpQd.jpg', 'Doug y Griff son muy buenos amigos desde que eran niños y siempre han soñado con hacer un remake de su película favorita de todos los tiempos: el «clásico cinematográfico» Anaconda. Cuando una crisis de mediana edad les anima a lanzarse por fin a la aventura, se adentran en la selva amazónica para empezar a rodar. Pero las cosas se ponen serias cuando aparece una anaconda gigante de verdad, convirtiendo su caótico y cómico plató de rodaje en una situación mortal.', 12),
+(11, 'La asistenta', 2025, 'https://image.tmdb.org/t/p/w300/A6S15iqfHpoit02leDfDVnpklys.jpg', 'Millie es una joven que, tras perder su trabajo, acepta un puesto como sirvienta en la lujosa pero inquietante mansión de los Winchester. Pronto se da cuenta de que algo no está bien en la casa y con sus habitantes, especialmente con Nina, la dueña, que actúa de manera errática.', 9648),
+(12, 'Ice Fall', 2025, 'https://image.tmdb.org/t/p/w300/8qQdun8426bfcQePFSZnucWGSbQ.jpg', 'Un exmarine y cazador furtivo llamado Harlan (Joel Kinnaman) descubre un avión cargado con millones de dólares que ha caído en un lago congelado. Tras ser arrestado por una guardabosques nativa, un grupo de criminales y policías corruptos se enteran de su paradero. Por ello, Harlan y la ranger se unen para luchar e intentar escapar a través del peligroso lago antes de que el hielo se derrita.', 28),
+(13, 'Killer Whale', 2026, 'https://image.tmdb.org/t/p/w300/cqbXxAw9sUr4tJ5ffEwtnz6IL9o.jpg', 'Las mejores amigas Maddie y Trish quedan atrapadas en una remota laguna con la peligrosa orca Ceto.', 53),
+(14, 'La guerra de los mundos', 2025, 'https://image.tmdb.org/t/p/w300/fjgSlNGECNgVeMJaOdDAXmGh7ZM.jpg', 'Will Radford, un destacado analista de ciberseguridad, pasa sus días rastreando posibles amenazas a la seguridad nacional a través de un programa de vigilancia masiva. Un ataque de una entidad desconocida le lleva a cuestionarse si el gobierno le está ocultando algo a él... y al resto del mundo.', 878),
+(15, 'Der Tiger (El tanque)', 2025, 'https://image.tmdb.org/t/p/w300/td8bh7p876r36OF0P9PN7fitrCG.jpg', 'Frente oriental, 1943: la dotación alemana de un tanque Tiger se embarca en una peligrosa misión tras las líneas enemigas. A medida que atraviesan la mortífera tierra de nadie, deberán enfrentarse al enemigo y a sus propios fantasmas del pasado.', 10752),
+(16, 'Los pecadores', 2025, 'https://image.tmdb.org/t/p/w300/zdClwqpYQXBSCGGDMdtvsuggwec.jpg', 'Tratando de dejar atrás sus problemáticas vidas, dos hermanos gemelos regresan a su pueblo natal para empezar de nuevo, solo para descubrir que un mal aún mayor les espera para darles la bienvenida.', 27),
+(17, 'Guardianes de la noche: Kimetsu no Yaiba La fortaleza infinita', 2025, 'https://image.tmdb.org/t/p/w300/iWLV12z9oexSRLz2WKyqCZbKoPA.jpg', 'El Cuerpo de Cazadores de Demonios se enfrenta a los Doce Kizuki restantes antes de enfrentarse a Muzan en el Castillo del Infinito para derrotarlo de una vez por todas.', 16),
+(18, 'De las cenizas: Bajo tierra', 2026, 'https://image.tmdb.org/t/p/w300/jl3reSLwDzDKAdSkMXoUAcwqeMg.jpg', 'Tres alumnas de un colegio femenino quedan atrapadas en un pozo subterráneo durante una tormenta y, mientras luchan por sobrevivir, deberán enfrentarse a sus propios conflictos.', 53),
+(19, 'El falsificador', 2026, 'https://image.tmdb.org/t/p/w300/bJFvxY8S3kM7h2ScWhfVozROstF.jpg', 'En este drama inspirado en hechos reales, un joven artista se convierte en un gran falsificador que trabaja con criminales de los barrios más siniestros de la Roma de los años 70.', 53),
+(20, 'Greenland 2', 2026, 'https://image.tmdb.org/t/p/w300/uoFJ6nGGvf8moZGpharm8Qyrpzm.jpg', 'La familia Garrity superviviente debe abandonar la seguridad del búnker de Groenlandia y embarcarse en un peligroso viaje a través del diezmado páramo helado de Europa para encontrar un nuevo hogar.', 12),
+(21, 'Zootrópolis 2', 2025, 'https://image.tmdb.org/t/p/w300/4fRdfQPjHiuDSkzaxFAV44k7Iem.jpg', 'Después de resolver el caso más importante en la historia de Zootrópolis, los policías novatos Judy Hopps y Nick Wilde descubren que su asociación no es tan sólida como pensaban cuando el Jefe Bogo les ordena unirse al programa de consejería \"Compañeros en Crisis\". Pero no pasa mucho tiempo para que su asociación se ponga a prueba al máximo, cuando la llegada de Gary, la serpiente, pone la ciudad patas arriba.', 16),
+(22, 'El botín', 2026, 'https://image.tmdb.org/t/p/w300/28hTjQCq0ul6WUR22qRsWEeuxlj.jpg', 'El descubrimiento de varios millones de dólares en efectivo en un zulo abandonado de Miami quiebra la confianza de un grupo de policías. Ahora, todo y todos están bajo sospecha.', 28),
+(23, 'Dust Bunny', 2025, 'https://image.tmdb.org/t/p/w300/vobigFZFvbYPf6ElYJu07P9rH8C.jpg', 'Una niña de ocho años le pide ayuda a su insidiosa vecina en su misión para matar al monstruo que vive debajo de su cama, el cual, según ella, devoró a su familia.', 28),
+(24, 'Los hermanos demolición', 2026, 'https://image.tmdb.org/t/p/w300/ttEESBvVrO8ngZr19qp6eBMVS9F.jpg', 'Un improbable dúo de hermanastros, uno un impulsivo detective y el otro un disciplinado, se ven atraídos por el asesinato de su padre en Hawai, lo que les lleva a un peligroso viaje para desenmascarar una conspiración de largo alcance.', 28),
+(25, 'The Shadow\'s Edge', 2025, 'https://image.tmdb.org/t/p/w300/25OeH0GOuEljJqZoF0HoKxOpq0B.jpg', 'Unos astutos y traicioneros ladrones desafian a la Policía Judicial de Macao. La Policía, que se encontraba en una dura batalla, invita de nuevo al experto en rastreo Huang De Zhong, retirado desde hace muchos años, a unir fuerzas con la joven élite del Departamento de Investigación Criminal de la Policía Judicial. Bajo la colisión de las técnicas tradicionales de rastreo y la alta tecnología, la policía y los criminales luchan con ingenio y valentía, y se lanzan a un duelo entre el bien y el mal parecido al juego del gato y el ratón.', 28),
+(26, 'Los desconocidos', 2024, 'https://image.tmdb.org/t/p/w300/qDfvIFGOgwGgyRL7AQtAp7d9MrU.jpg', 'La vida de una mujer frustrada da un giro oscuro tras un encuentro fortuito con un misterioso asesino a sueldo. Su romance relámpago les lleva a una matanza de criminales, pero a medida que profundiza en el tema, empieza a cuestionarse la verdadera naturaleza de su compañero y las sombras que ambos ocultan.', 28),
+(27, 'Predator: Badlands', 2025, 'https://image.tmdb.org/t/p/w300/8nCEJ5hFJt0h8FhXafHGhEhT8d7.jpg', 'Un joven Predator rechazado por su clan encuentra un aliado inesperado en Thia y emprende un peligroso viaje en busca del adversario definitivo.', 28),
+(28, 'Avatar: Fuego y ceniza', 2025, 'https://image.tmdb.org/t/p/w300/4n1U0Mwn7djux6VKNYDRWPgS2x6.jpg', 'Jake Sully y Neytiri enfrentan una nueva amenaza en Pandora: los Ash People, una tribu Na\'vi violenta y sedienta de poder, liderada por la implacable Varang. Tras la devastadora guerra contra la RDA y la pérdida de su hijo mayor, la familia de Jake deberá luchar por su supervivencia y el futuro de Pandora en un conflicto que llevará a los personajes a sus límites emocionales y físicos. Con nuevos y antiguos aliados, esta épica visual y emocional redefine el destino de un mundo al borde del abismo.', 878),
+(29, 'Bob Esponja: Una aventura pirata', 2025, 'https://image.tmdb.org/t/p/w300/xmRdMdHaEfzMlI5H4dxjnk74q1o.jpg', 'Desesperado por ser un gran tipo, Bob Esponja se propone demostrar su valentía al Sr. Krabs siguiendo a The Flying Dutchman, un misterioso pirata fantasma, en una aventura marítima que lo lleva a las profundidades más profundas del mar profundo, donde ninguna Esponja ha ido antes.', 16),
+(30, 'Anaconda', 2025, 'https://image.tmdb.org/t/p/w300/zX1KJPiGTrzpFcjfOWlmqdRgpQd.jpg', 'Doug y Griff son muy buenos amigos desde que eran niños y siempre han soñado con hacer un remake de su película favorita de todos los tiempos: el «clásico cinematográfico» Anaconda. Cuando una crisis de mediana edad les anima a lanzarse por fin a la aventura, se adentran en la selva amazónica para empezar a rodar. Pero las cosas se ponen serias cuando aparece una anaconda gigante de verdad, convirtiendo su caótico y cómico plató de rodaje en una situación mortal.', 12),
+(31, 'La asistenta', 2025, 'https://image.tmdb.org/t/p/w300/A6S15iqfHpoit02leDfDVnpklys.jpg', 'Millie es una joven que, tras perder su trabajo, acepta un puesto como sirvienta en la lujosa pero inquietante mansión de los Winchester. Pronto se da cuenta de que algo no está bien en la casa y con sus habitantes, especialmente con Nina, la dueña, que actúa de manera errática.', 9648),
+(32, 'Ice Fall', 2025, 'https://image.tmdb.org/t/p/w300/8qQdun8426bfcQePFSZnucWGSbQ.jpg', 'Un exmarine y cazador furtivo llamado Harlan (Joel Kinnaman) descubre un avión cargado con millones de dólares que ha caído en un lago congelado. Tras ser arrestado por una guardabosques nativa, un grupo de criminales y policías corruptos se enteran de su paradero. Por ello, Harlan y la ranger se unen para luchar e intentar escapar a través del peligroso lago antes de que el hielo se derrita.', 28),
+(33, 'Killer Whale', 2026, 'https://image.tmdb.org/t/p/w300/cqbXxAw9sUr4tJ5ffEwtnz6IL9o.jpg', 'Las mejores amigas Maddie y Trish quedan atrapadas en una remota laguna con la peligrosa orca Ceto.', 53),
+(34, 'La guerra de los mundos', 2025, 'https://image.tmdb.org/t/p/w300/fjgSlNGECNgVeMJaOdDAXmGh7ZM.jpg', 'Will Radford, un destacado analista de ciberseguridad, pasa sus días rastreando posibles amenazas a la seguridad nacional a través de un programa de vigilancia masiva. Un ataque de una entidad desconocida le lleva a cuestionarse si el gobierno le está ocultando algo a él... y al resto del mundo.', 878),
+(35, 'Der Tiger (El tanque)', 2025, 'https://image.tmdb.org/t/p/w300/td8bh7p876r36OF0P9PN7fitrCG.jpg', 'Frente oriental, 1943: la dotación alemana de un tanque Tiger se embarca en una peligrosa misión tras las líneas enemigas. A medida que atraviesan la mortífera tierra de nadie, deberán enfrentarse al enemigo y a sus propios fantasmas del pasado.', 10752),
+(36, 'Los pecadores', 2025, 'https://image.tmdb.org/t/p/w300/zdClwqpYQXBSCGGDMdtvsuggwec.jpg', 'Tratando de dejar atrás sus problemáticas vidas, dos hermanos gemelos regresan a su pueblo natal para empezar de nuevo, solo para descubrir que un mal aún mayor les espera para darles la bienvenida.', 27),
+(37, 'Guardianes de la noche: Kimetsu no Yaiba La fortaleza infinita', 2025, 'https://image.tmdb.org/t/p/w300/iWLV12z9oexSRLz2WKyqCZbKoPA.jpg', 'El Cuerpo de Cazadores de Demonios se enfrenta a los Doce Kizuki restantes antes de enfrentarse a Muzan en el Castillo del Infinito para derrotarlo de una vez por todas.', 16),
+(38, 'De las cenizas: Bajo tierra', 2026, 'https://image.tmdb.org/t/p/w300/jl3reSLwDzDKAdSkMXoUAcwqeMg.jpg', 'Tres alumnas de un colegio femenino quedan atrapadas en un pozo subterráneo durante una tormenta y, mientras luchan por sobrevivir, deberán enfrentarse a sus propios conflictos.', 53),
+(39, 'El falsificador', 2026, 'https://image.tmdb.org/t/p/w300/bJFvxY8S3kM7h2ScWhfVozROstF.jpg', 'En este drama inspirado en hechos reales, un joven artista se convierte en un gran falsificador que trabaja con criminales de los barrios más siniestros de la Roma de los años 70.', 53),
+(40, 'Greenland 2', 2026, 'https://image.tmdb.org/t/p/w300/uoFJ6nGGvf8moZGpharm8Qyrpzm.jpg', 'La familia Garrity superviviente debe abandonar la seguridad del búnker de Groenlandia y embarcarse en un peligroso viaje a través del diezmado páramo helado de Europa para encontrar un nuevo hogar.', 12);
 
 -- --------------------------------------------------------
 
@@ -290,7 +327,7 @@ CREATE TABLE IF NOT EXISTS comentarios (
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuarios` (
+CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
@@ -298,91 +335,6 @@ CREATE TABLE `usuarios` (
   `rol` enum('admin','usuario') DEFAULT 'usuario',
   `pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `comentarios`
---
-ALTER TABLE `comentarios`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `usuario_id` (`usuario_id`),
-  ADD KEY `id_libro` (`id_libro`),
-  ADD KEY `id_pelicula` (`id_pelicula`);
-
---
--- Indices de la tabla `libros`
---
-ALTER TABLE `libros`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `listas`
---
-ALTER TABLE `listas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `usuario_id` (`usuario_id`);
-
---
--- Indices de la tabla `peliculas`
---
-ALTER TABLE `peliculas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `comentarios`
---
-ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `listas`
---
-ALTER TABLE `listas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `peliculas`
---
-ALTER TABLE `peliculas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `comentarios`
---
-ALTER TABLE `comentarios`
-  ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_libro`) REFERENCES `libros` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `comentarios_ibfk_3` FOREIGN KEY (`id_pelicula`) REFERENCES `peliculas` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `listas`
---
-ALTER TABLE `listas`
-  ADD CONSTRAINT `listas_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
