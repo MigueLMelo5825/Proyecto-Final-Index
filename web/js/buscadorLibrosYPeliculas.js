@@ -68,31 +68,8 @@ async function cargarLibroPelicula(textoLibroPelicula){
 
         const libros = await peticionPHPLibros.json();
 
-        //console.log(libros);
-
-        divEncontrados.innerHTML = "";
-
-        //el php devuelve un array el cual se puede validar directamente
-        if (libros.length === 0) {
-            divEncontrados.innerHTML = "<p>No se encontraron libros</p>";
-            return;
-        }
-
-        //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibrosPeliculas
-        const arrayLibrosPeliculas = [];
-
-        libros.forEach(libro =>{
-            arrayLibrosPeliculas.push({
-                id: libro.id,
-                nombre: libro.titulo,
-                autores: libro.autores,
-                categoria: libro.categoria,
-                imagen_url: libro.imagen_url
-            })
-        });
-
         //CODIGO PARA OBTENER LAS PELICULAS ATRAVEZ DEL SERVIDOR PHP
-        
+
         const peticionPhpPeliculas = await fetch(urlPhpPeliculas, {
             method: "POST",
             headers: {
@@ -110,6 +87,30 @@ async function cargarLibroPelicula(textoLibroPelicula){
         const peliculas = await peticionPhpPeliculas.json();
 
         console.log(peliculas);
+
+        divEncontrados.innerHTML = "";
+
+        //el php devuelve un array el cual se puede validar directamente
+        if (libros.length === 0 && peliculas.length === 0) {
+            divEncontrados.innerHTML = "<p>No se encontro ningun libro o pelicula</p>";
+            return;
+        }
+
+        //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibrosPeliculas
+        const arrayLibrosPeliculas = [];
+
+        libros.forEach(libro =>{
+            arrayLibrosPeliculas.push({
+                id: libro.id,
+                nombre: libro.titulo,
+                autores: libro.autores,
+                categoria: libro.categoria,
+                imagen_url: libro.imagen_url
+            })
+        });
+        
+
+        peliculas.forEach
         
         
         //guardamos la palabra buscada en el cache junto el array encontrado
