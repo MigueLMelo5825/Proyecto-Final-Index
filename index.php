@@ -1,16 +1,10 @@
 <?php
-// -------------------------------------------------------------
-// Front Controller del mini-framework
-// -------------------------------------------------------------
-
 require_once __DIR__ . '/app/Core/autoload.php';
 require_once __DIR__ . '/app/Core/Config.php';
 require_once __DIR__ . '/app/Core/bGeneral.php';
 require_once __DIR__ . '/app/libs/bSeguridad.php';
 
-// -------------------------------------------------------------
 // Sesión segura
-// -------------------------------------------------------------
 $session = new SessionManager(
     loginPage: 'index.php?ctl=inicio',
     timeout: 600
@@ -22,35 +16,26 @@ $session->checkSecurity();
 // Mapa de rutas
 // -------------------------------------------------------------
 $map = [
-
-    // Página de inicio
     'inicio' => [
         'controller' => 'InicioController',
         'action'     => 'inicio',
         'nivel'      => 1
     ],
-
-    // PERFIL DEL USUARIO
     'perfil' => [
         'controller' => 'UsuarioController',
         'action'     => 'perfil',
         'nivel'      => 1
     ],
-
-    // TIMELINE
     'timeline' => [
-        'controller' => 'UsuarioController',
-        'action'     => 'timeline',
+        'controller' => 'TimelineController',
+        'action'     => 'index',
         'nivel'      => 1
     ],
-
-    // Cargar películas
     'cargarPeliculas' => [
         'controller' => 'PeliculasController',
         'action'     => 'cargarPeliculas',
         'nivel'      => 1
     ],
-
 ];
 
 // -------------------------------------------------------------
@@ -67,6 +52,11 @@ if (!isset($map[$ruta])) {
 $controllerName = $map[$ruta]['controller'];
 $actionName     = $map[$ruta]['action'];
 $requiredLevel  = $map[$ruta]['nivel'];
+
+// -------------------------------------------------------------
+// Cargar el controlador AHORA (cuando ya sabemos cuál es)
+// -------------------------------------------------------------
+require_once __DIR__ . '/app/Controllers/' . $controllerName . '.php';
 
 // -------------------------------------------------------------
 // Comprobación de permisos
@@ -89,3 +79,4 @@ if (!method_exists($controller, $actionName)) {
 }
 
 $controller->$actionName();
+
