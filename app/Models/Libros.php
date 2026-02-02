@@ -1,8 +1,7 @@
 <?php
 
-// ------------------------------------------------------
 //  IMPORTAR LIBRO DESDE GOOGLE BOOKS
-// ------------------------------------------------------
+
 function importarLibro($item, PDO $pdo) {
 
     $info = $item['volumeInfo'] ?? null;
@@ -58,10 +57,8 @@ function importarLibro($item, PDO $pdo) {
     }
 }
 
-
-// ------------------------------------------------------
 //  OBTENER LISTA GENERAL DE LIBROS
-// ------------------------------------------------------
+
 function obtenerLibros(PDO $pdo) {
     $sql = "SELECT titulo, autores, categoria, imagen_url, preview_link 
             FROM libros 
@@ -73,9 +70,8 @@ function obtenerLibros(PDO $pdo) {
 }
 
 
-// ------------------------------------------------------
 //  OBTENER TOP 5 LIBROS PARA EL PERFIL
-// ------------------------------------------------------
+
 function obtenerTopLibros(PDO $pdo) {
 
     // Tu tabla SÍ tiene fecha_importacion → perfecto
@@ -87,5 +83,40 @@ function obtenerTopLibros(PDO $pdo) {
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function obtenerLibroPorId(PDO $conexionBD, string $idLibro): ?array {
+
+    $consulta = "
+        SELECT 
+            id,
+            titulo,
+            subtitulo,
+            autores,
+            editorial,
+            fecha_publicacion,
+            descripcion,
+            isbn_10,
+            isbn_13,
+            paginas,
+            categoria,
+            imagen_url,
+            idioma,
+            preview_link
+        FROM libros
+        WHERE id = :idLibro
+        LIMIT 1
+    ";
+
+    $sentencia = $conexionBD->prepare($consulta);
+    $sentencia->execute([
+        ':idLibro' => $idLibro
+    ]);
+
+    $libro = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    return $libro ?: null;
+}
+
+
 
 ?>

@@ -20,4 +20,9 @@ class LibrosController {
         $libros = obtenerTopLibros($pdo);
         include dirname(__DIR__).'/templates/perfil.php';
     }
+
+
+
+
+
 }

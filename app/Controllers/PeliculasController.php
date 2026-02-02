@@ -1,12 +1,12 @@
 <?php
 
-<<<<<<< HEAD
-=======
+
+
 // require_once dirname(__DIR__).'/Core/Database.php';
 // require_once dirname(__DIR__).'/Core/ConexionPeliculasApi.php';
 // require_once dirname(__DIR__).'/Models/Peliculas.php';
 
->>>>>>> ba03239ee50d2c6d6e0044b3a89df24f17028a45
+
 class PeliculasController {
 
     public function cargarPeliculas() {

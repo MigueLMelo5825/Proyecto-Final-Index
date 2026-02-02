@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 // -------------------------------------------------------------
 // Front Controller del mini-framework
 // -------------------------------------------------------------
@@ -65,4 +65,4 @@ if (!method_exists($controller, $actionName)) {
 }
 
 $controller->$actionName();
-?>
+?> -->
