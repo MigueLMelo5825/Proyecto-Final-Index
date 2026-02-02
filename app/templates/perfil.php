@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('display_startup_errors', 1);
 
-// http://localhost/Proyecto/index.php?ctl=perfil
+//http://localhost/Proyecto/index.php?ctl=perfil
 
 if (!isset($usuario)) {
     $usuario = [

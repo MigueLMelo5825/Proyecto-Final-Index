@@ -12,7 +12,7 @@ const divEncontrados = document.getElementById("libroOPeliculaEncontrada");
 let contenido = "";
 const cache = {};
 
-function mostrarLibro(){
+function mostrarLibroPelicula(){
 
     inputLibro.addEventListener("keyup", event => {
 
@@ -36,13 +36,13 @@ function mostrarLibro(){
 
 //------------------------------FUNCION QUE TRAE LA INFORMACION DEL PHP-----------------------
 
-async function cargarLibroPelicula(textoLibro){
+async function cargarLibroPelicula(textoLibroPelicula){
 
     try{
 
-        if(cache[textoLibro]){
+        if(cache[textoLibroPelicula]){
 
-            cache[textoLibro].crearLista();
+            cache[textoLibroPelicula].crearLista();
             funcionesLista();
             return;
         }
@@ -53,7 +53,7 @@ async function cargarLibroPelicula(textoLibro){
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                libro: textoLibro
+                inputBuscador: textoLibroPelicula
             })
         });
 
@@ -62,29 +62,29 @@ async function cargarLibroPelicula(textoLibro){
             throw new Error("Error al cargar el archivo php " + peticionPHP.statusText);
         }
 
-        const libros = await peticionPHP.json();
+        const librosPeliculas = await peticionPHP.json();
 
         //console.log(libros);
 
         divEncontrados.innerHTML = "";
 
         //el php devuelve un array el cual se puede validar directamente
-        if (libros.length === 0) {
+        if (librosPeliculas.length === 0) {
             divEncontrados.innerHTML = "<p>No se encontraron libros</p>";
             return;
         }
 
         //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibros
-        const arrayLibros = [];
+        const arrayLibrosPeliculas = [];
 
-        libros.forEach(libro =>{
+        arrayLibrosPeliculas.forEach(lp =>{
             arrayLibros.push({
-                id: libro.id,
-                nombre: libro.titulo,
-                autores: libro.autores,
-                categoria: libro.categoria,
-                imagen_url: libro.imagen_url,
-                type: "libro"
+                id: lp.id,
+                titulo: lp.titulo,
+                info_extra: lp.info_extra,
+                genero: lp.genero,
+                imagen_url: lp.imagen_url,
+                type: lp.tipo
             })
         });
 
@@ -93,13 +93,13 @@ async function cargarLibroPelicula(textoLibro){
         
         
         //guardamos la palabra buscada en el cache junto el array encontrado
-        cache[inputLibro.value] = arrayLibros;
+        cache[inputLibro.value] = arrayLibrosPeliculas;
 
         //ordenamos el array para mostrarlo por pantalla
-        arrayLibros.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        arrayLibros.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
         //creamos la lista con la funcion prototype
-        arrayLibros.crearLista();
+        arrayLibrosPeliculas.crearLista();
 
         //cargamos todas las funciones que tiene la lista
         funcionesLista();
@@ -270,5 +270,5 @@ function cerrarBuscador(event){
 }
 
 window.onload = function (){
-    mostrarLibro();
+    mostrarLibroPelicula();
 }
