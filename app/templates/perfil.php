@@ -75,6 +75,8 @@ if (!isset($topPeliculas)) $topPeliculas = [];
                     </div>
                 </div>
             <?php endforeach; ?>
+            <a href="index.php?ctl=crearLista" class="btn">Crear nueva lista</a>
+
         </div>
 
     </div>

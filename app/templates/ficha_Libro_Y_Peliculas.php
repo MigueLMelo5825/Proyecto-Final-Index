@@ -1,6 +1,10 @@
 <?php
 require_once dirname(__DIR__) . '/Core/Database.php';
 require_once dirname(__DIR__) . '/Models/Libros.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$idUsuario = $_SESSION['id_usuario'] ?? null;
 
 //variables de control
 $id = $_GET['id'] ?? '';
@@ -97,6 +101,41 @@ if (!$urlImagenPortada) {
     <button id="btn-favorito" class="corazon-like" title="Añadir a favoritos">
         <span class="icon">❤</span>
     </button>
+<?php
+$idUsuario = $_SESSION['id_usuario'] ?? null;
+if ($idUsuario):
+
+    require_once dirname(__DIR__) . '/Models/Listas.php';
+    $listasUsuario = Listas::obtenerListasUsuario($conexionBD, $idUsuario);
+?>
+    <div class="añadir-lista">
+<form action="index.php?ctl=añadirALista" method="POST">
+
+            <input type="hidden" name="id_libro" value="<?= $type === 'libro' ? $id : '' ?>">
+            <input type="hidden" name="id_pelicula" value="<?= $type === 'pelicula' ? $id : '' ?>">
+
+            <label>Añadir a una lista:</label>
+            <select name="id_lista" required>
+                <option value="">Selecciona una lista</option>
+
+                <?php foreach ($listasUsuario as $lista): ?>
+                    <option value="<?= $lista['id_lista'] ?>">
+                        <?= escaparHTML($lista['nombre']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <button type="submit" class="boton-externo">Añadir</button>
+        </form>
+
+        <a href="/Proyecto/index.php?ctl=crearLista" class="boton-externo">
+            Crear nueva lista
+        </a>
+    </div>
+
+<?php endif; ?>
+
+
 </div>
 
 <!-- Sección de Valoración -->

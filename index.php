@@ -53,6 +53,20 @@ $map = [
         'action'     => 'eliminarUsuario',
         'nivel'      => 3
     ],
+
+    // LISTAS
+    'crearLista' => [
+    'controller' => 'ListaController',
+    'action'     => 'crear',
+    'nivel'      => 1
+],
+'añadirALista' => [
+    'controller' => 'ListaController',
+    'action'     => 'añadir',
+    'nivel'      => 1
+],
+
+
 ];
 
 // -------------------------------------------------------------
