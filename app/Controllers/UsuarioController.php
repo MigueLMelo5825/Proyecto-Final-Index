@@ -58,4 +58,6 @@ class UsuarioController {
 
         require __DIR__ . '/../templates/perfil.php';
     }
+
+    
 }

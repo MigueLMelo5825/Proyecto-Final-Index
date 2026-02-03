@@ -36,6 +36,24 @@ $map = [
         'action'     => 'cargarPeliculas',
         'nivel'      => 1
     ],
+    'panelAdmin' => [
+    'controller' => 'AdminController',
+    'action'     => 'index',
+    'nivel'      => 3
+],
+
+'cambiarRol' => [
+    'controller' => 'AdminController',
+    'action'     => 'cambiarRol',
+    'nivel'      => 3
+],
+
+'eliminarUsuario' => [
+    'controller' => 'AdminController',
+    'action'     => 'eliminarUsuario',
+    'nivel'      => 3
+],
+
 ];
 
 // -------------------------------------------------------------
