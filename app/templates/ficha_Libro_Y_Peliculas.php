@@ -29,7 +29,11 @@ $conexionBD = Database::getConnection();
 $libroPelicula = Libros::obtenerLibroPelicula($conexionBD, $id, $type);
 
 //funcion para obtener el genero de la pelicula
-$genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
+$genero = null;
+if ($type === "pelicula" && isset($libroPelicula['genero'])) {
+    $genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
+}
+
 
 if (!$libroPelicula) {
     http_response_code(404);
@@ -46,8 +50,6 @@ if($type === "libro"){
     $urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
 }else{
     $urlImagenPortada = $libroPelicula['portada'] ?? '';
-    //funcion para obtener el genero de la pelicula
-    $genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
 }
 
 if ($urlImagenPortada) {
@@ -137,7 +139,7 @@ require_once dirname(__DIR__) . '/Models/ListasModel.php';
 
 
 if ($idUsuario):
-    $listasUsuario = Listas::obtenerListasUsuario($conexionBD, $idUsuario);
+$listasUsuario = ListasModel::obtenerListasUsuario($conexionBD, $idUsuario);
 ?>
     <div class="añadir-lista">
         <form action="index.php?ctl=añadirALista" method="POST">
