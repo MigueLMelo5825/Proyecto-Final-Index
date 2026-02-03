@@ -36,6 +36,7 @@ $map = [
         'action'     => 'cargarPeliculas',
         'nivel'      => 1
     ],
+<<<<<<< HEAD
     'panelAdmin' => [
     'controller' => 'AdminController',
     'action'     => 'index',
@@ -54,6 +55,8 @@ $map = [
     'nivel'      => 3
 ],
 
+=======
+>>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 ];
 
 // -------------------------------------------------------------
