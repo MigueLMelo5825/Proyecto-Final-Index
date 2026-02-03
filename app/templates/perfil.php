@@ -23,25 +23,11 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 <head>
     <meta charset="UTF-8">
     <title>INDEX – Perfil</title>
-
     <link rel="stylesheet" href="web/css/styleperfil.css">
 </head>
 <body>
-
-<header>
-    <nav>
-        <h1>INDEX</h1>
-        <div id="buscador">
-            <p>Buscar: <input type="text" id="inputLibro"></p>
-            <div id="libroOPeliculaEncontrada"></div>
-        </div>
-        <ul>
-            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
-            <li><a href="index.php?controller=peliculas&action=cargarPeliculas">Cargar Películas</a></li>
-            <li><a href="index.php">Inicio</a></li>
-        </ul>
-    </nav>
-</header>
+    
+<?php include_once __DIR__.'/../Models/header.php'; ?>
 
 <main>
 
@@ -95,6 +81,6 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 
 </main>
 
-<script src="web/js/buscadorLibrosYPeliculas.js"></script>
+<?php include_once __DIR__.'/../Models/footer.php'; ?>
 </body>
 </html>

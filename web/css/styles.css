@@ -1,5 +1,15 @@
-/* 
-   RESET BÁSICO
+/* VARIABLES DE DISEÑO */
+:root {
+    --primary: #C47A4A;        /* Terracota elegante */
+    --bg: #FAF8F5;             /* Blanco cálido editorial */
+    --card-bg: #FFFFFF;        /* Tarjetas estilo papel */
+    --border: #E8E2DA;         /* Borde beige suave */
+    --text: #2A2A2A;           /* Texto principal */
+    --text-soft: #6F6A63;      /* Texto secundario cálido */
+    --radius: 10px;            /* Redondeado suave */
+}
+
+/* RESET BÁSICO
 */
 * {
     margin: 0;
@@ -8,58 +18,61 @@
 }
 
 body {
-    font-family: "Raleway", sans-serif;
-    background-color: #fafafa;
-    color: #1a1a1a;
+    font-family: "Source Sans Pro", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
     line-height: 1.6;
     padding: 0 24px;
-    font-size: 20px;
 }
 
-/*
-   NAVEGACIÓN
-*/
+/* Tipografía editorial clara para títulos */
+h1, h2, h3, h4 {
+    font-family: "Lora", serif;
+}
+
+/* NAVEGACIÓN */
 header {
     width: 100%;
     padding: 20px 0;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--border);
     margin-bottom: 40px;
 }
 
-
 nav {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
-    gap: 40px;
 }
 
 nav h1 {
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary);
 }
 
-
-.centro {
+nav ul {
     display: flex;
-    align-items: center;
     gap: 24px;
     list-style: none;
-    margin: 0 auto;   
-    padding: 0;
 }
 
 nav a {
     text-decoration: none;
-    color: #1a1a1a;
-    font-weight: 500;
-    transition: opacity 0.2s ease;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s ease;
 }
 
 nav a:hover {
-    opacity: 0.6;
+    color: var(--primary);
+}
+
+/* 
+   CONTENIDO PRINCIPAL
+ */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 /* BUSCADOR MIGUEL MELO */
@@ -205,3 +218,93 @@ main {
     color: #444;
 }
 
+/* 
+   FOOTER STYLE
+*/
+.main-footer {
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 60px;
+    padding: 40px 0 20px 0;
+    color: #1a1a1a;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 0 24px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.footer-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.footer-section p, .footer-section ul li {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.footer-section a:hover {
+    color: #1a1a1a;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Ajuste para que el footer no flote si hay poco contenido */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1; /* Esto empuja el footer hacia abajo */
+}

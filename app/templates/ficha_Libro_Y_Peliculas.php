@@ -38,22 +38,11 @@ if (!$urlImagenPortada) {
 <head>
     <meta charset="UTF-8">
     <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
-    <link rel="stylesheet" href="/web/css/styleperfil.css">
-   
-
-    
+    <link rel="stylesheet" href="../../web/css/fichaLibroPelicula.css">
 </head>
 <body>
 
-<header>
-    <nav>
-        <h1>INDEX</h1>
-        <ul>
-            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
-            <li><a href="index.php">Inicio</a></li>
-        </ul>
-    </nav>
-</header>
+<?php include_once __DIR__.'/../Models/header.php'; ?>
 
 <main class="detalle-libro">
     <div class="detalle-grid">
@@ -97,6 +86,44 @@ if (!$urlImagenPortada) {
         </div>
     </div>
 </main>
+<!-- Botones de Acción: Favorito y Ver Más -->
+<div class="acciones-usuario">
+    <?php if (!empty($libroPelicula['preview_link'])): ?>
+        <a class="boton-externo" href="<?= escaparHTML($libroPelicula['preview_link']) ?>" target="_blank" rel="noopener">
+            Ver en Google Books
+        </a>
+    <?php endif; ?>
+    
+    <button id="btn-favorito" class="corazon-like" title="Añadir a favoritos">
+        <span class="icon">❤</span>
+    </button>
+</div>
+
+<!-- Sección de Valoración -->
+<div class="valoracion">
+    <p>Valoración:</p>
+    <div class="estrellas">
+        <input type="radio" name="star" id="star5"><label for="star5">★</label>
+        <input type="radio" name="star" id="star4"><label for="star4">★</label>
+        <input type="radio" name="star" id="star3"><label for="star3">★</label>
+        <input type="radio" name="star" id="star2"><label for="star2">★</label>
+        <input type="radio" name="star" id="star1"><label for="star1">★</label>
+    </div>
+</div>
+
+<!-- Sección de Comentarios -->
+<section class="comentarios">
+    <h3>Comentarios</h3>
+    <form class="form-comentario">
+        <textarea placeholder="Escribe tu opinión..."></textarea>
+        <button type="submit" class="boton-comentar">Publicar</button>
+    </form>
+    <div class="lista-comentarios">
+        <p class="sin-comentarios">Aún no hay comentarios. ¡Sé el primero!</p>
+    </div>
+</section>
+
+<?php include_once __DIR__.'/../Models/footer.php'; ?>
 
 </body>
 </html>
