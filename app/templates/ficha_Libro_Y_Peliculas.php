@@ -38,30 +38,11 @@ if (!$urlImagenPortada) {
 <head>
     <meta charset="UTF-8">
     <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
-<<<<<<< HEAD
-    <link rel="stylesheet" href="/web/css/styleperfil.css">
-   
-
-    
-</head>
-<body>
-
-<header>
-    <nav>
-        <h1>INDEX</h1>
-        <ul>
-            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
-            <li><a href="index.php">Inicio</a></li>
-        </ul>
-    </nav>
-</header>
-=======
     <link rel="stylesheet" href="../../web/css/fichaLibroPelicula.css">
 </head>
 <body>
 
 <?php include_once __DIR__.'/../Models/header.php'; ?>
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 
 <main class="detalle-libro">
     <div class="detalle-grid">
@@ -105,8 +86,6 @@ if (!$urlImagenPortada) {
         </div>
     </div>
 </main>
-<<<<<<< HEAD
-=======
 <!-- Botones de Acción: Favorito y Ver Más -->
 <div class="acciones-usuario">
     <?php if (!empty($libroPelicula['preview_link'])): ?>
@@ -145,7 +124,6 @@ if (!$urlImagenPortada) {
 </section>
 
 <?php include_once __DIR__.'/../Models/footer.php'; ?>
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 
 </body>
 </html>

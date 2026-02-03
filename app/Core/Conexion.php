@@ -9,7 +9,7 @@ class Conexion {
         if (self::$conexion === null) {
 
             $host = "localhost";
-            $dbname = "indexproyecto";   // ⚠️ Cambia si tu BD tiene otro nombre
+            $dbname = "indexproyecto";   // Cambia si tu BD tiene otro nombre
             $user = "root";
             $pass = "";
 

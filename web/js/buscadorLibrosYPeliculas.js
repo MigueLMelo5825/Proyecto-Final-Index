@@ -1,9 +1,5 @@
 //creo la funcion para cargar los archivos al buscador
 
-<<<<<<< HEAD
-//url del php para obtener los libros
-const urlPhp = "app/templates/buscador_Libros_Y_Peliculas.php";
-=======
 // Obtenemos la ruta base del proyecto dinámicamente
 // Esto detecta si estás en "/proyecto_final_index/" o "/proyecto_de_un_compañero/"
 const pathArray = window.location.pathname.split('/');
@@ -17,7 +13,6 @@ const fallback = `/${projectRoot}/web/img/fallback.png`;
 
 //url para redireccionar a fichaLibroPelicula.php
 const urlRedireccion = `/${projectRoot}/app/templates/ficha_Libro_Y_Peliculas.php`;
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 
 //obtengo lasvariables globables del archivo html
 const inputLibro = document.getElementById("inputLibro");
@@ -155,11 +150,7 @@ Array.prototype.crearLista = function (){
             const pCategoria = document.createElement("p");
             
             //asignamos los valores para mostrar
-<<<<<<< HEAD
-            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : "web/img/fallback.png";
-=======
             img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : fallback;
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 
             pTitulo.innerHTML = `<strong>${m.titulo}</strong>`;
             
@@ -282,11 +273,7 @@ function seleccionarLibro(li){
     if(!idLibro && !typeLibro) return;
 
     //construimos la url de redireccion
-<<<<<<< HEAD
-    const urlPhp = `app/templates/ficha_Libro_Y_Peliculas.php?id=${encodeURIComponent(idLibro)}&type=${encodeURIComponent(typeLibro)}`;
-=======
     const urlPhp = `${urlRedireccion}?id=${encodeURIComponent(idLibro)}&type=${encodeURIComponent(typeLibro)}`;
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 
     //redireccionamos a la ficha de libro o pelicula
     window.location.href = urlPhp;
@@ -301,11 +288,6 @@ function cerrarBuscador(event){
     }
 }
 
-<<<<<<< HEAD
-window.onload = function (){
-    mostrarLibroPelicula();
-}
-=======
 // Al final de tu archivo buscadorLibrosYPeliculas.js
 document.addEventListener("DOMContentLoaded", () => {
     // Verificamos si el input existe en la página actual antes de ejecutar
@@ -313,4 +295,3 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarLibroPelicula();
     }
 });
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
