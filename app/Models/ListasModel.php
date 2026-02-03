@@ -14,9 +14,10 @@ class ListaModel {
         return $stmt->execute([$idUsuario, $nombre, $descripcion, $tipo]);
     }
 
-    public function obtenerListasUsuario($idUsuario) {
+    public static function obtenerListasUsuario($idUsuario) {
         $sql = "SELECT * FROM listas WHERE id_usuario = ?";
-        $stmt = $this->db->prepare($sql);
+        $db = Conexion::getConexion();
+        $stmt = $db->prepare($sql);
         $stmt->execute([$idUsuario]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
