@@ -27,7 +27,7 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 </head>
 <body>
     
-<?php include_once __DIR__.'/../Models/header.php'; ?>
+<?php include_once __DIR__.'/../templates/header.php'; ?>
 
 <main>
 
@@ -83,6 +83,6 @@ if (!isset($topPeliculas)) $topPeliculas = [];
 
 </main>
 
-<?php include_once __DIR__.'/../Models/footer.php'; ?>
+<?php include_once __DIR__.'/../templates/footer.php'; ?>
 </body>
 </html>
