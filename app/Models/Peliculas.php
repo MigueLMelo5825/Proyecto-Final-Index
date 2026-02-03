@@ -11,7 +11,7 @@ class Peliculas {
     // ------------------------------------------------------
     //  OBTENER NOMBRE DEL GÉNERO (MAPEO DE TMDB → TEXTO)
     // ------------------------------------------------------
-    public function obtenerNombreGenero($id): string {
+    public static function obtenerNombreGenero($id): string {
         $generos = [
             28 => "Acción",
             12 => "Aventura",

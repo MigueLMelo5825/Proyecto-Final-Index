@@ -1,6 +1,16 @@
 <?php
 require_once dirname(__DIR__) . '/Core/Database.php';
 require_once dirname(__DIR__) . '/Models/Libros.php';
+require_once dirname(__DIR__) . '/Models/Peliculas.php';
+
+//codigo php para obtener las rutas y darles la direccion correcta
+// Obtiene la carpeta raíz del proyecto dinámicamente
+// Si el proyecto está en localhost/mi_proyecto/ , devolverá /mi_proyecto/
+$root = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', dirname(__DIR__, 2)));
+$root = '/' . trim($root, '/') . '/';
+
+//url para cargar las rutas de stylos e imagenes
+$urlImgFallback = $root . 'web/img/fallback.png';
 
 //variables de control
 $id = $_GET['id'] ?? '';
@@ -15,6 +25,9 @@ if ($id === '' || $type === '') {
 $conexionBD = Database::getConnection();
 $libroPelicula = Libros::obtenerLibroPelicula($conexionBD, $id, $type);
 
+//funcion para obtener el genero de la pelicula
+$genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
+
 if (!$libroPelicula) {
     http_response_code(404);
     echo "<h1>Libro no encontrado</h1>";
@@ -25,12 +38,20 @@ function escaparHTML(string $texto): string {
     return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
 }
 
-$urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
+//validamos segun el tipo trae la imagen de portada del objeto 
+if($type === "libro"){
+    $urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
+}else{
+    $urlImagenPortada = $libroPelicula['portada'] ?? '';
+}
+
 if ($urlImagenPortada) {
     $urlImagenPortada = str_replace('http://', 'https://', $urlImagenPortada);
 }
+
+//validamos que si no encuentra un valor ponemos nuestra imagen preterminada
 if (!$urlImagenPortada) {
-    $urlImagenPortada = '/web/img/fallback.png';
+    $urlImagenPortada = $urlImgFallback ;
 }
 ?>
 <!DOCTYPE html>
@@ -42,58 +63,64 @@ if (!$urlImagenPortada) {
 </head>
 <body>
 
-<?php include_once __DIR__.'/../Models/header.php'; ?>
+<?php include_once __DIR__.'/../templates/header.php'; ?>
 
-<main class="detalle-libro">
+<main class="detalle">
     <div class="detalle-grid">
 
-        <div class="portada-libro">
+        <div class="portada">
             <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
         </div>
 
-        <div class="contenido-libro">
+        <div class="contenido">
             <h2><?= escaparHTML($libroPelicula['titulo']) ?></h2>
 
             <?php if (!empty($libroPelicula['subtitulo'])): ?>
                 <h3><?= escaparHTML($libroPelicula['subtitulo']) ?></h3>
             <?php endif; ?>
+            
+            <?php if($type === "libro"): ?>
+                <div class="info-libro">
+                    <p><strong>Autor(es):</strong> <?= escaparHTML($libroPelicula['autores'] ?? 'Desconocido') ?></p>
+                    <p><strong>Categoría:</strong> <?= escaparHTML($libroPelicula['categoria'] ?? 'N/A') ?></p>
+                    <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
+                    <p><strong>Fecha de publicación:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
+                    <p><strong>Número de páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
+                    <p><strong>Idioma:</strong> <?= escaparHTML($libroPelicula['idioma'] ?? 'N/A') ?></p>
+                    <p><strong>ISBN-10:</strong> <?= escaparHTML($libroPelicula['isbn_10'] ?? 'N/A') ?></p>
+                    <p><strong>ISBN-13:</strong> <?= escaparHTML($libroPelicula['isbn_13'] ?? 'N/A') ?></p>
+                </div>
+            
 
-            <div class="info-libro">
-                <p><strong>Autor(es):</strong> <?= escaparHTML($libroPelicula['autores'] ?? 'Desconocido') ?></p>
-                <p><strong>Categoría:</strong> <?= escaparHTML($libroPelicula['categoria'] ?? 'N/A') ?></p>
-                <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
-                <p><strong>Fecha de publicación:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
-                <p><strong>Número de páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
-                <p><strong>Idioma:</strong> <?= escaparHTML($libroPelicula['idioma'] ?? 'N/A') ?></p>
-                <p><strong>ISBN-10:</strong> <?= escaparHTML($libroPelicula['isbn_10'] ?? 'N/A') ?></p>
-                <p><strong>ISBN-13:</strong> <?= escaparHTML($libroPelicula['isbn_13'] ?? 'N/A') ?></p>
-            </div>
+                <div class="descripcion-libro">
+                    <h3>Descripción</h3>
+                    <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
+                </div>
 
-            <div class="descripcion-libro">
-                <h3>Descripción</h3>
-                <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
-            </div>
-
-            <?php if (!empty($libroPelicula['preview_link'])): ?>
-                <a class="boton-externo" 
-                   href="<?= escaparHTML($libroPelicula['preview_link']) ?>" 
-                   target="_blank" 
-                   rel="noopener">
-                   Ver en Google Books
-                </a>
+                <?php if (!empty($libroPelicula['preview_link'])): ?>
+                    <a class="boton-externo" 
+                    href="<?= escaparHTML($libroPelicula['preview_link']) ?>" 
+                    target="_blank" 
+                    rel="noopener">
+                    Ver en Google Books
+                    </a>
+                <?php endif; ?>
             <?php endif; ?>
+            <?php if($type === "pelicula"): ?>
+                <div class="info-pelicula">
+                    <p><strong>A&ntilde;o:</strong> <?= escaparHTML($libroPelicula['anio'] ?? 'N/A') ?></p>
+                </div>
 
+                <div class="descripcion-pelicula">
+                    <h3>Descripción</h3>
+                    <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 </main>
 <!-- Botones de Acción: Favorito y Ver Más -->
-<div class="acciones-usuario">
-    <?php if (!empty($libroPelicula['preview_link'])): ?>
-        <a class="boton-externo" href="<?= escaparHTML($libroPelicula['preview_link']) ?>" target="_blank" rel="noopener">
-            Ver en Google Books
-        </a>
-    <?php endif; ?>
-    
+<div class="acciones-usuario">  
     <button id="btn-favorito" class="corazon-like" title="Añadir a favoritos">
         <span class="icon">❤</span>
     </button>
@@ -123,7 +150,7 @@ if (!$urlImagenPortada) {
     </div>
 </section>
 
-<?php include_once __DIR__.'/../Models/footer.php'; ?>
+<?php include_once __DIR__.'/../templates/footer.php'; ?>
 
 </body>
 </html>
