@@ -1,0 +1,207 @@
+/* 
+   RESET BÁSICO
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Raleway", sans-serif;
+    background-color: #fafafa;
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: 0 24px;
+    font-size: 20px;
+}
+
+/*
+   NAVEGACIÓN
+*/
+header {
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 40px;
+}
+
+
+nav {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    gap: 40px;
+}
+
+nav h1 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+
+.centro {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0 auto;   
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+nav a:hover {
+    opacity: 0.6;
+}
+
+/* BUSCADOR MIGUEL MELO */
+
+#buscador {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: relative; /* IMPORTANTE: Para que la lista flote respecto a esto */
+}
+
+/* LA VENTANA FLOTANTE DE RESULTADOS */
+#libroOPeliculaEncontrada {
+    position: absolute;
+    top: 100%;       /* Aparece justo debajo del input */
+    left: 0;
+    width: 350px;    /* Ancho de la ventana de resultados */
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Sombra para dar profundidad */
+    z-index: 999;    /* Para que esté por encima de todo */
+    max-height: 400px;
+    overflow-y: auto; /* Scroll si hay muchos resultados */
+    margin-top: 5px;
+    display: none;    /* Se activa por JS */
+}
+
+/* Ajustes del diseño interno de la lista */
+#infoLibro ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block; /* Sobrescribimos el flex del nav */
+}
+
+#infoLibro li {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#infoLibro li:hover, #infoLibro li:focus {
+    background-color: #f0f0f0;
+    outline: none;
+}
+
+#infoLibro img {
+    width: 50px;      /* Tamaño miniatura */
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Ajuste de los textos dentro de la lista flotante */
+#infoLibro div p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.2;
+    color: var(--text-soft);
+}
+
+#infoLibro div p strong {
+    color: var(--text);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* FIN BUSCADOR */
+
+.perfil a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.salir {
+    margin-left: auto;
+    
+}
+
+
+
+/* 
+   CONTENIDO PRINCIPAL
+*/
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 
+   TIMELINE / POSTS
+*/
+.post {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.post:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.post h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.post p {
+    font-size: 15px;
+    color: #333;
+}
+
+
+/* 
+   PERFIL
+*/
+#perfil img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+}
+
+#perfil h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+#perfil p {
+    font-size: 15px;
+    color: #444;
+}
+
