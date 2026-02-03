@@ -158,14 +158,14 @@ Array.prototype.crearLista = function (){
                 pAutores.textContent = "Autor: " + (m.info_extra || "Desconocido");
             
             }else{
-                pAutores.textContent = "anio: " + (m.info_extra || "Desconocido");
+                pAutores.textContent = "Año: " + (m.info_extra || "Desconocido");
             }
 
             if(m.type == "libro"){
                 pCategoria.textContent = "Categoría: " + (m.genero || "N/A");
             
             }else{
-                pCategoria.textContent = "genero: " + (m.genero || "N/A");
+                pCategoria.textContent = "Genero: " + (m.genero || "N/A");
             }
 
             // agregamos los valores al div texto

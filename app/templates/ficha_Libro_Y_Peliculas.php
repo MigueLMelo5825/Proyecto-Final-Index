@@ -29,11 +29,7 @@ $conexionBD = Database::getConnection();
 $libroPelicula = Libros::obtenerLibroPelicula($conexionBD, $id, $type);
 
 //funcion para obtener el genero de la pelicula
-$genero = null;
-if ($type === "pelicula" && isset($libroPelicula['genero'])) {
-    $genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
-}
-
+$genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
 
 if (!$libroPelicula) {
     http_response_code(404);
@@ -50,6 +46,8 @@ if($type === "libro"){
     $urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
 }else{
     $urlImagenPortada = $libroPelicula['portada'] ?? '';
+    //funcion para obtener el genero de la pelicula
+    $genero = Peliculas::obtenerNombreGenero($libroPelicula['genero']);
 }
 
 if ($urlImagenPortada) {
