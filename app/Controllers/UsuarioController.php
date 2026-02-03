@@ -2,7 +2,6 @@
 
 class UsuarioController {
 
-<<<<<<< HEAD
     private $session;
     private $usuarioModel;
 
@@ -51,17 +50,6 @@ class UsuarioController {
         $pelisModel  = new Peliculas();
 
         $topLibros = $librosModel->obtenerTopLibros();
-=======
-    public function perfil() {
-
-
-        $librosModel = new Libros();
-
-        $pelisModel  = new Peliculas();
-
-        $topLibros = $librosModel->obtenerTopLibros();
-
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
         $topPeliculas = $pelisModel->obtenerTopPeliculas();
 
         foreach ($topPeliculas as &$p) {
@@ -70,9 +58,4 @@ class UsuarioController {
 
         require __DIR__ . '/../templates/perfil.php';
     }
-<<<<<<< HEAD
-
-    
-=======
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
 }
