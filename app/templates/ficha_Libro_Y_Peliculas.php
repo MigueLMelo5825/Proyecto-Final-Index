@@ -109,6 +109,7 @@ if (!$urlImagenPortada) {
             <?php if($type === "pelicula"): ?>
                 <div class="info-pelicula">
                     <p><strong>A&ntilde;o:</strong> <?= escaparHTML($libroPelicula['anio'] ?? 'N/A') ?></p>
+                    <p><strong>Genero:</strong> <?= escaparHTML($genero ?? 'N/A') ?></p>
                 </div>
 
                 <div class="descripcion-pelicula">
