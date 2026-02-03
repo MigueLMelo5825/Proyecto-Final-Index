@@ -36,27 +36,23 @@ $map = [
         'action'     => 'cargarPeliculas',
         'nivel'      => 1
     ],
-<<<<<<< HEAD
+
+    // ADMIN
     'panelAdmin' => [
-    'controller' => 'AdminController',
-    'action'     => 'index',
-    'nivel'      => 3
-],
-
-'cambiarRol' => [
-    'controller' => 'AdminController',
-    'action'     => 'cambiarRol',
-    'nivel'      => 3
-],
-
-'eliminarUsuario' => [
-    'controller' => 'AdminController',
-    'action'     => 'eliminarUsuario',
-    'nivel'      => 3
-],
-
-=======
->>>>>>> f66ed70b4c4f00f925fd3f7b57da556279dd7cdd
+        'controller' => 'AdminController',
+        'action'     => 'index',
+        'nivel'      => 3
+    ],
+    'cambiarRol' => [
+        'controller' => 'AdminController',
+        'action'     => 'cambiarRol',
+        'nivel'      => 3
+    ],
+    'eliminarUsuario' => [
+        'controller' => 'AdminController',
+        'action'     => 'eliminarUsuario',
+        'nivel'      => 3
+    ],
 ];
 
 // -------------------------------------------------------------
@@ -100,4 +96,3 @@ if (!method_exists($controller, $actionName)) {
 }
 
 $controller->$actionName();
-
