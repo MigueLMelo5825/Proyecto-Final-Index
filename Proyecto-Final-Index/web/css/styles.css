@@ -1,0 +1,310 @@
+/* VARIABLES DE DISEÑO */
+:root {
+    --primary: #C47A4A;        /* Terracota elegante */
+    --bg: #FAF8F5;             /* Blanco cálido editorial */
+    --card-bg: #FFFFFF;        /* Tarjetas estilo papel */
+    --border: #E8E2DA;         /* Borde beige suave */
+    --text: #2A2A2A;           /* Texto principal */
+    --text-soft: #6F6A63;      /* Texto secundario cálido */
+    --radius: 10px;            /* Redondeado suave */
+}
+
+/* RESET BÁSICO
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Source Sans Pro", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0 24px;
+}
+
+/* Tipografía editorial clara para títulos */
+h1, h2, h3, h4 {
+    font-family: "Lora", serif;
+}
+
+/* NAVEGACIÓN */
+header {
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+nav ul {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+/* 
+   CONTENIDO PRINCIPAL
+ */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* BUSCADOR MIGUEL MELO */
+
+#buscador {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: relative; /* IMPORTANTE: Para que la lista flote respecto a esto */
+}
+
+/* LA VENTANA FLOTANTE DE RESULTADOS */
+#libroOPeliculaEncontrada {
+    position: absolute;
+    top: 100%;       /* Aparece justo debajo del input */
+    left: 0;
+    width: 350px;    /* Ancho de la ventana de resultados */
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Sombra para dar profundidad */
+    z-index: 999;    /* Para que esté por encima de todo */
+    max-height: 400px;
+    overflow-y: auto; /* Scroll si hay muchos resultados */
+    margin-top: 5px;
+    display: none;    /* Se activa por JS */
+}
+
+/* Ajustes del diseño interno de la lista */
+#infoLibro ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block; /* Sobrescribimos el flex del nav */
+}
+
+#infoLibro li {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#infoLibro li:hover, #infoLibro li:focus {
+    background-color: #f0f0f0;
+    outline: none;
+}
+
+#infoLibro img {
+    width: 50px;      /* Tamaño miniatura */
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Ajuste de los textos dentro de la lista flotante */
+#infoLibro div p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.2;
+    color: var(--text-soft);
+}
+
+#infoLibro div p strong {
+    color: var(--text);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* FIN BUSCADOR */
+
+.perfil a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.salir {
+    margin-left: auto;
+    
+}
+
+
+
+/* 
+   CONTENIDO PRINCIPAL
+*/
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 
+   TIMELINE / POSTS
+*/
+.post {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.post:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.post h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.post p {
+    font-size: 15px;
+    color: #333;
+}
+
+
+/* 
+   PERFIL
+*/
+#perfil img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+}
+
+#perfil h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+#perfil p {
+    font-size: 15px;
+    color: #444;
+}
+
+/* 
+   FOOTER STYLE
+*/
+.main-footer {
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    margin-top: 60px;
+    padding: 40px 0 20px 0;
+    color: #1a1a1a;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 0 24px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.footer-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.footer-section p, .footer-section ul li {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.footer-section a:hover {
+    color: #1a1a1a;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Ajuste para que el footer no flote si hay poco contenido */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1; /* Esto empuja el footer hacia abajo */
+}

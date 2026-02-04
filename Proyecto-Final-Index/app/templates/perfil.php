@@ -1,0 +1,88 @@
+<?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_startup_errors', 1);
+
+//http://localhost/Proyecto/index.php?ctl=perfil
+
+if (!isset($usuario)) {
+    $usuario = [
+        'nombre' => 'Usuario invitado',
+        'bio' => '',
+        'foto' => 'web/img/default.jpg'
+    ];
+}
+
+if (!isset($topLibros)) $topLibros = [];
+if (!isset($topPeliculas)) $topPeliculas = [];
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>INDEX – Perfil</title>
+    <link rel="stylesheet" href="web/css/styleperfil.css">
+</head>
+<body>
+    
+<?php include_once __DIR__.'/../templates/header.php'; ?>
+
+<main>
+
+    <section id="perfil">
+        <img src="<?= $usuario['foto'] ?>" alt="Foto de perfil">
+        <h2><?= htmlspecialchars($usuario['nombre']) ?></h2>
+        <p><?= htmlspecialchars($usuario['bio']) ?></p>
+
+        <div id="estadisticas">
+            <div class="stat"><strong>32</strong><span>Libros leídos</span></div>
+            <div class="stat"><strong>8</strong><span>Listas creadas</span></div>
+            <div class="stat"><strong>14</strong><span>Reseñas</span></div>
+        </div>
+    </section>
+
+    <hr>
+
+    <div class="top-container">
+
+        <div class="top-col">
+            <h2>📚 Top 5 Libros</h2>
+
+            <?php foreach ($topLibros as $libro): ?>
+                <div class="top-item">
+                    <img src="<?= $libro['imagen_url'] ?>" alt="<?= $libro['titulo'] ?>">
+                    <div class="top-item-info">
+                        <strong><?= $libro['titulo'] ?></strong>
+                        <small><?= $libro['autores'] ?></small>
+                        <small><?= $libro['categoria'] ?></small>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="top-col">
+            <h2>🎬 Top 5 Películas</h2>
+
+            <?php foreach ($topPeliculas as $peli): ?>
+                <div class="top-item">
+                    <img src="<?= $peli['portada'] ?>" alt="<?= $peli['titulo'] ?>">
+                    <div class="top-item-info">
+                        <strong><?= $peli['titulo'] ?></strong>
+                        <small><?= $peli['genero_nombre'] ?></small>
+                        <small><?= $peli['anio'] ?></small>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <a href="index.php?ctl=crearLista" class="btn">Crear nueva lista</a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<?php include_once __DIR__.'/../templates/footer.php'; ?>
+</body>
+</html>
