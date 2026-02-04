@@ -17,9 +17,13 @@
 
   <div class="container">
     <h1>Crear cuenta</h1>
+<form id="form" method="POST" action="index.php?ctl=registro">
 
+<<<<<<< HEAD
 <form method="POST" action="index.php?ctl=registro">
 
+=======
+>>>>>>> d9312c3 (login y registro funciona, sql Usuarios modificados)
 
       <div>
         <label for="name">Nombre</label>

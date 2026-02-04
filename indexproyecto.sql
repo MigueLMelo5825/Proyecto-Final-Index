@@ -343,15 +343,21 @@ INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `gene
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `contrasena` varchar(200) NOT NULL,
-  `rol` enum('admin','usuario') DEFAULT 'usuario',
-  `pais` varchar(100) NOT NULL
+DROP TABLE IF EXISTS `usuarios`;
+
+CREATE TABLE `usuarios` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `contrasena` VARCHAR(200) NOT NULL,
+  `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
+  `pais` VARCHAR(100) DEFAULT NULL,
+  `nivel` INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-COMMIT;
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -7,29 +7,40 @@ class UsuarioModel {
     public function __construct() {
         $this->db = Conexion::getConexion();
     }
+    // -------------------------------------------------------------
+    // REGISTRAR USUARIO
+    // -------------------------------------------------------------
+public function registrar($nombre, $email, $hash) {
+    $sql = "INSERT INTO usuarios (nombre, email, contrasena, rol, nivel)
+            VALUES (?, ?, ?, 'usuario', 1)";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$nombre, $email, $hash]);
+}
+
 
     // -------------------------------------------------------------
     // VALIDAR LOGIN
     // -------------------------------------------------------------
     public function validarLogin($email, $password) {
 
-        $sql = "SELECT * FROM usuarios WHERE email = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$email]);
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$email]);
 
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$usuario) {
-            return false;
-        }
 
-        // Verificar contraseña
-        if (!password_verify($password, $usuario['contrasena'])) {
-            return false;
-        }
-
-        return $usuario;
+    if (!$usuario) {
+        return false;
     }
+
+    if (!password_verify($password, $usuario['contrasena'])) {
+        return false;
+    }
+
+    return $usuario;
+}
+
 // -------------------------------------------------------------
     // ELIMINAR USUARIO (admin)
     // -------------------------------------------------------------

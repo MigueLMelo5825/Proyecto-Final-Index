@@ -6,11 +6,9 @@ require_once __DIR__ . '/app/libs/bSeguridad.php';
 
 // Sesión segura
 $session = new SessionManager(
-    loginPage: 'index.php?ctl=inicio',
+    loginPage: 'index.php?ctl=login',
     timeout: 600
 );
-
-$session->checkSecurity();
 
 // -------------------------------------------------------------
 // Mapa de rutas
@@ -21,16 +19,32 @@ $map = [
         'action'     => 'inicio',
         'nivel'      => 1
     ],
+
+    'login' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'login',
+        'nivel'      => 0
+    ],
+
+    'registro' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'registro',
+    'nivel'      => 0
+],
+
+
     'perfil' => [
         'controller' => 'UsuarioController',
         'action'     => 'perfil',
         'nivel'      => 1
     ],
+
     'timeline' => [
         'controller' => 'TimelineController',
         'action'     => 'index',
         'nivel'      => 1
     ],
+
     'cargarPeliculas' => [
         'controller' => 'PeliculasController',
         'action'     => 'cargarPeliculas',
@@ -56,6 +70,7 @@ $map = [
 
     // LISTAS
     'crearLista' => [
+<<<<<<< HEAD
     'controller' => 'ListaController',
     'action'     => 'crear',
     'nivel'      => 1
@@ -73,6 +88,17 @@ $map = [
 
 
 
+=======
+        'controller' => 'ListaController',
+        'action'     => 'crear',
+        'nivel'      => 1
+    ],
+    'añadirALista' => [
+        'controller' => 'ListaController',
+        'action'     => 'añadir',
+        'nivel'      => 1
+    ],
+>>>>>>> d9312c3 (login y registro funciona, sql Usuarios modificados)
 ];
 
 // -------------------------------------------------------------
@@ -91,7 +117,15 @@ $actionName     = $map[$ruta]['action'];
 $requiredLevel  = $map[$ruta]['nivel'];
 
 // -------------------------------------------------------------
-// Cargar el controlador AHORA (cuando ya sabemos cuál es)
+// Seguridad (Opción B aplicada)
+// -------------------------------------------------------------
+if (!in_array($ruta, ['login', 'registro'])) {
+    $session->checkSecurity();
+}
+
+
+// -------------------------------------------------------------
+// Cargar el controlador
 // -------------------------------------------------------------
 require_once __DIR__ . '/app/Controllers/' . $controllerName . '.php';
 

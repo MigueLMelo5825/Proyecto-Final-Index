@@ -1,6 +1,8 @@
 <?php
 
-
+require_once dirname(__DIR__).'/Core/Database.php';
+require_once dirname(__DIR__).'/Core/ConexionPeliculasApi.php';
+require_once dirname(__DIR__).'/Models/Peliculas.php';
 
 class PeliculasController {
 
@@ -16,8 +18,9 @@ class PeliculasController {
     }
 
     public function mostrarTop() {
-        $pdo = Database::getConnection();
-        $peliculas = obtenerTopPeliculas($pdo);
+        $modeloPeliculas = new Peliculas();
+        $peliculas = $modeloPeliculas->obtenerTopPeliculas();
+
         include dirname(__DIR__).'/templates/perfil.php';
     }
 }

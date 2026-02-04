@@ -14,6 +14,7 @@ class Conexion {
             $pass = "";
 
             try {
+
                 self::$conexion = new PDO(
                     "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
                     $user,

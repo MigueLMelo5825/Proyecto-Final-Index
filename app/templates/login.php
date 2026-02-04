@@ -6,7 +6,6 @@
     <title>Iniciar Sesión</title>
     
     <link rel="stylesheet" href="../../web/css/styleLogin.css">
-  
 </head>
 <body>
 
@@ -14,14 +13,17 @@
     <div class="login-container">
         <h2>Iniciar sesión</h2>
 
-        <form id="loginForm" method="POST" action="../../index.php?ctl=login">
-            <label> Usuario o email
-                <input type="text" id="usuario" name="usuario" placeholder="Usuario">
+<form id="loginForm" method="POST" action="index.php?ctl=login">
+
+
+            
+            <label> Email o usuario
+                <input type="text" id="email" name="email" placeholder="Email" required>
                 <p id="errorUsuario" class="error"></p>
             </label> 
            
             <label> Contraseña
-                <input type="password" id="password" name="password" placeholder="Contraseña">
+                <input type="password" id="password" name="password">
                 <p id="errorPassword" class="error"></p>
             </label>
            
@@ -34,7 +36,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="../../web/js/validacionLogin.js"></script>
 
