@@ -21,7 +21,7 @@ public function registrar($nombre, $email, $hash) {
     // -------------------------------------------------------------
     // VALIDAR LOGIN
     // -------------------------------------------------------------
-    public function validarLogin($email, $password) {
+    public function validarLogin($email, $password) {   
 
     $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $this->db->prepare($sql);

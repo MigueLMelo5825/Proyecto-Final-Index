@@ -19,7 +19,7 @@
     <h1>Crear cuenta</h1>
 <form id="form" method="POST" action="index.php?ctl=registro">
 
-<form method="POST" action="index.php?ctl=registro">
+<form method="POST" action="index.php?ctl=registro"> 
 
 
       <div>

@@ -261,21 +261,18 @@ INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fech
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `listas`
---
+DROP TABLE IF EXISTS listas;
 
-CREATE TABLE IF NOT EXISTS `listas` (
-  `id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `nombre` varchar(150) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `usuario_id` (`usuario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE listas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT DEFAULT NULL,
+    tipo VARCHAR(50) DEFAULT 'personal',
+    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
--- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `peliculas`

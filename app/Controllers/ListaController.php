@@ -1,15 +1,49 @@
 <?php
-require_once dirname(__DIR__) . '/Models/Listas.php';
+require_once __DIR__ . '/../Models/ListasModel.php';
+require_once __DIR__ . '/../Core/Database.php';
 
 class ListaController {
 
-    public function añadir() {
-        session_start();
+    // -------------------------------------------------------------
+    // CREAR LISTA
+    // -------------------------------------------------------------
+    public function crear() {
+        $session = new SessionManager();
+        $session->checkSecurity();
 
-        if (!isset($_SESSION['id_usuario'])) {
-            header("Location: index.php?ctl=inicio");
+        $idUsuario = $session->get('id_usuario');
+
+        // Si envían el formulario
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nombre = trim($_POST['nombre'] ?? '');
+            $descripcion = trim($_POST['descripcion'] ?? '');
+            $tipo = trim($_POST['tipo'] ?? 'personal');
+
+            if ($nombre === '') {
+                header("Location: index.php?ctl=crearLista&error=nombre_vacio");
+                exit;
+            }
+
+            $modelo = new ListasModel();
+            $modelo->crearLista($idUsuario, $nombre, $descripcion, $tipo);
+
+            header("Location: index.php?ctl=perfil");
             exit;
         }
+
+        // Cargar vista del formulario
+        require __DIR__ . '/../templates/crear_lista.php';
+    }
+
+    // -------------------------------------------------------------
+    // AÑADIR LIBRO/PELÍCULA A UNA LISTA
+    // -------------------------------------------------------------
+    public function añadir() {
+        $session = new SessionManager();
+        $session->checkSecurity();
+
+        $idUsuario = $session->get('id_usuario');
 
         $idLista = $_POST['id_lista'] ?? null;
         $idLibro = $_POST['id_libro'] ?? null;
