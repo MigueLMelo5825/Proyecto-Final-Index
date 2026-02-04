@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/app/Core/autoload.php';
 require_once __DIR__ . '/app/Core/Config.php';
-require_once __DIR__ . '/app/Core/bGeneral.php';
+require_once __DIR__ . '/app/libs/bGeneral.php';
 require_once __DIR__ . '/app/libs/bSeguridad.php';
 
 // Sesión segura
@@ -27,11 +27,10 @@ $map = [
     ],
 
     'registro' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'registro',
-    'nivel'      => 0
-],
-
+        'controller' => 'UsuarioController',
+        'action'     => 'registro',
+        'nivel'      => 0
+    ],
 
     'perfil' => [
         'controller' => 'UsuarioController',
@@ -70,25 +69,6 @@ $map = [
 
     // LISTAS
     'crearLista' => [
-<<<<<<< HEAD
-    'controller' => 'ListaController',
-    'action'     => 'crear',
-    'nivel'      => 1
-],
-'añadirALista' => [
-    'controller' => 'ListaController',
-    'action'     => 'añadir',
-    'nivel'      => 1
-],
-'registro' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'registro',
-    'nivel'      => 0
-],
-
-
-
-=======
         'controller' => 'ListaController',
         'action'     => 'crear',
         'nivel'      => 1
@@ -98,8 +78,8 @@ $map = [
         'action'     => 'añadir',
         'nivel'      => 1
     ],
->>>>>>> d9312c3 (login y registro funciona, sql Usuarios modificados)
 ];
+
 
 // -------------------------------------------------------------
 // Resolución de ruta
