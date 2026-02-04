@@ -52,6 +52,18 @@
       font-size: 0.95rem;
       transition: border-color 0.2s ease;
     }
+    
+
+   select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+}
+
 
     input:focus {
       border-color: #111827;

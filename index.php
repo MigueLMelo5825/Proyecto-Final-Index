@@ -65,6 +65,12 @@ $map = [
     'action'     => 'añadir',
     'nivel'      => 1
 ],
+'registro' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'registro',
+    'nivel'      => 0
+],
+
 
 
 ];
