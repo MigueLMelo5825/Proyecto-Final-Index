@@ -64,6 +64,7 @@ class UsuarioController {
 
 function registro()
 {
+
     $errores = [];
 
     $name     = recoge("name");
