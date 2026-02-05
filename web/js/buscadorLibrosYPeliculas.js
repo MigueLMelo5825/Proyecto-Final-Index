@@ -1,297 +1,149 @@
-//creo la funcion para cargar los archivos al buscador
+// ---------------- CONFIGURACIÓN ----------------
 
-// Obtenemos la ruta base del proyecto dinámicamente
-// Esto detecta si estás en "/proyecto_final_index/" o "/proyecto_de_un_compañero/"
-const pathArray = window.location.pathname.split('/');
-const projectRoot = pathArray[1]; // El nombre de la carpeta del proyecto
+// Tu proyecto está en: http://localhost/Proyecto/
+const baseUrl = "/Proyecto";
 
-//url del php para obtener los libros
-const urlPhp = `/${projectRoot}/app/templates/buscador_Libros_Y_Peliculas.php`;
+// URL del backend del buscador (controlador MVC)
+const urlPhp = `${baseUrl}/index.php?ctl=buscar`;
 
-//url para obtener la imagen fallback para libros sin portada
-const fallback = `/${projectRoot}/web/img/fallback.png`;
+// Imagen fallback (asegúrate de que existe en /Proyecto/web/img/)
+const fallback = `${baseUrl}/web/img/fallback.png`;
 
-//url para redireccionar a fichaLibroPelicula.php
-const urlRedireccion = `/${projectRoot}/app/templates/ficha_Libro_Y_Peliculas.php`;
+// Redirección a la ficha (AJUSTA si tienes otra ruta)
+const urlRedireccion = `${baseUrl}/index.php?ctl=fichaLibroPelicula`;
 
-//obtengo lasvariables globables del archivo html
+// Elementos del DOM
 const inputLibro = document.getElementById("inputLibro");
-const divEncontrados = document.getElementById("libroOPeliculaEncontrada");
+const divEncontrados =
+    document.getElementById("libroOPeliculaEncontrada") ||
+    document.getElementById("resultadosBusqueda");
 
-
-//variables de control
-let contenido = "";
 const cache = {};
 
-function mostrarLibroPelicula(){
 
-    inputLibro.addEventListener("keyup", event => {
+// ---------------- INICIALIZACIÓN ----------------
 
-        event.preventDefault();
-
-        //obtenemos el valor de libro
-        let textoLibroPelicula = inputLibro.value;
-
-        if(textoLibroPelicula.length > 0 ){
-
-            divEncontrados.style.display = "block";
-            cargarLibroPelicula(textoLibroPelicula);
-        
-        }else{
-
-            divEncontrados.innerHTML = "";
-            divEncontrados.style.display = "none"
-        }
-    })
-}
-
-//------------------------------FUNCION QUE TRAE LA INFORMACION DEL PHP-----------------------
-
-async function cargarLibroPelicula(textoLibroPelicula){
-
-    try{
-
-        if(cache[textoLibroPelicula]){
-
-            cache[textoLibroPelicula].crearLista();
-            funcionesLista();
-            return;
-        }
-
-        const peticionPHP = await fetch(urlPhp, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                inputBuscador: textoLibroPelicula
-            })
-        });
-
-        if(!peticionPHP.ok){
-
-            throw new Error("Error al cargar el archivo php " + peticionPHP.statusText);
-        }
-
-        const librosPeliculas = await peticionPHP.json();
-
-        //console.log(libros);
-
-        divEncontrados.innerHTML = "";
-
-        //el php devuelve un array el cual se puede validar directamente
-        if (librosPeliculas.length === 0) {
-            divEncontrados.innerHTML = "<p>No se encontraron libros</p>";
-            return;
-        }
-
-        //como el php me devuelve un array indexado lo que debo de hacer es recorrer ese array e insertar sus valores dentro de arrayLibros
-        const arrayLibrosPeliculas = [];
-
-        librosPeliculas.forEach(lp =>{
-            arrayLibrosPeliculas.push({
-                id: lp.id,
-                titulo: lp.titulo,
-                info_extra: lp.info_extra,
-                genero: lp.genero,
-                imagen_url: lp.imagen_url,
-                type: lp.tipo
-            })
-        });
-
-
-        //console.log(arrayLibros)
-        
-        
-        //guardamos la palabra buscada en el cache junto el array encontrado
-        cache[inputLibro.value] = arrayLibrosPeliculas;
-
-        //ordenamos el array para mostrarlo por pantalla
-        arrayLibrosPeliculas.sort((a, b) => a.titulo.localeCompare(b.titulo));
-
-        //creamos la lista con la funcion prototype
-        arrayLibrosPeliculas.crearLista();
-    
-    }catch(error){
-
-        console.error("Error en el fetch valide el codigo" + error);
-    }
-}
-
-//creop una funcion personaliza usando Array.prototype para crear la lista de libros y mostrarla por pantalla---------------------//
-
-Array.prototype.crearLista = function (){
-
-    divEncontrados.innerHTML = "";
-
-    //creamos el div que estara dentro del div de libros y peliculas encontradas, esto con el fin de que cada libro encontrado sea un div con su informacion
-    const divLibro = document.createElement("div");
-    divLibro.id = "infoLibro";
-
-    //agregamos este div al 
-
-    //estos seran los elementos dentro del div info
-    const ul = document.createElement("ul");
-
-
-
-        this.forEach(m =>{
-
-            const li = document.createElement("li");
-            li.style.display = "flex"
-
-            //creamos los valores que guardaran los resultados y los mostrara en pantalla
-            const img = document.createElement("img");
-            li.dataset.id = m.id;
-            li.dataset.type = m.type;
-            const divTexto = document.createElement("div");
-            const pTitulo = document.createElement("p");
-            const pAutores = document.createElement("p");
-            const pCategoria = document.createElement("p");
-            
-            //asignamos los valores para mostrar
-            img.src = m.imagen_url ? m.imagen_url.replace("http://", "https://") : fallback;
-
-            pTitulo.innerHTML = `<strong>${m.titulo}</strong>`;
-            
-            if(m.type == "libro"){
-                pAutores.textContent = "Autor: " + (m.info_extra || "Desconocido");
-            
-            }else{
-                pAutores.textContent = "Año: " + (m.info_extra || "Desconocido");
-            }
-
-            if(m.type == "libro"){
-                pCategoria.textContent = "Categoría: " + (m.genero || "N/A");
-            
-            }else{
-                pCategoria.textContent = "Genero: " + (m.genero || "N/A");
-            }
-
-            // agregamos los valores al div texto
-            divTexto.appendChild(pTitulo);
-            divTexto.appendChild(pAutores);
-            divTexto.appendChild(pCategoria);
-
-            //agregamos los valores al li
-            li.appendChild(img);
-            li.appendChild(divTexto);
-            
-            //agregamos al ul para mostrar en el div de informacion
-            ul.appendChild(li);
-            
-        });
-
-        //activamos el div y mostramos las sugerencias
-        divEncontrados.style.display = "block";
-        divEncontrados.appendChild(divLibro);
-        divLibro.appendChild(ul);
-
-        funcionesLista();
-
-}
-
-function funcionesLista(){
-
-    //creamos eventos en los li para poder ser seleccionados dentro de la lista y dar un foco
-    const liLibros = divEncontrados.querySelectorAll("li");
-        
-    liLibros.forEach(li => {
-
-        //aca hacemos que cada li sea enfocable
-        li.setAttribute("tabindex", "0");
-
-        //agregamos el evento de foco individual a cada uno
-        li.addEventListener("focus", event => {
-
-            //cambiamos el color de cada li cuando tenga el foco
-            event.target.style.backgroundColor = "#d8d8d8";
-            //li.classList.add("seleccionado");
-        })
-
-        //volvemos a colocar transparente al perder el foco
-        li.addEventListener("blur", event => {
-            
-            //usando el event target para realizar los cambios
-            event.target.style.backgroundColor = "transparent";
-            //li.classList.remove("seleccionado");
-        })
-
-        li.addEventListener("keydown", event => {
-
-            switch(event.key){
-                case "ArrowDown":
-                    event.preventDefault();
-                    
-                    li.nextElementSibling?.focus();
-                break;
-                case "ArrowUp":
-                    event.preventDefault();
-                    
-                    li.previousElementSibling?.focus();
-                break;
-                case "Enter":
-                    event.preventDefault();
-
-                    seleccionarLibro(li);
-                break;
-            }
-        })
-
-        //agregamos evento al dar click sobre el objeto libro
-        li.addEventListener("click", event => {
-
-            event.preventDefault();
-
-            const liLibro = event.target.closest("li[data-id]");
-            if(!liLibro) return;
-
-            // Validar que no haga nada con texto vacio
-            if (inputLibro.value.trim() === "") {
-                return;
-            }
-
-            seleccionarLibro(liLibro);
-        })
-    })
-}
-
-function seleccionarLibro(li){
-
-    //colocamos el texto del libro seleccionado en el inputLibro
-    inputLibro.value = li.textContent.trim();
-
-    //ocultamos el buscado al tener un libro ya seleccionado y borramos el input 
-    inputLibro.textContent = "";
-    divEncontrados.style.display = "none";
-
-    //obtenemos el id del libro desde el atributo oculto data-id como el tipo si es libro/pelicula
-    const idLibro = li.dataset.id;
-    const typeLibro = li.dataset.type;
-
-    //si no existe el id cancelamos el proceso de redireccion al igual que el tipo
-    if(!idLibro && !typeLibro) return;
-
-    //construimos la url de redireccion
-    const urlPhp = `${urlRedireccion}?id=${encodeURIComponent(idLibro)}&type=${encodeURIComponent(typeLibro)}`;
-
-    //redireccionamos a la ficha de libro o pelicula
-    window.location.href = urlPhp;
-
-}
-
-//creamos funcion para que al momento de dar click fuera del buscado se cierre la ventana
-function cerrarBuscador(event){
-    
-    if(document.getElementById("infoLibro").contains(event.target)){
-        divEncontrados.style.display = "none";
-    }
-}
-
-// Al final de tu archivo buscadorLibrosYPeliculas.js
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificamos si el input existe en la página actual antes de ejecutar
-    if (document.getElementById("inputLibro")) {
+    if (inputLibro && divEncontrados) {
         mostrarLibroPelicula();
     }
 });
+
+
+// ---------------- EVENTO PRINCIPAL ----------------
+
+function mostrarLibroPelicula() {
+    inputLibro.addEventListener("keyup", event => {
+        event.preventDefault();
+
+        const texto = inputLibro.value.trim();
+
+        if (texto.length > 0) {
+            divEncontrados.style.display = "block";
+            cargarLibroPelicula(texto);
+        } else {
+            divEncontrados.innerHTML = "";
+            divEncontrados.style.display = "none";
+        }
+    });
+}
+
+
+// ---------------- FETCH AL BACKEND ----------------
+
+async function cargarLibroPelicula(texto) {
+    try {
+        const peticion = await fetch(`${urlPhp}&texto=${encodeURIComponent(texto)}`);
+        const datos = await peticion.json();
+
+        divEncontrados.innerHTML = "";
+
+        if (!Array.isArray(datos) || datos.length === 0) {
+            divEncontrados.innerHTML = "<p>No se encontraron resultados</p>";
+            return;
+        }
+
+        const lista = datos.map(item => ({
+            id: item.id,
+            titulo: item.titulo,
+            info_extra: item.info_extra,
+            genero: item.genero,
+            imagen_url: item.imagen_url,
+            type: item.tipo
+        }));
+
+        lista.crearLista();
+
+    } catch (error) {
+        console.error("Error en el fetch:", error);
+    }
+}
+
+
+// ---------------- CREAR LISTA ----------------
+
+Array.prototype.crearLista = function () {
+    divEncontrados.innerHTML = "";
+
+    const ul = document.createElement("div");
+    ul.className = "list-group w-100";
+
+    this.forEach(item => {
+        const li = document.createElement("a");
+        li.className = "list-group-item list-group-item-action d-flex align-items-center";
+        li.dataset.id = item.id;
+        li.dataset.type = item.type;
+
+        const img = document.createElement("img");
+        img.src = item.imagen_url ? item.imagen_url.replace("http://", "https://") : fallback;
+        img.style.width = "45px";
+        img.style.height = "65px";
+        img.style.objectFit = "cover";
+        img.className = "me-3 rounded";
+
+        const divTexto = document.createElement("div");
+
+        const pTitulo = document.createElement("p");
+        pTitulo.innerHTML = `<strong>${item.titulo}</strong>`;
+
+        const pExtra = document.createElement("p");
+        pExtra.className = "mb-0 text-muted";
+        pExtra.textContent = item.type === "libro"
+            ? "Autor: " + (item.info_extra || "Desconocido")
+            : "Año: " + (item.info_extra || "Desconocido");
+
+        const pGenero = document.createElement("p");
+        pGenero.className = "mb-0 text-muted";
+        pGenero.textContent = "Género: " + (item.genero || "N/A");
+
+        divTexto.appendChild(pTitulo);
+        divTexto.appendChild(pExtra);
+        divTexto.appendChild(pGenero);
+
+        li.appendChild(img);
+        li.appendChild(divTexto);
+        ul.appendChild(li);
+
+        // HOVER
+        li.addEventListener("mouseover", () => li.style.background = "#f8f9fa");
+        li.addEventListener("mouseout", () => li.style.background = "white");
+
+        // CLICK
+        li.addEventListener("click", () => seleccionarLibro(li));
+    });
+
+    divEncontrados.appendChild(ul);
+};
+
+
+// ---------------- REDIRECCIÓN ----------------
+
+function seleccionarLibro(li) {
+    const id = li.dataset.id;
+    const type = li.dataset.type;
+
+    if (!id || !type) return;
+
+    const url = `${urlRedireccion}&id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`;
+    window.location.href = url;
+}

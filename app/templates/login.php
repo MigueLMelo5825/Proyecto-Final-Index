@@ -31,8 +31,8 @@
         </form>
 
         <div class="login-footer">
-            <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
-            <p>¿Olvidaste la contraseña? <a href="recupero.php">Recuperar la contraseña</a></p>
+            <p>¿No tienes cuenta? <a href="index.php?ctl=registro">Regístrate</a></p>
+            <p>¿Olvidaste la contraseña? <a href="index.php?ctl=recupero">Recuperar la contraseña</a></p>
         </div>
     </div>
 </div>

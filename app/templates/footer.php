@@ -34,6 +34,8 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Script para el buscador -->
+<script src="/Proyecto/web/js/buscadorLibrosYPeliculas.js" defer></script>
 
 </body>
 </html>

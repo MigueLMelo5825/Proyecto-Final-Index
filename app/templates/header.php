@@ -1,24 +1,92 @@
-<header>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Proyecto/web/css/styles.css">
+
+
     <!-- Bootstrap CSS -->
-<link 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-    rel="stylesheet">
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
 
-<!-- Bootstrap Icons (opcional pero útil) -->
-<link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Bootstrap Icons -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <nav>
-        <h1>INDEX</h1>
-        <div id="buscador">
-            <p>Buscar: <input type="text" id="inputLibro"></p>
-            <div id="libroOPeliculaEncontrada"></div>
+    <title>INDEX</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <!-- LOGO -->
+        <a class="navbar-brand fw-bold" href="index.php">INDEX</a>
+
+        <!-- Botón responsive -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenido -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- IZQUIERDA -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Inicio</a>
+                </li>
+            </ul>
+
+            <!-- BUSCADOR (opcional) -->
+            <form class="d-flex me-3 position-relative" role="search">
+    <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
+
+    <!-- CONTENEDOR DONDE SE MOSTRARÁN LAS SUGERENCIAS -->
+    <div id="resultadosBusqueda" 
+         class="list-group position-absolute w-100 mt-5"
+         style="z-index: 2000;"></div>
+</form>
+
+
+            <!-- DERECHA (según sesión) -->
+            <ul class="navbar-nav">
+
+                <?php if (isset($_SESSION['id_usuario'])): ?>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?controller=usuario&action=perfil">
+                            <i class="bi bi-person-circle"></i> Perfil
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="index.php?controller=usuario&action=cerrarSesion">
+                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                        </a>
+                    </li>
+
+                <?php else: ?>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?ctl=registro">
+                            <i class="bi bi-person-plus"></i> Registrarse
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?ctl=inicioSesion">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                        </a>
+                    </li>
+
+                <?php endif; ?>
+
+            </ul>
         </div>
-        <ul>
-            <li><a href="index.php?controller=usuario&action=perfil">Perfil</a></li>
-            <li><a href="index.php?controller=peliculas&action=cargarPeliculas">Cargar Películas</a></li>
-            <li><a href="index.php">Inicio</a></li>
-        </ul>
-    </nav>
-</header>
+    </div>
+</nav>

@@ -32,6 +32,13 @@ $map = [
         'nivel'      => 0
     ],
 
+    'buscar' => [
+    'controller' => 'BuscadorController',
+    'action'     => 'buscar',
+    'nivel'      => 0
+],
+
+
     'perfil' => [
         'controller' => 'UsuarioController',
         'action'     => 'perfil',
@@ -47,6 +54,12 @@ $map = [
     'cargarPeliculas' => [
         'controller' => 'PeliculasController',
         'action'     => 'cargarPeliculas',
+        'nivel'      => 1
+    ],
+
+    'fichaLibroPelicula' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'ficha',
         'nivel'      => 1
     ],
 

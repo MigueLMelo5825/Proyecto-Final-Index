@@ -308,3 +308,30 @@ body {
 main {
     flex: 1; /* Esto empuja el footer hacia abajo */
 }
+
+/* ============================
+   AUTOCOMPLETE BUSCADOR INDEX
+   ============================ */
+
+#resultadosBusqueda {
+    max-height: 350px;          /* límite vertical */
+    overflow-y: auto;           /* scroll interno */
+    border-radius: 8px;         /* bordes suaves */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: white;
+    border: 1px solid #ddd;
+    position: absolute;         /* necesario para dropdown */
+    top: 100%;                  /* justo debajo del input */
+    left: 0;
+    width: 100%;
+    z-index: 2000;
+}
+
+#resultadosBusqueda .list-group-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#resultadosBusqueda .list-group-item:last-child {
+    border-bottom: none;
+}
