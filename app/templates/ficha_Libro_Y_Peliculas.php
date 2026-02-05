@@ -111,18 +111,17 @@ if (!$urlImagenPortada) {
                 </a>
             </div>
 
-<?php else: ?>
+                <?php else: ?>
 
-    <!-- Mostrar mensaje si NO está logueado -->
-    <div class="añadir-lista">
-        <a href="index.php?ctl=login" class="boton-externo">
-            Inicia sesión para añadir a una lista
-        </a>
-    </div>
+                <!-- Mostrar mensaje si NO está logueado -->
+                <div class="añadir-lista">
+                    <a href="index.php?ctl=login" class="boton-externo">
+                        Inicia sesión para añadir a una lista
+                    </a>
+                </div>
 
-<?php endif; ?>
+            <?php endif; ?>
 
-</div>
         </div>
 
         <!-- Columna Información -->
@@ -156,7 +155,11 @@ if (!$urlImagenPortada) {
                     <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
                     <p><strong>Fecha:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
                     <p><strong>Páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
-                    <p><strong>Idioma:</strong> <?= escaparHTML($libroPelicula['idioma'] ?? 'N/A') ?></p>
+                    <?php if($libroPelicula['idioma'] === "es"): ?>
+                        <p><strong>Idioma:</strong> <?= escaparHTML("Español" ?? 'N/A') ?></p>
+                    <?php else: ?>
+                        <p><strong>Idioma:</strong> <?= escaparHTML("Ingles" ?? 'N/A') ?></p>
+                    <?php endif ?>
                 </div>
                 
                 <div class="seccion-descripcion">
