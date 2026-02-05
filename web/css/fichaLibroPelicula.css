@@ -15,229 +15,113 @@
 @import url('https://fonts.googleapis.com');
 
 :root {
-    --bg-fino: #ffffff;
-    --texto-titulos: #121212;
-    --texto-cuerpo: #333333;
-    --acento-red: #ff4d4d;
-    --oro-star: #ffc107;
-    --borde-light: #ececec;
-    --sombra-soft: 0 20px 40px rgba(0,0,0,0.08);
-    --fuente-serif: 'Lora', serif;
-    --fuente-sans: 'Source Sans Pro', sans-serif;
+    --dark-base: rgb(33, 37, 41);
+    --accent-gold: #ffa41c;
+    --link-blue: #007185;
+    --border-soft: #e7e7e7;
 }
 
-/* Estructura Principal */
-.detalle {
-    max-width: 1100px;
-    margin: 60px auto;
-    padding: 0 30px;
-    font-family: var(--fuente-sans);
-}
-
+/* GRID Y PORTADA */
 .detalle-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 60px;
-    align-items: start;
-}
-
-/* Portada con Efecto Glass y Sticky */
-.portada {
-    position: sticky;
-    top: 40px;
+    grid-template-columns: 280px 1fr;
+    gap: 50px;
+    margin-top: 40px;
 }
 
 .portada img {
     width: 100%;
-    border-radius: 16px;
-    box-shadow: var(--sombra-soft);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    object-fit: cover;
 }
 
-.portada img:hover {
-    transform: scale(1.02);
+/* BARRA DE VALORACIÓN */
+.rating-social-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
 }
 
-/* Tipografías y Títulos */
-.contenido h2 {
-    font-family: var(--fuente-serif);
-    font-size: 42px;
-    line-height: 1.1;
-    color: var(--texto-titulos);
-    margin-bottom: 10px;
+.estrellas-voto { display: flex; flex-direction: row-reverse; }
+.estrellas-voto input { display: none; }
+.estrellas-voto label { font-size: 24px; color: #ccc; cursor: pointer; }
+.estrellas-voto input:checked ~ label, 
+.estrellas-voto label:hover, 
+.estrellas-voto label:hover ~ label { color: var(--accent-gold); }
+
+.puntuacion-texto { font-size: 14px; color: var(--link-blue); font-weight: 600; }
+
+/* LIKE INNOVADOR */
+.btn-interaccion-like {
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.contenido h3 {
-    font-family: var(--fuente-sans);
-    font-weight: 300;
-    font-size: 20px;
-    color: #888;
-    margin-bottom: 30px;
-}
+.corazon-icono { color: #bbb; font-size: 20px; }
 
-/* Bloque de Información Técnica */
-.info-libro, .info-pelicula {
+.btn-interaccion-like.active {
+    background: #fff4e5;
+    border-color: var(--accent-gold);
+    transform: scale(1.2);
+}
+.btn-interaccion-like.active .corazon-icono { color: #ff4d4d; }
+
+/* INFO TÉCNICA */
+.info-tecnica {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    background: #fcfcfc;
-    border: 1px solid var(--borde-light);
-    padding: 25px;
-    border-radius: 12px;
-    margin-bottom: 35px;
-}
-
-.info-libro p, .info-pelicula p {
-    font-size: 15px;
-    color: var(--texto-cuerpo);
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 8px;
-}
-
-.info-libro strong, .info-pelicula strong {
-    color: #000;
-    font-weight: 600;
-}
-
-/* Descripción */
-.descripcion-libro h3, .descripcion-pelicula h3, .comentarios h3 {
-    font-family: var(--fuente-serif);
-    font-size: 22px;
-    color: var(--texto-titulos);
-    margin-bottom: 15px;
-    border-left: 4px solid var(--texto-titulos);
-    padding-left: 15px;
-}
-
-.descripcion-libro p, .descripcion-pelicula p {
-    font-size: 17px;
-    line-height: 1.8;
-    color: #555;
-    text-align: justify;
-}
-
-/* Valoración y Estrellas */
-.valoracion {
-    margin: 40px 0 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--borde-light);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.estrellas {
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.estrellas input { display: none; }
-
-.estrellas label {
-    font-size: 32px;
-    color: #e0e0e0;
-    cursor: pointer;
-    transition: color 0.2s ease-in-out;
-}
-
-.estrellas input:checked ~ label,
-.estrellas label:hover,
-.estrellas label:hover ~ label {
-    color: var(--oro-star);
-    text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
-}
-
-/* Botones y Acciones */
-.acciones-usuario {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.boton-externo {
-    background: #000;
-    color: #fff;
-    padding: 14px 28px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-}
-
-.boton-externo:hover {
-    background: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.corazon-like {
-    background: #fff;
-    border: 1px solid #ddd;
-    color: #ddd;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.corazon-like:hover, .corazon-like.active {
-    background: #fff0f1;
-    border-color: var(--acento-red);
-    color: var(--acento-red);
-}
-
-/* Sección de Comentarios */
-.comentarios {
-    max-width: 1100px;
-    margin: 40px auto 100px;
-    padding: 0 30px;
-}
-
-.form-comentario textarea {
-    width: 100%;
-    border: 1px solid var(--borde-light);
-    border-radius: 12px;
+    background: #f9f9f9;
     padding: 20px;
-    font-family: var(--fuente-sans);
-    font-size: 16px;
-    background: #fcfcfc;
-    resize: none;
-    margin-bottom: 15px;
-    transition: border 0.3s ease;
+    border-radius: 12px;
+    margin: 20px 0;
 }
 
-.form-comentario textarea:focus {
-    outline: none;
-    border-color: #000;
-    background: #fff;
+/* LEER MÁS DINÁMICO */
+.texto-recortado {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.4s ease;
+}
+.texto-recortado::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 40px;
+    background: linear-gradient(transparent, white);
+}
+.texto-recortado.expandido { max-height: 1000px; }
+.texto-recortado.expandido::after { display: none; }
+
+.btn-expandir {
+    background: none; border: none; color: var(--link-blue);
+    font-weight: 700; cursor: pointer; padding: 10px 0;
 }
 
-.boton-comentar {
-    background: #000;
+/* PANEL COMENTARIOS DARK */
+.panel-comentarios {
+    background-color: var(--dark-base);
     color: #fff;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.3s;
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 40px;
 }
 
-.boton-comentar:hover { opacity: 0.8; }
-
-/* Responsive */
-@media (max-width: 900px) {
-    .detalle-grid { grid-template-columns: 1fr; }
-    .portada { position: static; text-align: center; }
-    .portada img { max-width: 300px; }
-    .contenido h2 { font-size: 32px; text-align: center; }
-    .contenido h3 { text-align: center; }
+.form-post textarea {
+    width: 100%; background: #2c3034; border: 1px solid #444;
+    color: #fff; border-radius: 8px; padding: 15px;
 }
+
+.btn-publicar {
+    background: var(--accent-gold);
+    color: #000; font-weight: 800; border: none;
+    padding: 10px 25px; border-radius: 20px; cursor: pointer;
+    margin-top: 10px; float: right;
+}
+
