@@ -67,7 +67,7 @@ if (!$urlImagenPortada) {
 <head>
     <meta charset="UTF-8">
     <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
-    <link rel="stylesheet" href="../../web/css/fichaLibroPelicula.css">
+    <link rel="stylesheet" href="<?php $root ?>web/css/fichaLibroPelicula.css">
 </head>
 <body>
 

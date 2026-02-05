@@ -57,6 +57,12 @@ $map = [
         'nivel'      => 1
     ],
 
+    'fichaLibroPelicula' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'ficha',
+        'nivel'      => 1
+    ],
+
     // ADMIN
     'panelAdmin' => [
         'controller' => 'AdminController',
