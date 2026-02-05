@@ -14,12 +14,20 @@ class ListaModel {
         return $stmt->execute([$idUsuario, $nombre, $descripcion, $tipo]);
     }
 
-    public static function obtenerListasUsuario($idUsuario) {
-        $sql = "SELECT * FROM listas WHERE id_usuario = ?";
-        $db = Conexion::getConexion();
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$idUsuario]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public static function obtenerListasUsuario(PDO $conexionBD, int $idUsuario): array {
+        try {
+            // El query debe ser un string puro, el objeto PDO no se toca aquí
+            $sql = "SELECT id_lista, nombre FROM listas WHERE id_usuario = ?";
+            $stmt = $conexionBD->prepare($sql);
+            
+            // Pasamos el ID como parámetro en el execute
+            $stmt->execute([$idUsuario]);
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en obtenerListasUsuario: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function añadirItem($idLista, $idLibro, $idPelicula) {

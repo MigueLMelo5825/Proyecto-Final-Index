@@ -34,8 +34,19 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- Script para el buscador -->
-<script src="/Proyecto/web/js/buscadorLibrosYPeliculas.js" defer></script>
+ <!-- En footer.php -->
+<?php
+    // Calculamos la ruta base de forma dinámica
+    $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+    $host = $_SERVER['HTTP_HOST'];
+    // Esto obtiene "/nombre_de_tu_carpeta_sea_cual_sea/"
+    $project_root = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+    $base_url = $protocol . $host . $project_root;
+?>
+
+<script src="<?= $base_url ?>web/js/buscadorLibrosYPeliculas.js" defer></script>
 
 </body>
 </html>

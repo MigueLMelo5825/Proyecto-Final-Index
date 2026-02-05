@@ -30,5 +30,8 @@
     </div>
   </div>
   
+
+  
+  <script src="../../web/js/validacionRecupero.js"></script>
 </body>
 </html>
