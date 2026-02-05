@@ -25,7 +25,7 @@ class UsuarioController {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $password2 = $_POST['password2'] ?? '';
-
+    
         // Validaciones básicas
         if ($password !== $password2) {
             echo "<h2>Las contraseñas no coinciden</h2>";

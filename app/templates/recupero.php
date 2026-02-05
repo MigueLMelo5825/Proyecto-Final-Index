@@ -16,10 +16,10 @@
     <br>
     <p>Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
 
-    <form>
+<form method="POST" action="?controller=recuperacion&action=enviarEmail">
       <div>
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" required />
+        <input type="email" id="email" name="email" required />
       </div>
 
       <button type="submit">Enviar enlace</button>

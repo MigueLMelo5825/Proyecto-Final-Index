@@ -66,5 +66,76 @@ public function actualizarRol($id, $rol) {
     return $stmt->execute([$rol, $id]);
 }
 
+//-------------------------------------------------------------
+
+public function buscarPorEmail($email) {
+    try {
+        $query = "SELECT * FROM usuarios WHERE email = :email LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+        
+    } catch (PDOException $e) {
+        error_log("Error al buscar usuario por email: " . $e->getMessage());
+        return false;
+    }
+}
+
+
+public function actualizarPassword($usuarioId, $nuevaPassword) {
+    try {
+        // Hashear la contraseña
+        $passwordHash = password_hash($nuevaPassword, PASSWORD_BCRYPT);
+        
+        $query = "UPDATE usuarios SET password = :password WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':password', $passwordHash, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $usuarioId, PDO::PARAM_INT);
+        
+        return $stmt->execute();
+        
+    } catch (PDOException $e) {
+        error_log("Error al actualizar contraseña: " . $e->getMessage());
+        return false;
+    }
+}
+
+
+public function emailExiste($email) {
+    try {
+        $query = "SELECT COUNT(*) as total FROM usuarios WHERE email = :email";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $resultado && $resultado['total'] > 0;
+        
+    } catch (PDOException $e) {
+        error_log("Error al verificar email: " . $e->getMessage());
+        return false;
+    }
+}
+
+
+public function obtenerPorId($id) {
+    try {
+        $query = "SELECT * FROM usuarios WHERE id = :id LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+        
+    } catch (PDOException $e) {
+        error_log("Error al obtener usuario por ID: " . $e->getMessage());
+        return false;
+    }
+}
+
+
 }
     
