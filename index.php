@@ -32,6 +32,13 @@ $map = [
         'nivel'      => 0
     ],
 
+    'buscar' => [
+    'controller' => 'BuscadorController',
+    'action'     => 'buscar',
+    'nivel'      => 0
+],
+
+
     'perfil' => [
         'controller' => 'UsuarioController',
         'action'     => 'perfil',
