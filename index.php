@@ -1,18 +1,62 @@
 <?php
+// ============================================================
+// AUTOLOAD Y CONFIGURACIÓN GLOBAL
+// ============================================================
 require_once __DIR__ . '/app/Core/autoload.php';
 require_once __DIR__ . '/app/Core/Config.php';
 require_once __DIR__ . '/app/libs/bGeneral.php';
 require_once __DIR__ . '/app/libs/bSeguridad.php';
 
-// Sesión segura
+// ============================================================
+// MODELOS
+// ============================================================ 
+require_once __DIR__ . '/app/Models/ConexionApiLibros.php';
+require_once __DIR__ . '/app/Models/ConexionPeliculasApi.php';
+require_once __DIR__ . '/app/Models/Libros.php';
+require_once __DIR__ . '/app/Models/ListaModel.php';
+require_once __DIR__ . '/app/Models/Peliculas.php';
+require_once __DIR__ . '/app/Models/TimelineModel.php';
+require_once __DIR__ . '/app/Models/TokenRecuperacion.php';
+require_once __DIR__ . '/app/Models/UsuarioModel.php';
+
+
+// ============================================================
+// CORE (CONEXIONES A API, DB, ETC.)
+// ============================================================
+require_once __DIR__ . '/app/Core/autoload.php';
+require_once __DIR__ . '/app/Core/Conexion.php';
+require_once __DIR__ . '/app/Core/Config.php';
+require_once __DIR__ . '/app/Core/Database.php';
+
+// ============================================================
+// CONTROLADORES
+// ============================================================
+require_once __DIR__ . '/app/Controllers/AdminController.php';
+require_once __DIR__ . '/app/Controllers/BuscadorController.php';
+require_once __DIR__ . '/app/Controllers/fichaLibroPeliculaController.php';
+require_once __DIR__ . '/app/Controllers/InicioController.php';
+require_once __DIR__ . '/app/Controllers/LibrosController.php';
+require_once __DIR__ . '/app/Controllers/ListaController.php';
+require_once __DIR__ . '/app/Controllers/PeliculasController.php';
+require_once __DIR__ . '/app/Controllers/RecuperacionController.php';
+require_once __DIR__ . '/app/Controllers/TimelineController.php';
+require_once __DIR__ . '/app/Controllers/AdminController.php';
+require_once __DIR__ . '/app/Controllers/UsuarioController.php';
+
+
+
+
+// ============================================================
+// SESIÓN SEGURA
+// ============================================================
 $session = new SessionManager(
     loginPage: 'index.php?ctl=login',
     timeout: 600
 );
 
-// -------------------------------------------------------------
-// Mapa de rutas
-// -------------------------------------------------------------
+// ============================================================
+// MAPA DE RUTAS
+// ============================================================
 $map = [
     'inicio' => [
         'controller' => 'InicioController',
@@ -33,11 +77,10 @@ $map = [
     ],
 
     'buscar' => [
-    'controller' => 'BuscadorController',
-    'action'     => 'buscar',
-    'nivel'      => 0
-],
-
+        'controller' => 'BuscadorController',
+        'action'     => 'buscar',
+        'nivel'      => 0
+    ],
 
     'perfil' => [
         'controller' => 'UsuarioController',
@@ -80,6 +123,19 @@ $map = [
         'nivel'      => 3
     ],
 
+    // IMPORTACIÓN DESDE API
+    'importarPeliculas' => [
+        'controller' => 'ImportarPeliculasController',
+        'action'     => 'importar',
+        'nivel'      => 3
+    ],
+
+    'importarLibros' => [
+        'controller' => 'ImportarLibrosController',
+        'action'     => 'importar',
+        'nivel'      => 3
+    ],
+
     // LISTAS
     'crearLista' => [
         'controller' => 'ListaController',
@@ -93,10 +149,9 @@ $map = [
     ],
 ];
 
-
-// -------------------------------------------------------------
-// Resolución de ruta
-// -------------------------------------------------------------
+// ============================================================
+// RESOLUCIÓN DE RUTA
+// ============================================================
 $ruta = $_GET['ctl'] ?? 'inicio';
 
 if (!isset($map[$ruta])) {
@@ -109,31 +164,25 @@ $controllerName = $map[$ruta]['controller'];
 $actionName     = $map[$ruta]['action'];
 $requiredLevel  = $map[$ruta]['nivel'];
 
-// -------------------------------------------------------------
-// Seguridad (Opción B aplicada)
-// -------------------------------------------------------------
+// ============================================================
+// SEGURIDAD
+// ============================================================
 if (!in_array($ruta, ['login', 'registro'])) {
     $session->checkSecurity();
 }
 
-
-// -------------------------------------------------------------
-// Cargar el controlador
-// -------------------------------------------------------------
-require_once __DIR__ . '/app/Controllers/' . $controllerName . '.php';
-
-// -------------------------------------------------------------
-// Comprobación de permisos
-// -------------------------------------------------------------
+// ============================================================
+// COMPROBACIÓN DE PERMISOS
+// ============================================================
 if (!$session->hasLevel($requiredLevel)) {
     header("HTTP/1.0 403 Forbidden");
     echo "<h1>403: No tienes permisos para acceder a esta acción</h1>";
     exit;
 }
 
-// -------------------------------------------------------------
-// Ejecución del controlador
-// -------------------------------------------------------------
+// ============================================================
+// EJECUCIÓN DEL CONTROLADOR
+// ============================================================
 $controller = new $controllerName($session);
 
 if (!method_exists($controller, $actionName)) {

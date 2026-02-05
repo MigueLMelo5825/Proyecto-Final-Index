@@ -37,28 +37,13 @@
 
 
   <div>
-        <label for="pais">Nacionalidad</label>
-        <select id="pais" name="pais" required>
-            <option value="">Selecciona tu país</option>
-            <option value="España">España</option>
-            <option value="México">México</option>
-            <option value="Argentina">Argentina</option>
-            <option value="Colombia">Colombia</option>
-            <option value="Chile">Chile</option>
-            <option value="Perú">Perú</option>
-            <option value="Ecuador">Ecuador</option>
-            <option value="Venezuela">Venezuela</option>
-            <option value="Uruguay">Uruguay</option>
-            <option value="Bolivia">Bolivia</option>
-            <option value="Paraguay">Paraguay</option>
-            <option value="Costa Rica">Costa Rica</option>
-            <option value="Panamá">Panamá</option>
-            <option value="Guatemala">Guatemala</option>
-            <option value="Honduras">Honduras</option>
-            <option value="El Salvador">El Salvador</option>
-            <option value="Nicaragua">Nicaragua</option>
-            <option value="República Dominicana">República Dominicana</option>
-        </select>
+    
+      <select name="pais_id">
+    <?php foreach ($paises as $p): ?>
+        <option value="<?= $p['id_pais'] ?>"><?= $p['nombre'] ?></option>
+    <?php endforeach; ?>
+</select>
+
       </div>
 
 

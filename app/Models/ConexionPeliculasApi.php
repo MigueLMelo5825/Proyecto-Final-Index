@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__DIR__).'/Models/Peliculas.php';
-
 class ConexionPeliculasApi {
 
     private static string $apiKey = "1af9c7bfbe2d47b30483f4c7ab743391";

@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../Models/ListasModel.php';
-require_once __DIR__ . '/../Core/Database.php';
 
 class ListaController {
 
@@ -25,7 +23,7 @@ class ListaController {
                 exit;
             }
 
-            $modelo = new ListasModel();
+            $modelo = new ListaModel();
             $modelo->crearLista($idUsuario, $nombre, $descripcion, $tipo);
 
             header("Location: index.php?ctl=perfil");

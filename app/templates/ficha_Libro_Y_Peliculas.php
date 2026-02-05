@@ -1,8 +1,4 @@
 <?php
-require_once dirname(__DIR__) . '/Core/Database.php';
-require_once dirname(__DIR__) . '/Models/Libros.php';
-require_once dirname(__DIR__) . '/Models/Peliculas.php';
-require_once dirname(__DIR__) . '/Models/ListasModel.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -136,7 +132,7 @@ if (!$urlImagenPortada) {
     </button>
 
 <?php
-require_once dirname(__DIR__) . '/Models/ListasModel.php';
+require_once dirname(__DIR__) . '/Models/ListaModel.php';
 
 
 if ($idUsuario):

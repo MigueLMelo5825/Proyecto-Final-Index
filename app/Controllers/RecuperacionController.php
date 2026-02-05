@@ -1,10 +1,6 @@
 <?php
 
 
-require_once __DIR__ . '/../Models/UsuarioModel.php';
-require_once __DIR__ . '/../Models/TokenRecuperacion.php';
-require_once __DIR__ . '/../libs/EmailService.php';
-
 class RecuperacionController {
     
     private $usuarioModel;

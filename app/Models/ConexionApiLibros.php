@@ -1,7 +1,5 @@
 <?php
 
-require dirname(__DIR__) . '/Models/Libros.php';
-
 class ConexionApiLibros
 {
 
