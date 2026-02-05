@@ -544,7 +544,35 @@ INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `gene
 (40, 'Greenland 2', 2026, 'https://image.tmdb.org/t/p/w300/uoFJ6nGGvf8moZGpharm8Qyrpzm.jpg', 'La familia Garrity superviviente debe abandonar la seguridad del búnker de Groenlandia y embarcarse en un peligroso viaje a través del diezmado páramo helado de Europa para encontrar un nuevo hogar.', 12);
 
 -- --------------------------------------------------------
--- se arregla fallo 
+-- creamos la tabla de likes
+
+CREATE TABLE IF NOT EXISTS `likes` (
+    `id_like` INT AUTO_INCREMENT PRIMARY KEY,
+    `id_usuario` INT NOT NULL,
+    `id_libro` VARCHAR(50) NULL, -- VARCHAR porque usas IDs de Google Books
+    `id_pelicula` INT NULL,
+    `fecha_like` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Evita que un usuario le dé like dos veces a lo mismo
+    UNIQUE KEY unique_like_libro (`id_usuario`, `id_libro`),
+    UNIQUE KEY unique_like_pelicula (`id_usuario`, `id_pelicula`),
+    FOREIGN KEY (`id_usuario`) REFERENCES usuarios(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+-- creamos la tabla de calificaciones
+
+CREATE TABLE IF NOT EXISTS `calificaciones` (
+    `id_calificacion` INT AUTO_INCREMENT PRIMARY KEY,
+    `id_usuario` INT NOT NULL,
+    `id_libro` VARCHAR(50) NULL,
+    `id_pelicula` INT NULL,
+    `puntuacion` TINYINT CHECK (puntuacion BETWEEN 1 AND 5),
+    `fecha_calificacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Un usuario solo puede calificar una vez cada obra
+    UNIQUE KEY unique_puntos_libro (`id_usuario`, `id_libro`),
+    UNIQUE KEY unique_puntos_pelicula (`id_usuario`, `id_pelicula`),
+    FOREIGN KEY (`id_usuario`) REFERENCES usuarios(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -1,7 +1,10 @@
 // ---------------- CONFIGURACIÓN ----------------
 
 // Tu proyecto está en: http://localhost/Proyecto/
-const baseUrl = "/Proyecto";
+//const baseUrl = "/Proyecto";
+
+//se crea una url diamina que se pueda usar en todos los proyectos Miguel Melo
+const baseUrl = window.location.href;
 
 // URL del backend del buscador (controlador MVC)
 const urlPhp = `${baseUrl}/index.php?ctl=buscar`;
