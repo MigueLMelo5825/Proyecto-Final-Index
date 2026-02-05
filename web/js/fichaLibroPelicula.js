@@ -3,12 +3,51 @@ const valores = new URLSearchParams(window.location.search);
 const idLibroPelicula = valores.get('id');
 const tipo = valores.get('type');
 
+//creamos variables para enviar peticion
+const urlBase = window.location.href;
+
+const urlPhp = `${baseUrl}/index.php?ctl=guardarLikeYComentario`;
+
+
 //obtenemos los botones e inputs del DOM
 const like = document.getElementById("btn-favorito");
 //funcion para enviar like y guardarlo
 async function enviarLike(){
+    
     like.addEventListener("click", async event =>{
         event.preventDefault();
+
+        try{
+
+            const peticionJson = await fetch (urlPhp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },    
+                body: JSON.stringify({
+                    id: idLibroPelicula,
+                    type: tipo,
+                    accion: "like",
+
+                })
+            });
+    
+            const datos = await peticionJson.json();
+
+            // 2. Lógica visual: Si el PHP dice 'agregado', pintamos el corazón
+            if (datos.status === "success") {
+                if (datos.resultado === "agregado") {
+                    like.classList.add("active");
+                } else {
+                    like.classList.remove("active");
+                }
+            } else {
+                alert(datos.mensaje); // "Debes iniciar sesión"
+            }
+            
+        }catch(error){
+            console.error(error)
+        }
     })
 }
 

@@ -11,6 +11,10 @@ class fichaLibroPeliculaController {
     }
 
     public static function guardarLikesYCalificacion(){
+        
+        //if (session_status() === PHP_SESSION_NONE) {
+            //session_start();
+        //}
         // Solo procesamos si hay sesión iniciado
         $idUsuario = $_SESSION['id_usuario'] ?? null;
 

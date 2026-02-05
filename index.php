@@ -106,6 +106,14 @@ $map = [
         'nivel'      => 1
     ],
 
+    'guardarLikeYComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'guardarLikesYCalificacion',
+        'nivel'      => 1
+    ],
+
+
+
     // ADMIN
     'panelAdmin' => [
         'controller' => 'AdminController',
