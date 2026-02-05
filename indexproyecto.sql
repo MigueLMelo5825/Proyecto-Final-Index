@@ -261,6 +261,27 @@ INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fech
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+
+CREATE TABLE `usuarios` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `contrasena` VARCHAR(200) NOT NULL,
+  `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
+  `pais` VARCHAR(100) DEFAULT NULL,
+  `nivel` INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------------------
+
 DROP TABLE IF EXISTS listas;
 
 CREATE TABLE listas (
@@ -335,26 +356,7 @@ INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `gene
 (40, 'Greenland 2', 2026, 'https://image.tmdb.org/t/p/w300/uoFJ6nGGvf8moZGpharm8Qyrpzm.jpg', 'La familia Garrity superviviente debe abandonar la seguridad del búnker de Groenlandia y embarcarse en un peligroso viaje a través del diezmado páramo helado de Europa para encontrar un nuevo hogar.', 12);
 
 -- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
-
-DROP TABLE IF EXISTS `usuarios`;
-
-CREATE TABLE `usuarios` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(150) NOT NULL,
-  `contrasena` VARCHAR(200) NOT NULL,
-  `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
-  `pais` VARCHAR(100) DEFAULT NULL,
-  `nivel` INT NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email_unique` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
+-- se arregla fallo 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
