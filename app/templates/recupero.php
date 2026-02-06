@@ -16,7 +16,7 @@
     <br>
     <p>Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
 
-<form method="POST" action="?controller=recuperacion&action=enviarEmail">
+<form method="POST" action="index.php?ctl=recupero">
       <div>
         <label for="email">Correo electrónico</label>
         <input type="email" id="email" name="email" required />

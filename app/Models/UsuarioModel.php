@@ -89,9 +89,9 @@ public function actualizarPassword($usuarioId, $nuevaPassword) {
         // Hashear la contraseña
         $passwordHash = password_hash($nuevaPassword, PASSWORD_BCRYPT);
         
-        $query = "UPDATE usuarios SET password = :password WHERE id = :id";
+        $query = "UPDATE usuarios SET contrasena = :contrasena WHERE id = :id";
         $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':password', $passwordHash, PDO::PARAM_STR);
+        $stmt->bindParam(':contrasena', $passwordHash, PDO::PARAM_STR);
         $stmt->bindParam(':id', $usuarioId, PDO::PARAM_INT);
         
         return $stmt->execute();

@@ -2,9 +2,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once __DIR__ . '/../libs/PHPMailer/src/Exception.php';
-require_once __DIR__ . '/../libs/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/../libs/PHPMailer/src/SMTP.php';
+
+require_once __DIR__ . '/../libs/PHPMailer/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/../libs/PHPMailer/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../libs/PHPMailer/PHPMailer/src/SMTP.php';
 
 class Mailer {
 
@@ -38,7 +39,10 @@ class Mailer {
       return true;
 
     } catch (Exception $e) {
-      return false;
+      echo "<pre>";
+      echo $mail->ErrorInfo;
+      echo "</pre>";
+      exit;
     }
   }
 }

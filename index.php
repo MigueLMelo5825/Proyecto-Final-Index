@@ -16,7 +16,6 @@ require_once __DIR__ . '/app/Models/Libros.php';
 require_once __DIR__ . '/app/Models/ListaModel.php';
 require_once __DIR__ . '/app/Models/Peliculas.php';
 require_once __DIR__ . '/app/Models/TimelineModel.php';
-require_once __DIR__ . '/app/Models/TokenRecuperacion.php';
 require_once __DIR__ . '/app/Models/UsuarioModel.php';
 
 
@@ -38,7 +37,6 @@ require_once __DIR__ . '/app/Controllers/InicioController.php';
 require_once __DIR__ . '/app/Controllers/LibrosController.php';
 require_once __DIR__ . '/app/Controllers/ListaController.php';
 require_once __DIR__ . '/app/Controllers/PeliculasController.php';
-require_once __DIR__ . '/app/Controllers/RecuperacionController.php';
 require_once __DIR__ . '/app/Controllers/TimelineController.php';
 require_once __DIR__ . '/app/Controllers/AdminController.php';
 require_once __DIR__ . '/app/Controllers/UsuarioController.php';
@@ -73,6 +71,19 @@ $map = [
     'registro' => [
         'controller' => 'UsuarioController',
         'action'     => 'registro',
+        'nivel'      => 0
+    ],
+
+    
+    'recupero' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'recuperar',
+        'nivel'      => 0
+    ],
+
+    'reset' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'reset',
         'nivel'      => 0
     ],
 
@@ -175,7 +186,7 @@ $requiredLevel  = $map[$ruta]['nivel'];
 // ============================================================
 // SEGURIDAD
 // ============================================================
-if (!in_array($ruta, ['login', 'registro'])) {
+if (!in_array($ruta, ['login', 'registro', 'recupero', 'reset'])) {
     $session->checkSecurity();
 }
 
