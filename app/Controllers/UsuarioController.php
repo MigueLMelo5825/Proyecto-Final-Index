@@ -57,6 +57,7 @@ class UsuarioController
     // -------------------------------------------------------------
     public function login()
     {
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/login.php';
             return;
@@ -82,8 +83,10 @@ class UsuarioController
             // 2) Compatibilidad con código que lee directamente $_SESSION
             $_SESSION['id_usuario']      = $usuario['id'];
             $_SESSION['usuarioId']       = $usuario['id'];
-            $_SESSION['usuarioNombre']   = $usuario['nombre'];
+            //$_SESSION['usuarioNombre']   = $usuario['nombre'];
             $_SESSION['usuarioNivel']    = $nivel;
+
+            CookieManager::set('usuarioNombre', $usuario['nombre']);
 
             header("Location: index.php?ctl=perfil");
             exit;

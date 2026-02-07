@@ -59,7 +59,7 @@ $map = [
     'inicio' => [
         'controller' => 'InicioController',
         'action'     => 'inicio',
-        'nivel'      => 1
+        'nivel'      => 0
     ],
 
     'login' => [
@@ -186,7 +186,7 @@ $requiredLevel  = $map[$ruta]['nivel'];
 // ============================================================
 // SEGURIDAD
 // ============================================================
-if (!in_array($ruta, ['login', 'registro', 'recupero', 'reset'])) {
+if (!in_array($ruta, ['login', 'registro', 'recupero', 'reset', 'inicio'])) {
     $session->checkSecurity();
 }
 
