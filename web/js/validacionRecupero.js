@@ -15,6 +15,5 @@ document.querySelector('form').addEventListener('submit', function(e) {
         alert("Por favor, introduce un formato de correo válido.");
         emailInput.focus();
     }
-   
 });
 
