@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     
+    
     <link rel="stylesheet" href="./web/css/styleLogin.css">
+
 </head>
 <body>
 
@@ -17,7 +19,7 @@
 
 
             
-            <label> Email o usuario
+            <label> Email 
                 <input type="text" id="email" name="email" placeholder="Email" required>
                 <p id="errorUsuario" class="error"></p>
             </label> 
