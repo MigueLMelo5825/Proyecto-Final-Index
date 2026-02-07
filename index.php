@@ -17,6 +17,8 @@ require_once __DIR__ . '/app/Models/ListaModel.php';
 require_once __DIR__ . '/app/Models/Peliculas.php';
 require_once __DIR__ . '/app/Models/TimelineModel.php';
 require_once __DIR__ . '/app/Models/UsuarioModel.php';
+require_once __DIR__ . '/app/Models/ListaItemsModel.php';
+
 
 
 // ============================================================
@@ -166,6 +168,18 @@ $map = [
         'action'     => 'añadir',
         'nivel'      => 1
     ],
+    'verLista' => [
+    'controller' => 'ListaController',
+    'action'     => 'ver',
+    'nivel'      => 1
+],
+
+'agregarItem' => [
+    'controller' => 'ListaController',
+    'action'     => 'agregarItem',
+    'nivel'      => 1
+],
+
 ];
 
 // ============================================================

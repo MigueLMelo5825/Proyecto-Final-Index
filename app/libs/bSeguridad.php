@@ -14,12 +14,12 @@ function comprobarhash($pass, $passBD) {
 // -------------------------------------------------------------
 // SESSION MANAGER
 // -------------------------------------------------------------
-class SessionManager {
+class SessionManagerLegacy {
 
     private $loginPage;
     private $timeout;
 
-    public function __construct($loginPage = 'index.php?ctl=login', $timeout = 600) {
+    public function __constructLegacy($loginPage = 'index.php?ctl=login', $timeout = 600) {
         $this->loginPage = $loginPage;
         $this->timeout = $timeout;
 

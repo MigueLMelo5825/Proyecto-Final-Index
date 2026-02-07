@@ -1,38 +1,10 @@
-/* 
-   TIPOGRAFÍAS (LORA + SOURCE SANS PRO)
-*/
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
-
-/* SE IMPORTAN LOS ARCHIVOS GENERALES DE STYLES.CSS */
-@import url("../css/styles.css"); 
-
-
-/* ============================================================
-   AISLAR BOOTSTRAP PARA QUE TU CSS NO LO ROMPA
-   ============================================================ */
-.bootstrap-zone {
-    all: unset;
-    display: block;
-    width: 100%;
-}
-
-.bootstrap-zone * {
-    all: revert;
-    box-sizing: border-box;
-}
-
-
-/* ============================================================
-   PERFIL
-   ============================================================ */
-
+/* PERFIL */
 #perfil {
-    background: var(--card-bg);
+    background: #fff;
     padding: 30px;
-    border-radius: var(--radius);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     text-align: center;
-    margin-bottom: 40px;
-    border: 1px solid var(--border);
 }
 
 #perfil img {
@@ -41,7 +13,7 @@
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 12px;
-    border: 3px solid var(--border);
+    border: 3px solid #ddd;
 }
 
 #perfil h2 {
@@ -50,59 +22,125 @@
 }
 
 #perfil p {
-    font-size: 16px;
-    color: var(--text-soft);
+    font-size: 15px;
+    color: #555;
 }
 
-
-/* ============================================================
-   ESTADÍSTICAS
-   ============================================================ */
-
+/* ESTADÍSTICAS */
 #estadisticas {
     display: flex;
     justify-content: center;
     gap: 40px;
-    margin-top: 20px;
+    flex-wrap: wrap;
+    margin-top: 15px;
 }
 
-.stat strong {
-    font-size: 22px;
+#estadisticas .stat {
+    text-align: center;
+}
+
+#estadisticas .stat strong {
+    font-size: 20px;
     display: block;
 }
 
-.stat span {
+#estadisticas .stat span {
     font-size: 14px;
-    color: var(--text-soft);
+    color: #777;
 }
 
-
-/* ============================================================
-   LISTAS PERSONALIZADAS (tu estilo original)
-   ============================================================ */
-
+/* LISTAS */
 .lista-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    margin-bottom: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 18px 15px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .lista-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.1);
 }
 
 .lista-card h4 {
     font-size: 18px;
-    margin-bottom: 4px;
-    color: var(--text);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .lista-card p {
-    font-size: 15px;
-    color: var(--text-soft);
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lista-card .badge {
+    font-size: 12px;
+}
+
+/* CUADRÍCULA TOPS */
+.top-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.top-item {
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.top-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.top-item img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+.top-item strong, .top-item small {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
+
+
+/* RESPONSIVE: en pantallas <992px, mostrar 3 ítems por fila */
+@media (max-width: 991px) {
+    .top-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* RESPONSIVE: en pantallas <768px, mostrar 2 ítems por fila */
+@media (max-width: 767px) {
+    .top-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* RESPONSIVE: en pantallas <576px, mostrar 1 ítem por fila */
+@media (max-width: 575px) {
+    .top-grid {
+        grid-template-columns: 1fr;
+    }
 }

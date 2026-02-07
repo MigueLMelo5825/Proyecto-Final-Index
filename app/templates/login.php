@@ -37,7 +37,5 @@
     </div>
 </div>
 
-<script src="./web/js/validacionLogin.js"></script>
-
 </body>
 </html>

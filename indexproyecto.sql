@@ -577,3 +577,23 @@ CREATE TABLE IF NOT EXISTS `calificaciones` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- --------------------------------------------------------
+-- Estructura de tabla para la tabla `lista_items`
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `listas_items` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_lista` INT(11) NOT NULL,
+  `titulo` VARCHAR(255) DEFAULT NULL,
+  `descripcion` TEXT DEFAULT NULL,
+  `id_libro` VARCHAR(20) DEFAULT NULL,
+  `id_pelicula` INT(11) DEFAULT NULL,
+  `añadido_en` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `id_lista` (`id_lista`),
+  CONSTRAINT `fk_listas_items_listas`
+    FOREIGN KEY (`id_lista`) REFERENCES `listas`(`id`)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

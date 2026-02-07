@@ -1,7 +1,5 @@
 <?php
 
-//use App\Core\Mailer;
-
 class UsuarioController
 {
     private $session;
@@ -9,7 +7,7 @@ class UsuarioController
 
     public function __construct($session)
     {
-        $this->session = $session;
+        $this->session      = $session;
         $this->usuarioModel = new UsuarioModel();
     }
 
@@ -18,36 +16,29 @@ class UsuarioController
     // -------------------------------------------------------------
     public function registro()
     {
-        // 1) Conexión BD + países para el select
-        $pdo = Database::getConnection();
-        $paises = $pdo->query("SELECT * FROM paises ORDER BY nombre")->fetchAll();
+        $pdo     = Database::getConnection();
+        $paises  = $pdo->query("SELECT * FROM paises ORDER BY nombre")->fetchAll();
 
-        // 2) Si no es POST -> mostrar formulario
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/registro.php';
             return;
         }
 
-        // 3) Recoger datos
-        $nombre    = $_POST['name'] ?? '';
-        $email     = $_POST['email'] ?? '';
+        $nombre    = $_POST['name']     ?? '';
+        $email     = $_POST['email']    ?? '';
         $password  = $_POST['password'] ?? '';
         $password2 = $_POST['password2'] ?? '';
-        $pais_id   = $_POST['pais_id'] ?? null;
+        $pais_id   = $_POST['pais_id']  ?? null;
 
-        // 4) Validaciones
         if ($password !== $password2) {
             echo "<h2>Las contraseñas no coinciden</h2>";
             return;
         }
 
-        // 5) Hash
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        // 6) Guardar
         $this->usuarioModel->registrar($nombre, $email, $hash, $pais_id);
 
-        // 7) Redirigir
         header("Location: index.php?ctl=login");
         exit;
     }
@@ -57,34 +48,26 @@ class UsuarioController
     // -------------------------------------------------------------
     public function login()
     {
-        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/login.php';
             return;
         }
 
-        $email    = $_POST['email'] ?? '';
+        $email    = $_POST['email']    ?? '';
         $password = $_POST['password'] ?? '';
 
         $usuario = $this->usuarioModel->validarLogin($email, $password);
 
         if ($usuario) {
+
             $rol   = $usuario['rol'] ?? 'user';
             $nivel = ($rol === 'admin') ? 3 : 1;
 
-            // 1) Compatibilidad con SessionManager (si usas $this->session->get/set)
-            if ($this->session) {
-                $this->session->set('id_usuario', $usuario['id']);
-                $this->session->set('nombre', $usuario['nombre']);
-                $this->session->set('rol', $rol);
-                $this->session->set('nivel', $nivel);
-            }
+            // LOGIN OFICIAL
+            $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
 
-            // 2) Compatibilidad con código que lee directamente $_SESSION
-            $_SESSION['id_usuario']      = $usuario['id'];
-            $_SESSION['usuarioId']       = $usuario['id'];
-            //$_SESSION['usuarioNombre']   = $usuario['nombre'];
-            $_SESSION['usuarioNivel']    = $nivel;
+            // Compatibilidad con código antiguo
+            $_SESSION['id_usuario'] = $usuario['id'];
 
             CookieManager::set('usuarioNombre', $usuario['nombre']);
 
@@ -98,36 +81,44 @@ class UsuarioController
     // -------------------------------------------------------------
     // PERFIL
     // -------------------------------------------------------------
-    public function perfil()
-    {
-        $idUsuario = $_SESSION['id_usuario'] ?? null;
+ public function perfil()
+{
+    $idUsuario = $_SESSION['id_usuario'] ?? null;
 
-        if (!$idUsuario) {
-            echo "<h2>Error: no se pudo obtener el usuario actual.</h2>";
-            return;
-        }
-
-        // Listas del usuario
-        $listas = ListaModel::obtenerListasUsuario($idUsuario);
-
-        // Tops
-        $librosModel = new Libros();
-        $pelisModel  = new Peliculas();
-
-        $topLibros    = $librosModel->obtenerTopLibros();
-        $topPeliculas = $pelisModel->obtenerTopPeliculas();
-
-        foreach ($topPeliculas as &$p) {
-            $p['genero_nombre'] = $pelisModel->obtenerNombreGenero($p['genero']);
-        }
-        unset($p);
-
-        require __DIR__ . '/../templates/perfil.php';
+    if (!$idUsuario) {
+        echo "<h2>Error: no se pudo obtener el usuario actual.</h2>";
+        return;
     }
 
+    // Conexión
+    $conexion = Database::getConnection();
+
+    // Listas del usuario
+    $listas = ListaModel::obtenerListasUsuario($conexion, $idUsuario);
+    $numeroListas = count($listas);
+
+    // Tops
+    $librosModel = new Libros();
+    $pelisModel  = new Peliculas();
+
+    $topLibros    = $librosModel->obtenerTopLibros();
+    $topPeliculas = $pelisModel->obtenerTopPeliculas();
+
+    foreach ($topPeliculas as &$p) {
+        $p['genero_nombre'] = $pelisModel->obtenerNombreGenero($p['genero']);
+    }
+    unset($p);
+
+    require __DIR__ . '/../templates/perfil.php';
+}
+
+
+
+    // -------------------------------------------------------------
+    // RECUPERAR CONTRASEÑA
+    // -------------------------------------------------------------
     public function recuperar()
     {
-        // Mostrar formulario si no es POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/recupero.php';
             return;
@@ -140,29 +131,24 @@ class UsuarioController
             return;
         }
 
-        // Buscar usuario (esto sí existe en tu UsuarioModel)
         $usuario = $this->usuarioModel->buscarPorEmail($email);
 
-        // Respuesta neutra (seguridad: no decir si existe o no)
         if (!$usuario) {
             echo "<h2>Si el correo existe, recibirás un enlace para recuperar la contraseña.</h2>";
             return;
         }
 
-        // Generar token y guardar en sesión (sin BD)
         $token = bin2hex(random_bytes(32));
         $_SESSION['reset_email']  = $email;
         $_SESSION['reset_token']  = password_hash($token, PASSWORD_DEFAULT);
-        $_SESSION['reset_expira'] = time() + 3600; // 1 hora
+        $_SESSION['reset_expira'] = time() + 3600;
 
-        // Construir URL de reset
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
         $base   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
         $link = "{$scheme}://{$host}{$base}/index.php?ctl=reset&email=" . urlencode($email) . "&token=" . urlencode($token);
 
-        // Enviar correo con PHPMailer (Gmail) usando tu Mailer
         $subject = "Recuperar contraseña";
         $htmlBody = "
             <h2>Recuperación de contraseña</h2>
@@ -185,9 +171,11 @@ class UsuarioController
         echo "<h2>Si el correo existe, recibirás un enlace para recuperar la contraseña.</h2>";
     }
 
+    // -------------------------------------------------------------
+    // RESET CONTRASEÑA
+    // -------------------------------------------------------------
     public function reset()
     {
-        // 1) Comprobar parámetros
         $email = $_GET['email'] ?? '';
         $token = $_GET['token'] ?? '';
 
@@ -196,7 +184,6 @@ class UsuarioController
             return;
         }
 
-        // 2) Comprobar sesión
         if (
             empty($_SESSION['reset_email']) ||
             empty($_SESSION['reset_token']) ||
@@ -206,33 +193,28 @@ class UsuarioController
             return;
         }
 
-        // 3) Validar email
         if ($email !== $_SESSION['reset_email']) {
             echo "<h2>Email no válido</h2>";
             return;
         }
 
-        // 4) Comprobar expiración
         if (time() > $_SESSION['reset_expira']) {
             unset($_SESSION['reset_email'], $_SESSION['reset_token'], $_SESSION['reset_expira']);
             echo "<h2>El enlace ha expirado</h2>";
             return;
         }
 
-        // 5) Verificar token
         if (!password_verify($token, $_SESSION['reset_token'])) {
             echo "<h2>Token inválido</h2>";
             return;
         }
 
-        // 6) Si no es POST → mostrar formulario
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/restablecer_contrasena.php';
             return;
         }
 
-        // 7) Procesar nueva contraseña
-        $password  = $_POST['password'] ?? '';
+        $password  = $_POST['password']  ?? '';
         $password2 = $_POST['password2'] ?? '';
 
         if ($password === '' || $password !== $password2) {
@@ -240,7 +222,6 @@ class UsuarioController
             return;
         }
 
-        // 8) Actualizar contraseña
         $usuario = $this->usuarioModel->buscarPorEmail($email);
 
         if (!$usuario) {
@@ -255,12 +236,9 @@ class UsuarioController
             return;
         }
 
-        // 9) Limpiar sesión de recuperación
         unset($_SESSION['reset_email'], $_SESSION['reset_token'], $_SESSION['reset_expira']);
 
         echo "<h2>Contraseña actualizada correctamente</h2>";
         echo "<a href='index.php?ctl=login'>Iniciar sesión</a>";
     }
-
-
 }
