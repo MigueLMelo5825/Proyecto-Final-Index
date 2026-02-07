@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recuperar contraseña</title>
 
-<link rel="stylesheet" href="css/styleRecupero.css">
+<link rel="stylesheet" href="./web/css/styleRecupero.css">
 
 
 </head>
@@ -26,12 +26,12 @@
     </form>
 
     <div class="footer">
-      ¿Recordaste tu contraseña? <a href="login.php">Inicia sesión</a>
+      ¿Recordaste tu contraseña? <a href="index.php?ctl=login">Inicia sesión</a>
     </div>
   </div>
   
 
   
-  <script src="../../web/js/validacionRecupero.js"></script>
+  <script src="./web/js/validacionRecupero.js"></script>
 </body>
 </html>

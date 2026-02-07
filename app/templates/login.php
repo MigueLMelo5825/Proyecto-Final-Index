@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     
-    <link rel="stylesheet" href="../../web/css/styleLogin.css">
+    <link rel="stylesheet" href="./web/css/styleLogin.css">
 </head>
 <body>
 
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<script src="../../web/js/validacionLogin.js"></script>
+<script src="./web/js/validacionLogin.js"></script>
 
 </body>
 </html>

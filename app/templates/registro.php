@@ -8,7 +8,7 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="../../web/css/styleRegistro.css">
+  <link rel="stylesheet" href="./web/css/styleRegistro.css">
 </head>
 
 
@@ -24,13 +24,13 @@
 
       <div>
         <label for="name">Nombre</label>
-        <input type="text" id="name" name="name" placeholder="Tu nombre" required />
+        <input type="text" id="name" name="name" placeholder="Introduce tu nombre" required />
       </div>
 
 
       <div>
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required />
+        <input type="email" id="email" name="email" placeholder="Introduce tu correo" required />
       </div>
 
 
@@ -49,7 +49,7 @@
 
       <div>
         <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" placeholder="Contraseña" required />
+        <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required />
       </div>
 
 
@@ -70,12 +70,12 @@
 
 
     <div class="footer">
-      ¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a>
+      ¿Ya tienes cuenta? <a href="index.php?ctl=login">Inicia sesión</a>
     </div>
   </div>
 
 
-  <script src="../../web/js/validacionRegistro.js"></script>
+  <script src="./web/js/validacionRegistro.js"></script>
 
 
 </body>

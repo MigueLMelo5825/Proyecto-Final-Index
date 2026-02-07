@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Restablecer contraseña</title>
-  <link rel="stylesheet" href="../../web/css/styleRecupero.css">
+  <link rel="stylesheet" href="./web/css/styleRecupero.css">
 </head>
 <body>
 <div class="container">
@@ -33,7 +33,7 @@
   </form>
 
   <div class="footer">
-    <a href="login.php">Volver al login</a>
+    <a href="index.php?ctl=login">Volver al login</a>
   </div>
 </div>
 </body>
