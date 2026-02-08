@@ -67,11 +67,7 @@ $loggedIn = isset($session) ? $session->isLoggedIn() : (isset($_SESSION['id_usua
                 <?php if ($loggedIn): ?>
 
                     <li class="nav-item">
-<<<<<<< HEAD
                         <a class="nav-link" href="<?= $base_url ?>index.php?ctl=perfil">
-=======
-                        <a class="nav-link" href="index.php?ctl=perfil">
->>>>>>> fba28c0a65b10af1ecb9054e81a6e33d9c7a618d
                             <i class="bi bi-person-circle"></i> Perfil
                         </a>
                     </li>
