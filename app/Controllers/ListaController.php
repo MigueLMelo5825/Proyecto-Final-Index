@@ -1,17 +1,20 @@
 <?php
 
-class ListaController {
+class ListaController
+{
 
     private $session;
 
-    public function __construct($session) {
+    public function __construct($session)
+    {
         $this->session = $session;
     }
 
     // ============================================================
     // CREAR LISTA
     // ============================================================
-    public function crear() {
+    public function crear()
+    {
 
         $this->session->checkSecurity();
         $idUsuario = $this->session->get('id_usuario');
@@ -38,38 +41,73 @@ class ListaController {
     }
 
     // ============================================================
-    // AÑADIR LIBRO/PELÍCULA A UNA LISTA (CÓDIGO ANTIGUO)
+    // AÑADIR LIBRO/PELÍCULA A UNA LISTA
     // ============================================================
-    public function añadir() {
+public function anadir() {
 
-        $this->session->checkSecurity();
-        $idUsuario = $this->session->get('id_usuario');
+    $this->session->checkSecurity();
 
-        $idLista = $_POST['id_lista'] ?? null;
-        $idLibro = $_POST['id_libro'] ?? null;
-        $idPelicula = $_POST['id_pelicula'] ?? null;
+    $idLista = $_POST['id_lista'] ?? null;
+    $idLibro = !empty($_POST['id_libro']) ? (int)$_POST['id_libro'] : null;
+    $idPelicula = !empty($_POST['id_pelicula']) ? (int)$_POST['id_pelicula'] : null;
 
-        if (!$idLista || (!$idLibro && !$idPelicula)) {
-            header("Location: index.php?ctl=perfil");
-            exit;
-        }
-
-        $conexion = Database::getConnection();
-
-        $sql = "INSERT INTO listas_items (id_lista, id_libro, id_pelicula, añadido_en)
-                VALUES (?, ?, ?, NOW())";
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([$idLista, $idLibro, $idPelicula]);
-
-        header("Location: index.php?ctl=perfil");
+    if (!$idLista || (!$idLibro && !$idPelicula)) {
+        echo "Faltan datos";
         exit;
     }
 
+    $conexion = Database::getConnection();
+
+    // LIBRO
+    if ($idLibro) {
+        $stmt = $conexion->prepare("SELECT titulo, autores FROM libros WHERE id = ?");
+        $stmt->execute([$idLibro]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            $titulo = $data['titulo'];
+            $descripcion = "Autor: " . ($data['autores'] ?? "Desconocido");
+        } else {
+            $titulo = "Libro desconocido";
+            $descripcion = "Sin información disponible";
+        }
+    }
+
+    // PELÍCULA
+    if ($idPelicula) {
+        $stmt = $conexion->prepare("SELECT titulo, anio FROM peliculas WHERE id = ?");
+        $stmt->execute([$idPelicula]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            $titulo = $data['titulo'];
+            $descripcion = "Año: " . ($data['anio'] ?? "N/A");
+        } else {
+            $titulo = "Película desconocida";
+            $descripcion = "Sin información disponible";
+        }
+    }
+
+    // INSERTAR
+    $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
+            VALUES (?, ?, ?, ?, ?, NOW())";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([$idLista, $titulo, $descripcion, $idLibro, $idPelicula]);
+
+header("Location: index.php?ctl=verLista&id=" . $idLista);
+    exit;
+}
+
+
+
     // ============================================================
-    // VER UNA LISTA (NUEVO)
+    // VER UNA LISTA
     // ============================================================
     public function ver()
     {
+        $this->session->checkSecurity();
+
         $idLista = $_GET['id'] ?? null;
 
         if (!$idLista) {
@@ -94,31 +132,5 @@ class ListaController {
         $items = ListaItemsModel::obtenerItems($conexion, $idLista);
 
         require __DIR__ . '/../templates/ver_lista.php';
-    }
-
-    // ============================================================
-    // AÑADIR ELEMENTO MANUAL A UNA LISTA (NUEVO)
-    // ============================================================
-    public function agregarItem()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo "<h2>Acceso no permitido</h2>";
-            return;
-        }
-
-        $idLista = $_POST['id_lista'] ?? null;
-        $titulo = $_POST['titulo'] ?? '';
-        $descripcion = $_POST['descripcion'] ?? null;
-
-        if (!$idLista || $titulo === '') {
-            echo "<h2>Datos incompletos</h2>";
-            return;
-        }
-
-        $conexion = Database::getConnection();
-        ListaItemsModel::agregarItem($conexion, $idLista, $titulo, $descripcion);
-
-        header("Location: index.php?ctl=verLista&id=" . $idLista);
-        exit;
     }
 }

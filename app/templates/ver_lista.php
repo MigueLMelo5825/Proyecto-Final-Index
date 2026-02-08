@@ -83,7 +83,9 @@ input.addEventListener("keyup", async () => {
                 </div>
             </div>
 
-            <form action="index.php?ctl=añadirALista" method="POST">
+<form action="index.php?ctl=lista&accion=añadir" method="POST">
+
+
                 <input type="hidden" name="id_lista" value="${idLista}">
                 ${item.type === "libro"
                     ? `<input type="hidden" name="id_libro" value="${item.id}">`
