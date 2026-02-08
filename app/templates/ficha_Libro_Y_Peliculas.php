@@ -77,7 +77,7 @@ if (!$urlImagenPortada) {
                 <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
             </div>
             <?php
-                require_once dirname(__DIR__) . '/Models/ListasModel.php';
+                require_once dirname(__DIR__) . '/Models/ListaModel.php';
 
                 if ($idUsuario):
                     $listasUsuario = ListaModel::obtenerListasUsuario($conexionBD, $idUsuario);
@@ -197,84 +197,6 @@ if (!$urlImagenPortada) {
     </div>
 </main>
 
-<<<<<<< HEAD
-<!-- Botones de Acción -->
-<div class="acciones-usuario">  
-    <button id="btn-favorito" class="corazon-like" title="Añadir a favoritos">
-        <span class="icon">❤</span>
-    </button>
-
-<?php
-require_once dirname(__DIR__) . '/Models/ListaModel.php';
-
-
-if ($idUsuario):
-$listasUsuario = ListaModel::obtenerListasUsuario($conexionBD, $idUsuario);
-?>
-    <div class="añadir-lista">
-        <form action="index.php?ctl=añadirALista" method="POST">
-
-            <input type="hidden" name="id_libro" value="<?= $type === 'libro' ? $id : '' ?>">
-            <input type="hidden" name="id_pelicula" value="<?= $type === 'pelicula' ? $id : '' ?>">
-
-            <label>Añadir a una lista:</label>
-            <select name="id_lista" required>
-                <option value="">Selecciona una lista</option>
-
-                <?php foreach ($listasUsuario as $lista): ?>
-                    <option value="<?= $lista['id_lista'] ?>">
-                        <?= escaparHTML($lista['nombre']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-            <button type="submit" class="boton-externo">Añadir</button>
-        </form>
-
-        <a href="index.php?ctl=crearLista" class="boton-externo">
-            Crear nueva lista
-        </a>
-    </div>
-
-<?php else: ?>
-
-    <!-- Mostrar mensaje si NO está logueado -->
-    <div class="añadir-lista">
-        <a href="index.php?ctl=login" class="boton-externo">
-            Inicia sesión para añadir a una lista
-        </a>
-    </div>
-
-<?php endif; ?>
-
-</div>
-
-<!-- Sección de Valoración -->
-<div class="valoracion">
-    <p>Valoración:</p>
-    <div class="estrellas">
-        <input type="radio" name="star" id="star5"><label for="star5">★</label>
-        <input type="radio" name="star" id="star4"><label for="star4">★</label>
-        <input type="radio" name="star" id="star3"><label for="star3">★</label>
-        <input type="radio" name="star" id="star2"><label for="star2">★</label>
-        <input type="radio" name="star" id="star1"><label for="star1">★</label>
-    </div>
-</div>
-
-<!-- Sección de Comentarios -->
-<section class="comentarios">
-    <h3>Comentarios</h3>
-    <form class="form-comentario">
-        <textarea placeholder="Escribe tu opinión..."></textarea>
-        <button type="submit" class="boton-comentar">Publicar</button>
-    </form>
-    <div class="lista-comentarios">
-        <p class="sin-comentarios">Aún no hay comentarios. ¡Sé el primero!</p>
-    </div>
-</section>
-
-=======
->>>>>>> 19cf83bd04190ccde001ccfe4416646266132ee8
 <?php include_once __DIR__.'/../templates/footer.php'; ?>
 
 <script src="<?php echo $root ?>web/js/fichaLibroPelicula.js"></script>
