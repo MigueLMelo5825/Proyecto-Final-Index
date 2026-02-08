@@ -68,7 +68,7 @@
                 <?php if (isset($_SESSION['id_usuario'])): ?>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?controller=usuario&action=perfil">
+                        <a class="nav-link" href="index.php?ctl=perfil">
                             <i class="bi bi-person-circle"></i> Perfil
                         </a>
                     </li>
