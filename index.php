@@ -83,6 +83,12 @@ $map = [
         'nivel'      => 0
     ],
 
+     'activar' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'activar',
+        'nivel'      => 0
+    ],
+
     'reset' => [
         'controller' => 'UsuarioController',
         'action'     => 'reset',

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     
-    
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./web/css/styleLogin.css">
 
 </head>
@@ -25,7 +25,7 @@
             </label> 
            
             <label> Contraseña
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password" >
                 <p id="errorPassword" class="error"></p>
             </label>
            
@@ -38,6 +38,17 @@
         </div>
     </div>
 </div>
+<?php if (!empty($_SESSION['swal'])): ?>
+    <script> 
+        Swal.fire({
+            icon: <?= json_encode($_SESSION['swal']['icon']) ?>,
+            title: <?= json_encode($_SESSION['swal']['title']) ?>,
+            text: '<?php echo $_SESSION['swal']['text']; ?>',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+    <?php unset($_SESSION['swal']); ?>
+<?php endif; ?>
 
 </body>
 </html>

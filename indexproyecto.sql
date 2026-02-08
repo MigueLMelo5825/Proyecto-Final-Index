@@ -463,10 +463,30 @@ CREATE TABLE `usuarios` (
   `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
   `pais` VARCHAR(100) DEFAULT NULL,
   `nivel` INT NOT NULL DEFAULT 1,
+  `activo` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE token_validacion (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_user INT NOT NULL,
+  token VARCHAR(64) NOT NULL UNIQUE,
+  valido_hasta INT NOT NULL,
+  CONSTRAINT fk_token_user
+    FOREIGN KEY (id_user) REFERENCES usuarios(id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE token_recuperacion (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_user INT NOT NULL,
+  token VARCHAR(64) NOT NULL,
+  valido_hasta INT NOT NULL,
+  CONSTRAINT fk_recuperacion_user
+    FOREIGN KEY (id_user) REFERENCES usuarios(id)
+    ON DELETE CASCADE
+);
 
 -- --------------------------------------------------------------------
 
