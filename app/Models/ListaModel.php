@@ -6,16 +6,11 @@ class ListaModel {
     /**
      * Obtener todas las listas de un usuario
      */
-    public static function obtenerListasUsuario($conexion, int $idUsuario): array {
-        $sql = "SELECT id, nombre, descripcion, tipo, creada_en
-                FROM listas
-                WHERE id_usuario = ?
-                ORDER BY creada_en DESC";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([$idUsuario]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+public static function obtenerListasUsuario($conexion, $idUsuario) {
+    $stmt = $conexion->prepare("SELECT id, nombre FROM listas WHERE id_usuario = ?");
+    $stmt->execute([$idUsuario]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     /**
      * Crear una nueva lista

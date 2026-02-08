@@ -90,38 +90,39 @@ if (!isset($listas)) $listas = [];
                         </div>
                     </div>
 
-                   <!-- MIS LISTAS -->
-<div class="col-lg-4">
-    <div class="p-4 border rounded bg-light h-100 shadow-sm">
-        <h2>Mis listas (<?= $numeroListas ?>)</h2>
+                    <!-- MIS LISTAS -->
+                    <div class="col-lg-4">
+                        <div class="p-4 border rounded bg-light h-100 shadow-sm">
+                            <h2>Mis listas (<?= $numeroListas ?>)</h2>
 
-        <?php if ($numeroListas === 0): ?>
-            <p>No tienes listas creadas todavía.</p>
-        <?php else: ?>
-            <ul>
-                <?php foreach ($listas as $lista): ?>
-                    <li>
-                        <strong><?= htmlspecialchars($lista['nombre']) ?></strong><br>
-                        <em><?= htmlspecialchars($lista['tipo']) ?></em><br>
-                        <?= htmlspecialchars($lista['descripcion']) ?><br>
-                        <small>Creada el: <?= $lista['creada_en'] ?></small><br>
+                            <?php if ($numeroListas === 0): ?>
+                                <p>No tienes listas creadas todavía.</p>
+                            <?php else: ?>
+                                <ul>
+                                    <?php foreach ($listas as $lista): ?>
+                                        <li>
+                                            <strong><?= htmlspecialchars($lista['nombre']) ?></strong><br>
+                                            <em><?= htmlspecialchars($lista['tipo']) ?></em><br>
+                                            <?= htmlspecialchars($lista['descripcion']) ?><br>
+                                            <small>Creada el: <?= $lista['creada_en'] ?></small><br>
+                                            <a href="index.php?ctl=ver&id=<?= $lista['id'] ?>" class="btn btn-primary btn-sm mt-2">
+                                                Ver lista
+                                            </a>
 
-                        <!-- BOTÓN VER LISTA -->
-                        <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" 
-                           class="btn btn-primary btn-sm mt-2">
-                            Ver lista
-                        </a>
-                    </li>
-                    <hr>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
 
-        <a href="index.php?ctl=crearLista" class="btn btn-success w-100 mt-3">
-            Crear nueva lista
-        </a>
-    </div>
-</div>
+
+
+                                        </li>
+                                        <hr>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+
+                            <a href="index.php?ctl=crearLista" class="btn btn-success w-100 mt-3">
+                                Crear nueva lista
+                            </a>
+                        </div>
+                    </div>
 
 
                 </div>
