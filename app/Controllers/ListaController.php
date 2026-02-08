@@ -2,7 +2,6 @@
 
 class ListaController
 {
-
     private $session;
 
     public function __construct($session)
@@ -15,19 +14,15 @@ class ListaController
     // ============================================================
     public function crear()
     {
-
         $this->session->checkSecurity();
         $idUsuario = $this->session->get('id_usuario');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
-            $tipo = trim($_POST['tipo'] ?? 'personal');
-
-            if ($nombre === '') {
-                header("Location: index.php?ctl=crearLista&error=nombre_vacio");
-                exit;
+            $tipo = trim($_POST['tipo'] ?? 'personal'); // tipo puede ser 'libro', 'pelicula', 'mixta'
+            if (!in_array($tipo, ['libro', 'pelicula', 'mixta'])) {
+                $tipo = 'mixta';
             }
 
             $modelo = new ListaModel();
@@ -43,63 +38,77 @@ class ListaController
     // ============================================================
     // AÑADIR LIBRO/PELÍCULA A UNA LISTA
     // ============================================================
-public function anadir() {
+    public function anadir()
+    {header('Content-Type: application/json; charset=utf-8');
 
-    $this->session->checkSecurity();
+        $this->session->checkSecurity();
 
-    $idLista = $_POST['id_lista'] ?? null;
-    $idLibro = !empty($_POST['id_libro']) ? (int)$_POST['id_libro'] : null;
-    $idPelicula = !empty($_POST['id_pelicula']) ? (int)$_POST['id_pelicula'] : null;
+        $idLista    = $_POST['id_lista'] ?? null;
+        $idLibro    = !empty($_POST['id_libro']) ? $_POST['id_libro'] : null;
+        $idPelicula = !empty($_POST['id_pelicula']) ? $_POST['id_pelicula'] : null;
 
-    if (!$idLista || (!$idLibro && !$idPelicula)) {
-        echo "Faltan datos";
+        header('Content-Type: application/json');
+
+        if (!$idLista || (!$idLibro && !$idPelicula)) {
+            echo json_encode(["status" => "error", "mensaje" => "Faltan datos."]);
+            exit;
+        }
+
+        $conexion = Database::getConnection();
+
+        // Obtener tipo de lista
+        $stmt = $conexion->prepare("SELECT tipo FROM listas WHERE id = ?");
+        $stmt->execute([$idLista]);
+        $lista = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$lista) {
+            echo json_encode(["status" => "error", "mensaje" => "Lista no encontrada."]);
+            exit;
+        }
+
+        $tipoLista = $lista['tipo'];
+
+        // Validación híbrida
+        if ($tipoLista !== 'mixta') {
+            if ($tipoLista === 'libro' && !$idLibro) {
+                echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir libros a esta lista."]);
+                exit;
+            }
+            if ($tipoLista === 'pelicula' && !$idPelicula) {
+                echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir películas a esta lista."]);
+                exit;
+            }
+        }
+
+        // Preparar título y descripción
+        $titulo = "";
+        $descripcion = "";
+
+        if ($idLibro) {
+            $stmt = $conexion->prepare("SELECT titulo, autores FROM libros WHERE id = ?");
+            $stmt->execute([$idLibro]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $titulo = $data['titulo'] ?? "Libro desconocido";
+            $descripcion = isset($data['autores']) ? "Autor: " . $data['autores'] : "Sin información disponible";
+        }
+
+        if ($idPelicula) {
+            $stmt = $conexion->prepare("SELECT titulo, anio FROM peliculas WHERE id = ?");
+            $stmt->execute([$idPelicula]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $titulo = $data['titulo'] ?? "Película desconocida";
+            $descripcion = isset($data['anio']) ? "Año: " . $data['anio'] : "Sin información disponible";
+        }
+
+        // Insertar en la lista
+        $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
+                VALUES (?, ?, ?, ?, ?, NOW())";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$idLista, $titulo, $descripcion, $idLibro, $idPelicula]);
+
+        echo json_encode(["status" => "success", "mensaje" => "Elemento añadido correctamente."]);
         exit;
     }
-
-    $conexion = Database::getConnection();
-
-    // LIBRO
-    if ($idLibro) {
-        $stmt = $conexion->prepare("SELECT titulo, autores FROM libros WHERE id = ?");
-        $stmt->execute([$idLibro]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($data) {
-            $titulo = $data['titulo'];
-            $descripcion = "Autor: " . ($data['autores'] ?? "Desconocido");
-        } else {
-            $titulo = "Libro desconocido";
-            $descripcion = "Sin información disponible";
-        }
-    }
-
-    // PELÍCULA
-    if ($idPelicula) {
-        $stmt = $conexion->prepare("SELECT titulo, anio FROM peliculas WHERE id = ?");
-        $stmt->execute([$idPelicula]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($data) {
-            $titulo = $data['titulo'];
-            $descripcion = "Año: " . ($data['anio'] ?? "N/A");
-        } else {
-            $titulo = "Película desconocida";
-            $descripcion = "Sin información disponible";
-        }
-    }
-
-    // INSERTAR
-    $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
-            VALUES (?, ?, ?, ?, ?, NOW())";
-
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute([$idLista, $titulo, $descripcion, $idLibro, $idPelicula]);
-
-header("Location: index.php?ctl=verLista&id=" . $idLista);
-    exit;
-}
-
-
 
     // ============================================================
     // VER UNA LISTA

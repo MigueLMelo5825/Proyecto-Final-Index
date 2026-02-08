@@ -66,7 +66,7 @@ $map = [
 
     // LISTAS
     'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],
-    'añadirALista' => ['controller' => 'ListaController', 'action' => 'anadir', 'nivel' => 1],
+    'anadirALista' => ['controller' => 'ListaController', 'action' => 'anadir', 'nivel' => 1],
     'verLista' => ['controller' => 'ListaController', 'action' => 'ver', 'nivel' => 1],
 
     // FICHA LIBRO/PELÍCULA

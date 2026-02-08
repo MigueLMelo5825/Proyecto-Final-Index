@@ -42,7 +42,7 @@ if (!isset($listas)) $listas = [];
 
             <div id="estadisticas">
                 <div class="stat"><strong>32</strong><span>Libros leídos</span></div>
-                <strong><?= $numeroListas ?></strong>
+                <div class="stat"><strong><?= $numeroListas ?? 0 ?></strong><span>Listas</span></div>
                 <div class="stat"><strong>14</strong><span>Reseñas</span></div>
             </div>
         </section>
@@ -62,9 +62,9 @@ if (!isset($listas)) $listas = [];
                                 <?php foreach ($topLibros as $libro): ?>
                                     <div class="col-6 col-md-6">
                                         <div class="top-item">
-                                            <img src="<?= $libro['imagen_url'] ?>" alt="<?= htmlspecialchars($libro['titulo']) ?>">
-                                            <strong><?= htmlspecialchars($libro['titulo']) ?></strong>
-                                            <small><?= htmlspecialchars($libro['autores']) ?></small>
+                                            <img src="<?= $libro['imagen_url'] ?? 'web/img/fallback.png' ?>" alt="<?= htmlspecialchars($libro['titulo'] ?? 'Libro') ?>">
+                                            <strong><?= htmlspecialchars($libro['titulo'] ?? 'Sin título') ?></strong>
+                                            <small><?= htmlspecialchars($libro['autores'] ?? 'Desconocido') ?></small>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -80,9 +80,9 @@ if (!isset($listas)) $listas = [];
                                 <?php foreach ($topPeliculas as $peli): ?>
                                     <div class="col-6 col-md-6">
                                         <div class="top-item">
-                                            <img src="<?= $peli['portada'] ?>" alt="<?= htmlspecialchars($peli['titulo']) ?>">
-                                            <strong><?= htmlspecialchars($peli['titulo']) ?></strong>
-                                            <small><?= htmlspecialchars($peli['genero_nombre']) ?></small>
+                                            <img src="<?= $peli['portada'] ?? 'web/img/fallback.png' ?>" alt="<?= htmlspecialchars($peli['titulo'] ?? 'Película') ?>">
+                                            <strong><?= htmlspecialchars($peli['titulo'] ?? 'Sin título') ?></strong>
+                                            <small><?= htmlspecialchars($peli['genero_nombre'] ?? 'Desconocido') ?></small>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -93,24 +93,22 @@ if (!isset($listas)) $listas = [];
                     <!-- MIS LISTAS -->
                     <div class="col-lg-4">
                         <div class="p-4 border rounded bg-light h-100 shadow-sm">
-                            <h2>Mis listas (<?= $numeroListas ?>)</h2>
+                            <h2>Mis listas (<?= $numeroListas ?? 0 ?>)</h2>
 
-                            <?php if ($numeroListas === 0): ?>
+                            <?php if (($numeroListas ?? 0) === 0): ?>
                                 <p>No tienes listas creadas todavía.</p>
                             <?php else: ?>
                                 <ul>
                                     <?php foreach ($listas as $lista): ?>
                                         <li>
-                                            <strong><?= htmlspecialchars($lista['nombre']) ?></strong><br>
-                                            <em><?= htmlspecialchars($lista['tipo']) ?></em><br>
-                                            <?= htmlspecialchars($lista['descripcion']) ?><br>
-                                            <small>Creada el: <?= $lista['creada_en'] ?></small><br>
-                                            <a href="index.php?ctl=ver&id=<?= $lista['id'] ?>" class="btn btn-primary btn-sm mt-2">
+                                            <strong><?= htmlspecialchars($lista['nombre'] ?? 'Sin nombre') ?></strong><br>
+                                            <em><?= htmlspecialchars($lista['tipo'] ?? 'Desconocido') ?></em><br>
+                                            <?= htmlspecialchars($lista['descripcion'] ?? 'Sin descripción') ?><br>
+                                            <small>Creada el: <?= htmlspecialchars($lista['creada_en'] ?? 'N/A') ?></small><br>
+                                            <!-- Enlace solo para ver la lista -->
+                                            <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" class="btn btn-primary btn-sm mt-2">
                                                 Ver lista
                                             </a>
-
-
-
 
                                         </li>
                                         <hr>
@@ -123,7 +121,6 @@ if (!isset($listas)) $listas = [];
                             </a>
                         </div>
                     </div>
-
 
                 </div>
 
