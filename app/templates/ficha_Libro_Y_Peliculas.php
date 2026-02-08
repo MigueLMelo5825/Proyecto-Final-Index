@@ -65,6 +65,7 @@ if (!$urlImagenPortada) {
 
 <?php include_once __DIR__ . '/header.php'; ?>
 
+<<<<<<< HEAD
 <main class="detalle">
     <div class="detalle-grid">
 
@@ -81,6 +82,18 @@ if (!$urlImagenPortada) {
                 <form id="formAñadirLista">
                     <input type="hidden" name="id_libro" value="<?= $type === 'libro' ? $id : '' ?>">
                     <input type="hidden" name="id_pelicula" value="<?= $type === 'pelicula' ? $id : '' ?>">
+=======
+    <main class="detalle">
+        <div class="detalle-grid">
+            <!-- Columna Portada -->
+            <div class="portada">
+                <div class="portada-wrapper">
+                    <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
+                </div>
+
+                <?php
+                require_once dirname(__DIR__) . '/Models/ListaModel.php';
+>>>>>>> fba28c0a65b10af1ecb9054e81a6e33d9c7a618d
 
                     <label>Añadir a una lista:</label>
                     <select name="id_lista" required>

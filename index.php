@@ -50,19 +50,78 @@ $session = new SessionManager(
 // MAPA DE RUTAS
 // ============================================================
 $map = [
-    // PÚBLICO
-    'inicio' => ['controller' => 'InicioController', 'action' => 'inicio', 'nivel' => 0],
-    'login' => ['controller' => 'UsuarioController', 'action' => 'login', 'nivel' => 0],
-    'registro' => ['controller' => 'UsuarioController', 'action' => 'registro', 'nivel' => 0],
-    'recupero' => ['controller' => 'UsuarioController', 'action' => 'recuperar', 'nivel' => 0],
-    'reset' => ['controller' => 'UsuarioController', 'action' => 'reset', 'nivel' => 0],
-    'buscar' => ['controller' => 'BuscadorController', 'action' => 'buscar', 'nivel' => 0],
-    'fichaLibroPelicula' => ['controller' => 'fichaLibroPeliculaController', 'action' => 'ficha', 'nivel' => 0],
+    'inicio' => [
+        'controller' => 'InicioController',
+        'action'     => 'inicio',
+        'nivel'      => 0
+    ],
 
+    'login' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'login',
+        'nivel'      => 0
+    ],
 
-    // USUARIO LOGUEADO
-    'perfil' => ['controller' => 'UsuarioController', 'action' => 'perfil', 'nivel' => 1],
-    'timeline' => ['controller' => 'TimelineController', 'action' => 'index', 'nivel' => 1],
+    'registro' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'registro',
+        'nivel'      => 0
+    ],
+
+    
+    'recupero' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'recuperar',
+        'nivel'      => 0
+    ],
+
+     'activar' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'activar',
+        'nivel'      => 0
+    ],
+
+    'reset' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'reset',
+        'nivel'      => 0
+    ],
+
+    'buscar' => [
+        'controller' => 'BuscadorController',
+        'action'     => 'buscar',
+        'nivel'      => 0
+    ],
+
+    'perfil' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'perfil',
+        'nivel'      => 1
+    ],
+
+    'timeline' => [
+        'controller' => 'TimelineController',
+        'action'     => 'index',
+        'nivel'      => 1
+    ],
+
+    'cargarPeliculas' => [
+        'controller' => 'PeliculasController',
+        'action'     => 'cargarPeliculas',
+        'nivel'      => 1
+    ],
+
+    'fichaLibroPelicula' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'ficha',
+        'nivel'      => 1
+    ],
+
+    'guardarLikeYComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'guardarLikesYCalificacion',
+        'nivel'      => 1
+    ],
 
     // LISTAS
     'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],

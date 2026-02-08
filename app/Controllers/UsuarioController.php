@@ -37,7 +37,49 @@ class UsuarioController
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $this->usuarioModel->registrar($nombre, $email, $hash, $pais_id);
+        $idUSer = $this->usuarioModel->registrar($nombre, $email, $hash, $pais_id);
+
+        if (!$idUSer) {
+            echo "<h2>No se pudo registrar el usuario</h2>";
+            return;
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $validoHasta = time() + 3600; // 1 hora de validez
+
+        $okToken = $this->usuarioModel->guardarTokenActivacion($idUSer, $token, $validoHasta);
+
+        if (!$okToken) {
+            echo "<h2>No se pudo guardar el token de activación</h2>";
+            return;
+        }
+
+        // Crear enlace de activación
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $base   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+
+        $link = "{$scheme}://{$host}{$base}/index.php?ctl=activar&token=" . urlencode($token);
+       
+        // correo de activación
+        $subject = "Activa tu cuenta";
+        $htmlBody = "
+            <h2>Activación de cuenta</h2>
+            <p>Hola " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . ",</p>
+            <p>Gracias por registrarte. Para activar tu cuenta, haz clic en el siguiente enlace:</p>
+            <p><a href='{$link}'>{$link}</a></p>
+            <p>Este enlace es válido por 1 hora.</p>";
+        $altBody = "Activa tu cuenta: {$link} (válido por 1 hora)";
+
+        $enviado = Mailer::enviar($email, $nombre, $subject, $htmlBody, $altBody);
+
+        if (!$enviado) {
+            echo "<h2>No se pudo enviar el correo de activación. Revisa la configuración SMTP.</h2>";
+            return;
+        }
+
+        echo "<h2>Registro exitoso. Revisa tu correo para activar tu cuenta.</h2>";
+        echo "<a href='index.php?ctl=login'>Iniciar sesión</a>";
 
         header("Location: index.php?ctl=login");
         exit;
@@ -57,11 +99,14 @@ class UsuarioController
         $password = $_POST['password'] ?? '';
 
         $usuario = $this->usuarioModel->validarLogin($email, $password);
+        //var_dump($usuario); // Depuración: muestra el resultado de validarLogin
+        //exit;
 
-        if ($usuario) {
+        if ($usuario && !isset($usuario['__inactivo__'])) {
 
             $rol   = $usuario['rol'] ?? 'user';
             $nivel = ($rol === 'admin') ? 3 : 1;
+            //$activo = $usuario['activo'] ? 0 : 1;
 
             // LOGIN OFICIAL
             $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
@@ -75,7 +120,30 @@ class UsuarioController
             exit;
         }
 
-        echo "<h2>Credenciales incorrectas</h2>";
+        if (is_array($usuario) && isset($usuario['__inactivo__'])) {
+            $_SESSION['swal'] = [
+                'title' => 'Cuenta inactiva',
+                'text'  => 'Tu cuenta no está activa. Revisa tu correo para activar tu cuenta.',
+                'icon'  => 'warning'
+            ];
+            header("Location: index.php?ctl=login");
+            exit;
+        }
+
+        $_SESSION['swal'] = [
+            'title' => 'Error de login',
+            'text'  => 'Contraseña incorrecta. Inténtalo de nuevo.',
+            'icon'  => 'error'
+        ];
+        header("Location: index.php?ctl=login");
+        exit;
+
+        /*if (isset($usuario['__inactivo__'])) {
+            echo "<h2>La cuenta no está activa. Por favor, revisa tu correo para activar tu cuenta.</h2>";
+            return;
+        }
+
+        echo "<h2>Credenciales incorrectas</h2>";*/
     }
 
     // -------------------------------------------------------------
@@ -114,9 +182,9 @@ class UsuarioController
 
 
 
-    // -------------------------------------------------------------
+
     // RECUPERAR CONTRASEÑA
-    // -------------------------------------------------------------
+
     public function recuperar()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -139,9 +207,13 @@ class UsuarioController
         }
 
         $token = bin2hex(random_bytes(32));
-        $_SESSION['reset_email']  = $email;
+        $validoHasta = time() + 3600; // 1 hora de validez
+
+        $this->usuarioModel->guardarTokenRecuperacion($usuario['id'], $token, $validoHasta);
+
+        /*$_SESSION['reset_email']  = $email;
         $_SESSION['reset_token']  = password_hash($token, PASSWORD_DEFAULT);
-        $_SESSION['reset_expira'] = time() + 3600;
+        $_SESSION['reset_expira'] = time() + 3600;*/
 
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
@@ -171,9 +243,40 @@ class UsuarioController
         echo "<h2>Si el correo existe, recibirás un enlace para recuperar la contraseña.</h2>";
     }
 
-    // -------------------------------------------------------------
+   
+    // ACTIVAR CUENTA
+    public function activar()
+    {
+        $token = $_GET['token'] ?? '';
+
+        if ($token === '') {
+            echo "<h2>Enlace de activación inválido</h2>";
+            return;
+        }
+
+        $row = $this->usuarioModel->buscarTokenValido($token);
+
+        if (!$row) {
+            echo "<h2>Enlace de activación inválido o expirado</h2>";
+            return;
+        }
+
+        $idUser = $row['id_user'];
+
+        $ok = $this->usuarioModel->activarUsuario($idUser);
+        if (!$ok) {
+            echo "<h2>No se pudo activar la cuenta</h2>";
+            return;
+        }
+
+        $this->usuarioModel->borrarToken($row['id']);
+
+   
+        require_once __DIR__ . './../templates/activar_cuenta.php';
+    }
+
     // RESET CONTRASEÑA
-    // -------------------------------------------------------------
+
     public function reset()
     {
         $email = $_GET['email'] ?? '';
@@ -184,48 +287,34 @@ class UsuarioController
             return;
         }
 
-        if (
-            empty($_SESSION['reset_email']) ||
-            empty($_SESSION['reset_token']) ||
-            empty($_SESSION['reset_expira'])
-        ) {
-            echo "<h2>La sesión de recuperación ha expirado</h2>";
+        // 1. Buscar token en BD
+        $row = $this->usuarioModel->buscarTokenRecuperacion($token);
+
+        if (!$row) {
+            echo "<h2>Enlace inválido o expirado</h2>";
             return;
         }
 
-        if ($email !== $_SESSION['reset_email']) {
-            echo "<h2>Email no válido</h2>";
+        // 2. Obtener usuario desde el token
+        $usuario = $this->usuarioModel->obtenerPorId($row['id_user']);
+
+        if (!$usuario || $usuario['email'] !== $email) {
+            echo "<h2>Usuario no válido</h2>";
             return;
         }
 
-        if (time() > $_SESSION['reset_expira']) {
-            unset($_SESSION['reset_email'], $_SESSION['reset_token'], $_SESSION['reset_expira']);
-            echo "<h2>El enlace ha expirado</h2>";
-            return;
-        }
-
-        if (!password_verify($token, $_SESSION['reset_token'])) {
-            echo "<h2>Token inválido</h2>";
-            return;
-        }
-
+        // 3. Mostrar formulario si es GET
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/restablecer_contrasena.php';
             return;
         }
 
+        // 4. Procesar cambio de contraseña
         $password  = $_POST['password']  ?? '';
         $password2 = $_POST['password2'] ?? '';
 
         if ($password === '' || $password !== $password2) {
             echo "<h2>Las contraseñas no coinciden</h2>";
-            return;
-        }
-
-        $usuario = $this->usuarioModel->buscarPorEmail($email);
-
-        if (!$usuario) {
-            echo "<h2>Error de usuario</h2>";
             return;
         }
 
@@ -236,9 +325,9 @@ class UsuarioController
             return;
         }
 
-        unset($_SESSION['reset_email'], $_SESSION['reset_token'], $_SESSION['reset_expira']);
+        // 5. Invalidar token 
+        $this->usuarioModel->borrarTokenRecuperacion($token);
 
-        echo "<h2>Contraseña actualizada correctamente</h2>";
-        echo "<a href='index.php?ctl=login'>Iniciar sesión</a>";
+        require __DIR__ . '/../templates/contrasena_modificado.php';
     }
 }
