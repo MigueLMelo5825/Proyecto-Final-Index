@@ -118,7 +118,7 @@ $map = [
         'nivel'      => 1
     ],
 
-    'guardarLikeYComentario' => [
+    'guardarLikesYCalificacion' => [
         'controller' => 'fichaLibroPeliculaController',
         'action'     => 'guardarLikesYCalificacion',
         'nivel'      => 1

@@ -35,9 +35,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Script para el buscador -->
-
+<!-- Script generales -->
 <script src="<?= $base_url ?>web/js/buscadorLibrosYPeliculas.js" defer></script>
 
-</body>
-</html>
+<!-- Script personalizados -->
