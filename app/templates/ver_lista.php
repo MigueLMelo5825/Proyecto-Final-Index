@@ -1,99 +1,63 @@
-<h2><?= htmlspecialchars($lista['nombre']) ?></h2>
-<p><?= htmlspecialchars($lista['descripcion']) ?></p>
+<?php
+// ============================================================
+// ver_lista.php
+// ============================================================
 
-<h3>Elementos de la lista</h3>
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_startup_errors', 1);
 
-<?php if (empty($items)): ?>
-    <p>No hay elementos en esta lista.</p>
-<?php else: ?>
-    <ul>
-        <?php foreach ($items as $item): ?>
-            <li>
-                <strong><?= htmlspecialchars($item['titulo']) ?></strong><br>
-                <?= htmlspecialchars($item['descripcion']) ?><br>
-                <small><?= $item['creado_en'] ?></small>
-            </li>
-            <hr>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+// Valores por defecto por si faltan datos
+if (!isset($lista)) {
+    $lista = [
+        'nombre' => 'Lista desconocida',
+        'descripcion' => '',
+        'id' => 0
+    ];
+}
 
-<hr>
+if (!isset($items)) {
+    $items = [];
+}
+?>
 
-<h3>Añadir elemento a esta lista</h3>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($lista['nombre']) ?> – Lista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="web/css/styleperfil.css">
+</head>
+<body>
 
-<!-- USAMOS LOS MISMOS IDs QUE EL BUSCADOR DEL HEADER -->
-<div class="mb-3 position-relative" style="max-width: 400px;">
-    <input class="form-control" type="search" placeholder="Buscar libros o películas..." id="inputLibro">
+<?php include_once __DIR__ . '/../templates/header.php'; ?>
 
-    <!-- MISMO ID QUE EL HEADER PARA REUTILIZAR CSS -->
-    <div id="resultadosBusqueda"
-         class="list-group position-absolute w-100 mt-1"
-         style="z-index: 2000; display:none;"></div>
-</div>
+<main class="container my-5">
 
-<script>
-// --- CONFIG ---
-const input = document.getElementById("inputLibro");
-const contenedor = document.getElementById("resultadosBusqueda");
-const idLista = <?= $lista['id'] ?>;
+    <h2><?= htmlspecialchars($lista['nombre']) ?></h2>
+    <p><?= htmlspecialchars($lista['descripcion']) ?></p>
 
-// URL del backend del buscador (igual que en tu JS original)
-const urlBuscar = "index.php?ctl=buscar";
+    <hr>
 
-// Imagen fallback
-const fallback = "web/img/fallback.png";
+    <h3>Elementos de la lista</h3>
 
-// --- EVENTO PRINCIPAL ---
-input.addEventListener("keyup", async () => {
-    const texto = input.value.trim();
+    <?php if (empty($items)): ?>
+        <p>No hay elementos en esta lista.</p>
+    <?php else: ?>
+        <ul class="list-group">
+            <?php foreach ($items as $item): ?>
+                <li class="list-group-item">
+                    <strong><?= htmlspecialchars($item['titulo'] ?? 'Sin título') ?></strong><br>
+                    <?= htmlspecialchars($item['descripcion'] ?? '') ?><br>
+                    <small>Creado en: <?= htmlspecialchars($item['creado_en'] ?? 'N/A') ?></small>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
 
-    contenedor.innerHTML = "";
-    if (texto.length < 2) {
-        contenedor.style.display = "none";
-        return;
-    }
+</main>
 
-    const peticion = await fetch(`${urlBuscar}&texto=${encodeURIComponent(texto)}`);
-    const datos = await peticion.json();
-
-    contenedor.innerHTML = "";
-    contenedor.style.display = "block";
-
-    if (!Array.isArray(datos) || datos.length === 0) {
-        contenedor.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
-        return;
-    }
-
-    datos.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "list-group-item d-flex align-items-center justify-content-between";
-
-        const img = item.imagen_url
-            ? item.imagen_url.replace("http://", "https://")
-            : fallback;
-
-        div.innerHTML = `
-            <div class="d-flex align-items-center">
-                <img src="${img}" width="45" height="65" class="me-3 rounded" style="object-fit:cover;">
-                <div>
-                    <strong>${item.titulo}</strong><br>
-                    <small>${item.type === "libro" ? "Autor: " + item.info_extra : "Año: " + item.info_extra}</small><br>
-                    <small class="text-muted">Género: ${item.genero}</small>
-                </div>
-            </div>
-
-            <form action="index.php?ctl=añadirALista" method="POST">
-                <input type="hidden" name="id_lista" value="${idLista}">
-                ${item.type === "libro"
-                    ? `<input type="hidden" name="id_libro" value="${item.id}">`
-                    : `<input type="hidden" name="id_pelicula" value="${item.id}">`
-                }
-                <button class="btn btn-primary btn-sm">Añadir</button>
-            </form>
-        `;
-
-        contenedor.appendChild(div);
-    });
-});
-</script>
+<?php include_once __DIR__ . '/../templates/footer.php'; ?>
+</body>
+</html>

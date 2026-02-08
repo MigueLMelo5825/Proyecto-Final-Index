@@ -1,8 +1,4 @@
 <?php
-
-//obtenemos el archivo para conectar a la base de datos
-require_once dirname(__DIR__).'/Core/Database.php';
-
 class fichaLibroPeliculaController {
 
     public function ficha() {

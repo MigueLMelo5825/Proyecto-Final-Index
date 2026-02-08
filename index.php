@@ -19,14 +19,10 @@ require_once __DIR__ . '/app/Models/TimelineModel.php';
 require_once __DIR__ . '/app/Models/UsuarioModel.php';
 require_once __DIR__ . '/app/Models/ListaItemsModel.php';
 
-
-
 // ============================================================
-// CORE (CONEXIONES A API, DB, ETC.)
+// CORE
 // ============================================================
-require_once __DIR__ . '/app/Core/autoload.php';
 require_once __DIR__ . '/app/Core/Conexion.php';
-require_once __DIR__ . '/app/Core/Config.php';
 require_once __DIR__ . '/app/Core/Database.php';
 
 // ============================================================
@@ -40,11 +36,7 @@ require_once __DIR__ . '/app/Controllers/LibrosController.php';
 require_once __DIR__ . '/app/Controllers/ListaController.php';
 require_once __DIR__ . '/app/Controllers/PeliculasController.php';
 require_once __DIR__ . '/app/Controllers/TimelineController.php';
-require_once __DIR__ . '/app/Controllers/AdminController.php';
 require_once __DIR__ . '/app/Controllers/UsuarioController.php';
-
-
-
 
 // ============================================================
 // SESIÓN SEGURA
@@ -80,6 +72,12 @@ $map = [
     'recupero' => [
         'controller' => 'UsuarioController',
         'action'     => 'recuperar',
+        'nivel'      => 0
+    ],
+
+     'activar' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'activar',
         'nivel'      => 0
     ],
 
@@ -125,62 +123,24 @@ $map = [
         'nivel'      => 1
     ],
 
+    // LISTAS
+    'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],
+    'anadirALista' => ['controller' => 'ListaController', 'action' => 'anadir', 'nivel' => 1],
+    'verLista' => ['controller' => 'ListaController', 'action' => 'ver', 'nivel' => 1],
 
+    // FICHA LIBRO/PELÍCULA
+    'ficha' => ['controller' => 'fichaLibroPeliculaController', 'action' => 'index', 'nivel' => 0],
 
     // ADMIN
-    'panelAdmin' => [
-        'controller' => 'AdminController',
-        'action'     => 'index',
-        'nivel'      => 3
-    ],
-    'cambiarRol' => [
-        'controller' => 'AdminController',
-        'action'     => 'cambiarRol',
-        'nivel'      => 3
-    ],
-    'eliminarUsuario' => [
-        'controller' => 'AdminController',
-        'action'     => 'eliminarUsuario',
-        'nivel'      => 3
-    ],
+    'panelAdmin' => ['controller' => 'AdminController', 'action' => 'index', 'nivel' => 3],
+    'cambiarRol' => ['controller' => 'AdminController', 'action' => 'cambiarRol', 'nivel' => 3],
+    'eliminarUsuario' => ['controller' => 'AdminController', 'action' => 'eliminarUsuario', 'nivel' => 3],
 
-    // IMPORTACIÓN DESDE API
-    'importarPeliculas' => [
-        'controller' => 'ImportarPeliculasController',
-        'action'     => 'importar',
-        'nivel'      => 3
-    ],
-
-    'importarLibros' => [
-        'controller' => 'ImportarLibrosController',
-        'action'     => 'importar',
-        'nivel'      => 3
-    ],
-
-    // LISTAS
-    'crearLista' => [
-        'controller' => 'ListaController',
-        'action'     => 'crear',
-        'nivel'      => 1
-    ],
-    'añadirALista' => [
-        'controller' => 'ListaController',
-        'action'     => 'añadir',
-        'nivel'      => 1
-    ],
-    'verLista' => [
-    'controller' => 'ListaController',
-    'action'     => 'ver',
-    'nivel'      => 1
-],
-
-'agregarItem' => [
-    'controller' => 'ListaController',
-    'action'     => 'agregarItem',
-    'nivel'      => 1
-],
-
+    // IMPORTACIÓN
+    'importarPeliculas' => ['controller' => 'ImportarPeliculasController', 'action' => 'importar', 'nivel' => 3],
+    'importarLibros' => ['controller' => 'ImportarLibrosController', 'action' => 'importar', 'nivel' => 3],
 ];
+
 
 // ============================================================
 // RESOLUCIÓN DE RUTA
@@ -188,9 +148,7 @@ $map = [
 $ruta = $_GET['ctl'] ?? 'inicio';
 
 if (!isset($map[$ruta])) {
-    header("HTTP/1.0 404 Not Found");
-    echo "<h1>Error 404: Ruta '$ruta' no encontrada</h1>";
-    exit;
+    die("<h1>Error 404: Ruta '$ruta' no encontrada</h1>");
 }
 
 $controllerName = $map[$ruta]['controller'];
@@ -204,13 +162,8 @@ if (!in_array($ruta, ['login', 'registro', 'recupero', 'reset', 'inicio'])) {
     $session->checkSecurity();
 }
 
-// ============================================================
-// COMPROBACIÓN DE PERMISOS
-// ============================================================
 if (!$session->hasLevel($requiredLevel)) {
-    header("HTTP/1.0 403 Forbidden");
-    echo "<h1>403: No tienes permisos para acceder a esta acción</h1>";
-    exit;
+    die("<h1>403: No tienes permisos</h1>");
 }
 
 // ============================================================
@@ -219,9 +172,7 @@ if (!$session->hasLevel($requiredLevel)) {
 $controller = new $controllerName($session);
 
 if (!method_exists($controller, $actionName)) {
-    header("HTTP/1.0 404 Not Found");
-    echo "<h1>Error 404: Acción '$actionName' no encontrada en $controllerName</h1>";
-    exit;
+    die("<h1>Error 404: Acción '$actionName' no encontrada en $controllerName</h1>");
 }
 
 $controller->$actionName();

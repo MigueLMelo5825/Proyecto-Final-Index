@@ -6,12 +6,13 @@
 
     <label>Descripción</label>
     <textarea name="descripcion"></textarea>
+<label>Tipo de lista:</label>
+<select name="tipo">
+    <option value="libro">Solo libros</option>
+    <option value="pelicula">Solo películas</option>
+    <option value="mixta" selected>Mixta</option>
+</select>
 
-    <label>Tipo</label>
-    <select name="tipo">
-        <option value="libro">Libros</option>
-        <option value="pelicula">Películas</option>
-    </select>
 
     <button type="submit">Crear lista</button>
 </form>

@@ -10,11 +10,19 @@ class UsuarioModel {
     // -------------------------------------------------------------
     // REGISTRAR USUARIO
     // -------------------------------------------------------------
-public function registrar($nombre, $email, $hash) {
-    $sql = "INSERT INTO usuarios (nombre, email, contrasena, rol, nivel)
-            VALUES (?, ?, ?, 'usuario', 1)";
+public function registrar($nombre, $email, $hash, $pais) {
+    $sql = "INSERT INTO usuarios (nombre, email, contrasena, rol, nivel, pais, activo)
+            VALUES (?, ?, ?, 'usuario', 1, ?, 0)";
     $stmt = $this->db->prepare($sql);
-    return $stmt->execute([$nombre, $email, $hash]);
+
+    $ok = $stmt->execute([$nombre, $email, $hash, $pais]);
+
+    if ($ok) {
+        return $this->db->lastInsertId();
+    } else {
+        return false;
+    }
+    //return $stmt->execute([$nombre, $email, $hash]);
 }
 
 
@@ -26,7 +34,6 @@ public function registrar($nombre, $email, $hash) {
     $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $this->db->prepare($sql);
     $stmt->execute([$email]);
-
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
@@ -36,6 +43,10 @@ public function registrar($nombre, $email, $hash) {
 
     if (!password_verify($password, $usuario['contrasena'])) {
         return false;
+    }
+
+    if (empty($usuario['activo']) || (int)$usuario['activo'] !== 1) {
+        return ['__inactivo__' => true];;
     }
 
     return $usuario;
@@ -53,7 +64,7 @@ public function registrar($nombre, $email, $hash) {
 // OBTENER TODOS LOS USUARIOS (admin)
 // -------------------------------------------------------------
 public function obtenerTodos() {
-    $sql = "SELECT id, nombre, email, rol, pais FROM usuarios";
+    $sql = "SELECT id, nombre, email, rol, pais, activo FROM usuarios";
     return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -136,6 +147,59 @@ public function obtenerPorId($id) {
     }
 }
 
+public function guardarTokenActivacion(int $idUser, string $token, int $validoHasta): bool {
+    $sql = "INSERT INTO token_validacion (id_user, token, valido_hasta) VALUES (?, ?, ?)";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$idUser, $token, $validoHasta]);
+}
+
+public function guardarTokenRecuperacion(int $idUser, string $token, int $validoHasta): bool {
+    $sql = "INSERT INTO token_recuperacion (id_user, token, valido_hasta) VALUES (?, ?, ?)";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$idUser, $token, $validoHasta]);
+}
+
+public function buscarTokenRecuperacion(string $token): ?array {
+    $sql = "SELECT * FROM token_recuperacion WHERE token = ? LIMIT 1";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$token]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) return null;
+    if (time() > (int)$row['valido_hasta']) return null;
+
+    return $row;
+}
+
+public function borrarTokenRecuperacion(string $token): bool {
+    $sql = "DELETE FROM token_recuperacion WHERE token = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$token]);
+}
+
+public function buscarTokenValido(string $token): ?array {
+    $sql = "SELECT * FROM token_validacion WHERE token = ? LIMIT 1";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$token]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) return null;
+    if (time() > (int)$row['valido_hasta']) return null;
+
+    return $row;
+}
+
+public function activarUsuario(int $idUser): bool {
+    $sql = "UPDATE usuarios SET activo = 1 WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$idUser]);
+}
+
+public function borrarToken(string $token): bool {
+    $sql = "DELETE FROM token_validacion WHERE token = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$token]);
+}
 
 }
     
