@@ -77,7 +77,7 @@ if (!$urlImagenPortada) {
                 <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
             </div>
             <?php
-                require_once dirname(__DIR__) . '/Models/ListaModel.php';
+                
 
                 if ($idUsuario):
                     $listasUsuario = ListaModel::obtenerListasUsuario($conexionBD, $idUsuario);

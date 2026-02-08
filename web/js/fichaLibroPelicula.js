@@ -3,8 +3,13 @@ const valores = new URLSearchParams(window.location.search);
 const idLibroPelicula = valores.get('id');
 const tipo = valores.get('type');
 
-//creamos variables para enviar peticion
-const urlBase = window.location.href;
+//se crea una url diamina que se pueda usar en todos los proyectos -- Miguel Melo
+// Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
+const pathSegments = window.location.pathname.split('/');
+
+const nombreProyecto = pathSegments[1]; // Esto tomará el nombre de proyecto que cada uno tenga
+
+const baseUrl = nombreProyecto;
 
 const urlPhp = `${baseUrl}/index.php?ctl=guardarLikeYComentario`;
 
