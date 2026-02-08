@@ -1,9 +1,18 @@
+<?php
+    // Calculamos la ruta base de forma dinámica Miguel Melo
+    $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+    $host = $_SERVER['HTTP_HOST'];
+    // Esto obtiene "/nombre_de_tu_carpeta_sea_cual_sea/"
+    $project_root = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+    $base_url = $protocol . $host . $project_root;
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Proyecto/web/css/styles.css">
+    <link rel="stylesheet" href="<?php $base_url ?>web/css/styles.css">
 
 
     <!-- Bootstrap CSS -->

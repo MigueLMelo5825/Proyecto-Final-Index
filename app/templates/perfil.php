@@ -8,7 +8,7 @@ if (!isset($usuario)) {
     $usuario = [
         'nombre' => 'Usuario invitado',
         'bio' => '',
-        'foto' => 'web/img/default.jpg'
+        'foto' => 'web/img/default.png'
     ];
 }
 

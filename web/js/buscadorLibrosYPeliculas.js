@@ -3,17 +3,22 @@
 // Tu proyecto está en: http://localhost/Proyecto/
 //const baseUrl = "/Proyecto";
 
-//se crea una url diamina que se pueda usar en todos los proyectos Miguel Melo
-const baseUrl = window.location.href;
+//se crea una url diamina que se pueda usar en todos los proyectos -- Miguel Melo
+// Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
+const pathSegments = window.location.pathname.split('/');
+
+const nombreProyecto = pathSegments[1]; // Esto tomará el nombre de proyecto que cada uno tenga
+
+const baseUrl = nombreProyecto;
 
 // URL del backend del buscador (controlador MVC)
-const urlPhp = `${baseUrl}/index.php?ctl=buscar`;
+const urlPhp = `/${baseUrl}/index.php?ctl=buscar`;
 
 // Imagen fallback (asegúrate de que existe en /Proyecto/web/img/)
-const fallback = `${baseUrl}/web/img/fallback.png`;
+const fallback = `/${baseUrl}/web/img/fallback.png`;
 
 // Redirección a la ficha (AJUSTA si tienes otra ruta)
-const urlRedireccion = `${baseUrl}/index.php?ctl=fichaLibroPelicula`;
+const urlRedireccion = `/${baseUrl}/index.php?ctl=fichaLibroPelicula`;
 
 // Elementos del DOM
 const inputLibro = document.getElementById("inputLibro");
