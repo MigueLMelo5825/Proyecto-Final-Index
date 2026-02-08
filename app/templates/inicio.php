@@ -12,7 +12,7 @@
 
             <div class="mt-4">
                 <a href="index.php?ctl=registro" class="btn btn-primary btn-lg me-2">Registrarse</a>
-                <a href="index.php?ctl=inicioSesion" class="btn btn-outline-secondary btn-lg">Iniciar sesión</a>
+                <a href="index.php?ctl=login" class="btn btn-outline-secondary btn-lg">Iniciar sesión</a>
             </div>
         </div>
 
