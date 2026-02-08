@@ -88,7 +88,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?ctl=inicioSesion">
+                        <a class="nav-link" href="index.php?ctl=login">
                             <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
                         </a>
                     </li>
