@@ -64,17 +64,6 @@ if (!$urlImagenPortada) {
 
     <?php include_once __DIR__ . '/../templates/header.php'; ?>
 
-<<<<<<< HEAD
-<main class="detalle">
-    <div class="detalle-grid">
-        <!-- Columna Portada -->
-        <div class="portada">
-            <div class="portada-wrapper">
-                <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
-            </div>
-            <?php
-                
-=======
     <main class="detalle">
         <div class="detalle-grid">
             <!-- Columna Portada -->
@@ -85,7 +74,6 @@ if (!$urlImagenPortada) {
 
                 <?php
                 require_once dirname(__DIR__) . '/Models/ListaModel.php';
->>>>>>> 836409f (Añadir a listas desde la ficha)
 
                 if ($idUsuario):
                     $listasUsuario = ListaModel::obtenerListasUsuario($conexionBD, $idUsuario);
