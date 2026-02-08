@@ -2,20 +2,25 @@
 const valores = new URLSearchParams(window.location.search);
 const idLibroPelicula = valores.get('id');
 const tipo = valores.get('type');
+const promedio = document.getElementById('calificacion');
 
-//se crea una url diamina que se pueda usar en todos los proyectos -- Miguel Melo
+//creamos variables para enviar peticion
 // Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
-const pathSegments = window.location.pathname.split('/');
+const path = window.location.pathname.split('/');
 
-const nombreProyecto = pathSegments[1]; // Esto tomará el nombre de proyecto que cada uno tenga
+const nombrePath = path[1]; // Esto tomará el nombre de proyecto que cada uno tenga
 
-const baseUrl = nombreProyecto;
+const url = nombrePath;
 
-const urlPhp = `${baseUrl}/index.php?ctl=guardarLikeYComentario`;
+const urlLikeCalificacion = `/${url}/index.php?ctl=guardarLikesYCalificacion`;
 
 
 //obtenemos los botones e inputs del DOM
 const like = document.getElementById("btn-favorito");
+const inputsEstrellas = document.querySelectorAll('.estrellas-voto input');
+const contadorLikes = document.getElementById('contador-likes');
+
+
 //funcion para enviar like y guardarlo
 async function enviarLike(){
     
@@ -24,7 +29,7 @@ async function enviarLike(){
 
         try{
 
-            const peticionJson = await fetch (urlPhp, {
+            const peticionJson = await fetch (urlLikeCalificacion, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json' 
@@ -43,6 +48,10 @@ async function enviarLike(){
             if (datos.status === "success") {
                 if (datos.resultado === "agregado") {
                     like.classList.add("active");
+
+                    if (contadorLikes && typeof datos.nuevoTotal !== 'undefined') {
+                        contadorLikes.textContent = datos.nuevoTotal;
+                    }
                 } else {
                     like.classList.remove("active");
                 }
@@ -56,7 +65,44 @@ async function enviarLike(){
     })
 }
 
-
+async function agregarValoracion(){
+    
+    inputsEstrellas.forEach(estrellas => {
+        estrellas.addEventListener('change', async () => {
+            const puntuacion = estrellas.value;
+        
+            try {
+                const response = await fetch(urlLikeCalificacion, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: idLibroPelicula,
+                        type: tipo,
+                        accion: 'calificar',
+                        puntuacion: puntuacion
+                    })
+                });
+                
+                const peticion = await response.json();
+                
+                if (peticion.status === 'success') {
+                    // AQUÍ LA MAGIA: Actualizamos el texto del promedio sin recargar
+                    if (promedio && peticion.nuevoPromedio) {
+                        promedio.textContent = `${peticion.nuevoPromedio} de 5`;
+                        console.log("Promedio actualizado: " + peticion.nuevoPromedio);
+                    }
+                } else {
+                    console.log("Error: " + peticion.mensaje);
+                    estrellas.checked = false;
+                    // Si el error es de sesión, se podría redirigir:
+                    // window.location.href = 'index.php?ctl=login';
+                }
+            } catch (error) {
+                console.error("Error al calificar:", error);
+            }
+        });
+    });
+}
 
 
 //funcion para dar al boton leer mas en descripcion
@@ -82,3 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+window.onload = function (){
+    enviarLike();
+    agregarValoracion();
+}

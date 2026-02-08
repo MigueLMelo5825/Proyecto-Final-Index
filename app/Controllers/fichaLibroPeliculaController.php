@@ -12,9 +12,9 @@ class fichaLibroPeliculaController {
 
     public static function guardarLikesYCalificacion(){
         
-        //if (session_status() === PHP_SESSION_NONE) {
-            //session_start();
-        //}
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         // Solo procesamos si hay sesión iniciado
         $idUsuario = $_SESSION['id_usuario'] ?? null;
 
@@ -55,25 +55,49 @@ class fichaLibroPeliculaController {
                     $stmt->execute([$idUsuario, $idLibroPelicula]);
                     $res = "agregado";
                 }
-                echo json_encode(["status" => "success", "resultado" => $res]);
+                
+                // Calculamos el NUEVO TOTAL DE LIKES
+                $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE $tipoId = ?");
+                $stmtCount->execute([$idLibroPelicula]);
+                $nuevoTotal = $stmtCount->fetchColumn();
+
+                echo json_encode([
+                    "status" => "success", 
+                    "resultado" => $res, // "agregado" o "eliminado"
+                    "nuevoTotal" => $nuevoTotal 
+                ]);
+                exit;
+
 
             } elseif ($accion === 'calificar' && $puntuacion) {
                 // Lógica de CALIFICAR: Insertar o actualizar si ya existe (ON DUPLICATE KEY UPDATE)
                 $sql = "INSERT INTO calificaciones (id_usuario, $tipoId, puntuacion) 
                         VALUES (:usuario, :libroPelicula, :puntos) 
-                        ON DUPLICATE KEY UPDATE puntuacion = :puntos";
+                        ON DUPLICATE KEY UPDATE puntuacion = :puntos_update";
                 
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
                     ':usuario' => $idUsuario,
                     ':libroPelicula' => $idLibroPelicula,
-                    ':puntos' => $puntuacion
+                    ':puntos' => $puntuacion,
+                    ':puntos_update' => $puntuacion
                 ]);
-                echo json_encode(["status" => "success", "mensaje" => "Calificación guardada"]);
-            }
+
+                // Calculamos el nuevo promedio tras insertar
+                $cons = $pdo->prepare("SELECT AVG(puntuacion) FROM calificaciones WHERE $tipoId = ?");
+                $cons->execute([$idLibroPelicula]);
+                $nuevoPromedio = round($cons->fetchColumn(), 1);
+
+                echo json_encode([
+                    "status" => "success", 
+                    "mensaje" => "Calificación guardada",
+                    "nuevoPromedio" => $nuevoPromedio ?: '0.0' // Enviamos el dato al JS
+                ]);
+            }    
         } catch (PDOException $e) {
-        echo json_encode(["status" => "error", "mensaje" => $e->getMessage()]);
+            echo json_encode(["status" => "error", "mensaje" => $e->getMessage()]);
         }
+        exit;
     }
 }
 

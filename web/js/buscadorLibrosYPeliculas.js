@@ -1,5 +1,8 @@
 // ---------------- CONFIGURACIÓN ----------------
 
+// Tu proyecto está en: http://localhost/Proyecto/
+//const baseUrl = "/Proyecto";
+
 //se crea una url diamina que se pueda usar en todos los proyectos -- Miguel Melo
 // Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
 const pathSegments = window.location.pathname.split('/');

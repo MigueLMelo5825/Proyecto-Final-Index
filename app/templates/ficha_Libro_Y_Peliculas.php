@@ -25,6 +25,43 @@ if ($id === '' || $type === '') {
 $conexionBD = Database::getConnection();
 $libroPelicula = Libros::obtenerLibroPelicula($conexionBD, $id, $type);
 
+//codigo para pintar el corazon en caso de que el usuario ya haya dado like, la calificacion y calcular su promedio
+$usuarioHaDadoLike = false;
+$valoracionUsuario = null;
+
+if ($idUsuario && $id) {
+    $tipoId = ($type === 'libro') ? 'id_libro' : 'id_pelicula';
+
+    $consultaLikes = $conexionBD->prepare("
+        SELECT 1
+        FROM likes
+        WHERE id_usuario = ? AND $tipoId = ?
+        LIMIT 1
+    ");
+
+    $consultaLikes->execute([$idUsuario, $id]);
+    $usuarioHaDadoLike = (bool) $consultaLikes->fetchColumn();
+
+    $consultaCalificaciones = $conexionBD->prepare("
+        SELECT puntuacion
+        FROM calificaciones
+        WHERE id_usuario = ? AND $tipoId = ?
+        LIMIT 1
+    ");
+    $consultaCalificaciones->execute([$idUsuario, $id]);
+    $valoracionUsuario = $consultaCalificaciones->fetchColumn();
+}
+//calculamos el promedio de las calificaciones
+$consultaPromedio = $conexionBD->prepare("SELECT AVG(puntuacion) FROM calificaciones WHERE $tipoId = ?");
+$consultaPromedio->execute([$id]);
+$promedio = round($consultaPromedio->fetchColumn(), 1);
+
+//calculamos total likes
+$conusltaTotalLikes = $conexionBD->prepare("SELECT COUNT(*) FROM likes WHERE $tipoId = ?");
+$conusltaTotalLikes->execute([$id]);
+$totalLikes = $conusltaTotalLikes->fetchColumn();
+
+
 //funcion para obtener el genero de la pelicula
 $genero = null;
 if ($type === "pelicula" && isset($libroPelicula['genero'])) {
@@ -127,17 +164,31 @@ if (!$urlImagenPortada) {
             <!-- BARRA DE VALORACIÓN SOCIAL -->
             <div class="rating-social-bar">
                 <div class="estrellas-voto">
-                    <input type="radio" name="star" id="star5"><label for="star5">★</label>
-                    <input type="radio" name="star" id="star4"><label for="star4">★</label>
-                    <input type="radio" name="star" id="star3"><label for="star3">★</label>
-                    <input type="radio" name="star" id="star2"><label for="star2">★</label>
-                    <input type="radio" name="star" id="star1"><label for="star1">★</label>
+                    <?php for ($i = 5; $i >= 1; $i--): ?>
+                        <input
+                            type="radio"
+                            name="star"
+                            value="<?= $i ?>"
+                            id="star<?= $i ?>"
+                            <?= ($valoracionUsuario == $i) ? 'checked' : '' ?>
+                        >
+                        <label for="star<?= $i ?>">★</label>
+                    <?php endfor; ?>
                 </div>
-                <span class="puntuacion-texto">4.8 de 5</span>
+                <span class="puntuacion-texto" id="calificacion"><?= $promedio ?: '0.0' ?> de 5</span>
                 
-                <button id="btn-favorito" class="btn-interaccion-like" title="Añadir a mis favoritos">
+                <button id="btn-favorito" class="btn-interaccion-like <?= $usuarioHaDadoLike ? 'active' : '' ?>" title="Añadir a mis favoritos">
                     <span class="corazon-icono">❤</span>
                 </button>
+                <?php if($totalLikes > 0): ?>
+                        <span id="contador-likes" class="badge-likes">&nbsp;A <?php echo $totalLikes ?> Usuarios les gusta 
+                            <?php if($type ==="libro"): ?>
+                                este Libro
+                            <?php else: ?>
+                                esta Pelicula
+                            <?php endif; ?>
+                        </span>
+                    <?php endif; ?>
             </div>
 
             <?php if (!empty($libroPelicula['subtitulo'])): ?>
