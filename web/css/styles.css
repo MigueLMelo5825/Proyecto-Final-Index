@@ -9,8 +9,7 @@
     --radius: 10px;            /* Redondeado suave */
 }
 
-/* RESET BÁSICO
-*/
+/* RESET BÁSICO */
 * {
     margin: 0;
     padding: 0;
@@ -22,7 +21,7 @@ body {
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.6;
-    padding: 0 24px;
+    padding: 0 24px; /* Se mantiene padding general excepto barra */
 }
 
 /* Tipografía editorial clara para títulos */
@@ -67,16 +66,13 @@ nav a:hover {
     color: var(--primary);
 }
 
-/* 
-   CONTENIDO PRINCIPAL
- */
+/* CONTENIDO PRINCIPAL */
 main {
     max-width: 1100px;
     margin: 0 auto;
 }
 
 /* BUSCADOR MIGUEL MELO */
-
 #buscador {
     display: flex;
     flex-direction: row;
@@ -93,20 +89,19 @@ main {
     background-color: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Sombra para dar profundidad */
-    z-index: 999;    /* Para que esté por encima de todo */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    z-index: 999;
     max-height: 400px;
-    overflow-y: auto; /* Scroll si hay muchos resultados */
+    overflow-y: auto;
     margin-top: 5px;
-    display: none;    /* Se activa por JS */
+    display: none;
 }
 
-/* Ajustes del diseño interno de la lista */
 #infoLibro ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: block; /* Sobrescribimos el flex del nav */
+    display: block;
 }
 
 #infoLibro li {
@@ -124,13 +119,12 @@ main {
 }
 
 #infoLibro img {
-    width: 50px;      /* Tamaño miniatura */
+    width: 50px;
     height: 70px;
     object-fit: cover;
     border-radius: 4px;
 }
 
-/* Ajuste de los textos dentro de la lista flotante */
 #infoLibro div p {
     margin: 0;
     font-size: 13px;
@@ -146,32 +140,23 @@ main {
 }
 
 /* FIN BUSCADOR */
-
 .perfil a {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-
 .salir {
     margin-left: auto;
-    
 }
 
-
-
-/* 
-   CONTENIDO PRINCIPAL
-*/
+/* CONTENIDO PRINCIPAL */
 main {
     max-width: 800px;
     margin: 0 auto;
 }
 
-/* 
-   TIMELINE / POSTS
-*/
+/* TIMELINE / POSTS */
 .post {
     background: #ffffff;
     border: 1px solid #e5e5e5;
@@ -196,10 +181,7 @@ main {
     color: #333;
 }
 
-
-/* 
-   PERFIL
-*/
+/* PERFIL */
 #perfil img {
     width: 120px;
     height: 120px;
@@ -218,9 +200,7 @@ main {
     color: #444;
 }
 
-/* 
-   FOOTER STYLE
-*/
+/* FOOTER STYLE */
 .main-footer {
     width: 100%;
     background-color: #ffffff;
@@ -309,19 +289,16 @@ main {
     flex: 1; /* Esto empuja el footer hacia abajo */
 }
 
-/* ============================
-   AUTOCOMPLETE BUSCADOR INDEX
-   ============================ */
-
+/* AUTOCOMPLETE BUSCADOR INDEX */
 #resultadosBusqueda {
-    max-height: 350px;          /* límite vertical */
-    overflow-y: auto;           /* scroll interno */
-    border-radius: 8px;         /* bordes suaves */
+    max-height: 350px;
+    overflow-y: auto;
+    border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     background: white;
     border: 1px solid #ddd;
-    position: absolute;         /* necesario para dropdown */
-    top: 100%;                  /* justo debajo del input */
+    position: absolute;
+    top: 100%;
     left: 0;
     width: 100%;
     z-index: 2000;
@@ -334,4 +311,63 @@ main {
 
 #resultadosBusqueda .list-group-item:last-child {
     border-bottom: none;
+}
+
+/* =========================
+   LOGO NAVBAR Y HERO
+   ========================= */
+
+/* Logo navbar grande */
+.navbar-logo {
+    height: 120px;        /* Logo grande para la barra */
+    object-fit: contain;
+    display: block;
+}
+
+/* Logo en la sección de inicio (hero) */
+.hero-logo {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* HEADER / NAV: ancho completo */
+header, nav.navbar {
+    width: 100%;
+    padding: 0;        /* Quitamos padding que reduce ancho */
+    max-width: none;
+}
+
+.navbar .container {
+    max-width: 1200px;  /* Contenido centrado */
+    margin: 0 auto;
+    padding: 0 24px;    /* padding interno solo del contenido */
+}
+
+/* Alineación de nav-items */
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Logo navbar más grande */
+.navbar-logo {
+    height: 120px;        /* altura del logo más visible */
+    object-fit: contain;
+    display: block;
+}
+
+/* Mantener ancho de la barra negra */
+nav.navbar {
+    width: 100%;          /* ocupa todo el ancho */
+}
+
+.navbar .container {
+    max-width: 1200px;    /* contenido centrado y no estirado */
+    margin: 0 auto;
+    padding: 0 24px;      /* padding interno solo del contenido */
 }

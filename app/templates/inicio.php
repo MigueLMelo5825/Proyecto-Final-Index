@@ -17,10 +17,11 @@
         </div>
 
         <div class="col-md-6 text-center">
-            <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" 
-                 alt="Libros y películas" 
-                 class="img-fluid" 
-                 style="max-width: 300px;">
+            <!-- Logo INDEX-01 -->
+            <img src="<?= $base_url ?>web/img/INDEX-01.png" 
+                 alt="INDEX" 
+                 class="img-fluid shadow" 
+                 style="max-width: 350px;">
         </div>
     </div>
 

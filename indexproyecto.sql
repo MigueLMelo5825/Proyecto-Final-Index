@@ -23,21 +23,17 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 -- --------------------------------------------------------
--- Estructura de tabla para la tabla `actividad (timeline.php)`
+-- Estructura de tabla para la tabla `eventos' (timeline.php)`
 -- --------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `actividad` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` INT(11) NOT NULL,
-  `tipo` VARCHAR(50) NOT NULL,
-  `titulo` VARCHAR(255) NOT NULL,
-  `descripcion` TEXT DEFAULT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `obra_id` VARCHAR(50) DEFAULT NULL,
-  `extra` JSON DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `usuario_id` (`usuario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE IF NOT EXISTS eventos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    fecha DATETIME NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
 
 --
 -- Estructura de tabla para la tabla `comentarios`

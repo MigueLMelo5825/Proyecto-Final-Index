@@ -38,78 +38,94 @@ class ListaController
     // ============================================================
     // AÑADIR LIBRO/PELÍCULA A UNA LISTA
     // ============================================================
-    public function anadir()
-    {header('Content-Type: application/json; charset=utf-8');
+public function anadir()
+{
+    header('Content-Type: application/json; charset=utf-8');
 
-        $this->session->checkSecurity();
+    $this->session->checkSecurity();
+    $idUsuario    = $this->session->get('id_usuario');
 
-        $idLista    = $_POST['id_lista'] ?? null;
-        $idLibro    = !empty($_POST['id_libro']) ? $_POST['id_libro'] : null;
-        $idPelicula = !empty($_POST['id_pelicula']) ? $_POST['id_pelicula'] : null;
+    $idLista      = $_POST['id_lista'] ?? null;
+    $idLibro      = !empty($_POST['id_libro']) ? $_POST['id_libro'] : null;
+    $idPelicula   = !empty($_POST['id_pelicula']) ? $_POST['id_pelicula'] : null;
 
-        header('Content-Type: application/json');
-
-        if (!$idLista || (!$idLibro && !$idPelicula)) {
-            echo json_encode(["status" => "error", "mensaje" => "Faltan datos."]);
-            exit;
-        }
-
-        $conexion = Database::getConnection();
-
-        // Obtener tipo de lista
-        $stmt = $conexion->prepare("SELECT tipo FROM listas WHERE id = ?");
-        $stmt->execute([$idLista]);
-        $lista = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$lista) {
-            echo json_encode(["status" => "error", "mensaje" => "Lista no encontrada."]);
-            exit;
-        }
-
-        $tipoLista = $lista['tipo'];
-
-        // Validación híbrida
-        if ($tipoLista !== 'mixta') {
-            if ($tipoLista === 'libro' && !$idLibro) {
-                echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir libros a esta lista."]);
-                exit;
-            }
-            if ($tipoLista === 'pelicula' && !$idPelicula) {
-                echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir películas a esta lista."]);
-                exit;
-            }
-        }
-
-        // Preparar título y descripción
-        $titulo = "";
-        $descripcion = "";
-
-        if ($idLibro) {
-            $stmt = $conexion->prepare("SELECT titulo, autores FROM libros WHERE id = ?");
-            $stmt->execute([$idLibro]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $titulo = $data['titulo'] ?? "Libro desconocido";
-            $descripcion = isset($data['autores']) ? "Autor: " . $data['autores'] : "Sin información disponible";
-        }
-
-        if ($idPelicula) {
-            $stmt = $conexion->prepare("SELECT titulo, anio FROM peliculas WHERE id = ?");
-            $stmt->execute([$idPelicula]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $titulo = $data['titulo'] ?? "Película desconocida";
-            $descripcion = isset($data['anio']) ? "Año: " . $data['anio'] : "Sin información disponible";
-        }
-
-        // Insertar en la lista
-        $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
-                VALUES (?, ?, ?, ?, ?, NOW())";
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([$idLista, $titulo, $descripcion, $idLibro, $idPelicula]);
-
-        echo json_encode(["status" => "success", "mensaje" => "Elemento añadido correctamente."]);
+    if (!$idLista || (!$idLibro && !$idPelicula)) {
+        echo json_encode(["status" => "error", "mensaje" => "Faltan datos."]);
         exit;
     }
 
+    $conexion = Database::getConnection();
+
+    // Obtener tipo de lista
+    $stmt = $conexion->prepare("SELECT tipo FROM listas WHERE id = ?");
+    $stmt->execute([$idLista]);
+    $lista = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$lista) {
+        echo json_encode(["status" => "error", "mensaje" => "Lista no encontrada."]);
+        exit;
+    }
+
+    $tipoLista = $lista['tipo'];
+
+    // Validación según tipo de lista
+    if ($tipoLista !== 'mixta') {
+        if ($tipoLista === 'libro' && !$idLibro) {
+            echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir libros a esta lista."]);
+            exit;
+        }
+        if ($tipoLista === 'pelicula' && !$idPelicula) {
+            echo json_encode(["status" => "error", "mensaje" => "Solo puedes añadir películas a esta lista."]);
+            exit;
+        }
+    }
+
+    // Preparar título y descripción
+    $titulo = "";
+    $descripcion = "";
+
+    if ($idLibro) {
+        $stmt = $conexion->prepare("SELECT titulo, autores FROM libros WHERE id = ?");
+        $stmt->execute([$idLibro]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $titulo = $data['titulo'] ?? "Libro desconocido";
+        $descripcion = isset($data['autores']) ? "Autor: " . $data['autores'] : "Sin información disponible";
+    }
+
+    if ($idPelicula) {
+        $stmt = $conexion->prepare("SELECT titulo, anio FROM peliculas WHERE id = ?");
+        $stmt->execute([$idPelicula]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $titulo = $data['titulo'] ?? "Película desconocida";
+        $descripcion = isset($data['anio']) ? "Año: " . $data['anio'] : "Sin información disponible";
+    }
+
+    // Insertar en la lista
+    $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
+            VALUES (?, ?, ?, ?, ?, NOW())";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([$idLista, $titulo, $descripcion, $idLibro, $idPelicula]);
+
+    // Registrar evento para timeline
+    $stmtEvento = $conexion->prepare("INSERT INTO eventos (id_usuario, tipo, titulo, descripcion, fecha)
+                                      VALUES (?, ?, ?, ?, NOW())");
+
+    if ($idLibro) {
+        $tituloEvento = "Añadido libro a lista";
+        $descEvento = "Has añadido '$titulo' a tu lista.";
+        $stmtEvento->execute([$idUsuario, 'libro', $tituloEvento, $descEvento]);
+    }
+
+    if ($idPelicula) {
+        $tituloEvento = "Añadida película a lista";
+        $descEvento = "Has añadido '$titulo' a tu lista.";
+        $stmtEvento->execute([$idUsuario, 'pelicula', $tituloEvento, $descEvento]);
+    }
+
+    // Responder al frontend
+    echo json_encode(["status" => "success", "mensaje" => "Elemento añadido correctamente."]);
+    exit;
+}
     // ============================================================
     // VER UNA LISTA
     // ============================================================

@@ -12,6 +12,12 @@ if (!isset($session)) {
 
 // Determinamos si hay usuario logueado
 $loggedIn = isset($session) ? $session->isLoggedIn() : (isset($_SESSION['id_usuario']) && $_SESSION['id_usuario'] > 0);
+
+// Elegir URL de destino del logo y enlace "Inicio"
+$inicioUrl = $loggedIn ? $base_url . 'index.php?ctl=timeline' : $base_url . 'index.php';
+
+// Elegir logo: INDEX-02 para navbar oscuro, INDEX-01 para fondos claros
+$logoUrl = $base_url . 'web/img/INDEX-02.png';
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +42,9 @@ $loggedIn = isset($session) ? $session->isLoggedIn() : (isset($_SESSION['id_usua
     <div class="container">
 
         <!-- LOGO -->
-        <a class="navbar-brand fw-bold" href="<?= $base_url ?>index.php">INDEX</a>
+        <a class="navbar-brand fw-bold" href="<?= $inicioUrl ?>">
+            <img src="<?= $logoUrl ?>" alt="INDEX" height="40">
+        </a>
 
         <!-- Botón responsive -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -49,7 +57,7 @@ $loggedIn = isset($session) ? $session->isLoggedIn() : (isset($_SESSION['id_usua
             <!-- IZQUIERDA -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= $base_url ?>index.php">Inicio</a>
+                    <a class="nav-link" href="<?= $inicioUrl ?>">Inicio</a>
                 </li>
             </ul>
 

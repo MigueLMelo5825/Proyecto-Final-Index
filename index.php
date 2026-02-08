@@ -68,14 +68,14 @@ $map = [
         'nivel'      => 0
     ],
 
-    
+
     'recupero' => [
         'controller' => 'UsuarioController',
         'action'     => 'recuperar',
         'nivel'      => 0
     ],
 
-     'activar' => [
+    'activar' => [
         'controller' => 'UsuarioController',
         'action'     => 'activar',
         'nivel'      => 0
@@ -101,9 +101,10 @@ $map = [
 
     'timeline' => [
         'controller' => 'TimelineController',
-        'action'     => 'index',
+        'action'     => 'mostrar',
         'nivel'      => 1
     ],
+
 
     'cargarPeliculas' => [
         'controller' => 'PeliculasController',
