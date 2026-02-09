@@ -1,7 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
---
 -- Servidor: 127.0.0.1
 -- Tiempo de generación: 02-02-2026 a las 18:37:18
 -- Versión del servidor: 10.4.32-MariaDB
@@ -20,6 +19,24 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `indexproyecto`
 --
+-
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+
+CREATE TABLE `usuarios` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `contrasena` VARCHAR(200) NOT NULL,
+  `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
+  `pais` VARCHAR(100) DEFAULT NULL,
+  `nivel` INT NOT NULL DEFAULT 1,
+  `activo` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- --------------------------------------------------------
@@ -445,24 +462,6 @@ INSERT INTO paises (nombre, codigo_iso) VALUES
 ('Zimbabue', 'ZW');
 
 
---
--- Estructura de tabla para la tabla `usuarios`
---
-
-DROP TABLE IF EXISTS `usuarios`;
-
-CREATE TABLE `usuarios` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(150) NOT NULL,
-  `contrasena` VARCHAR(200) NOT NULL,
-  `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
-  `pais` VARCHAR(100) DEFAULT NULL,
-  `nivel` INT NOT NULL DEFAULT 1,
-  `activo` INT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email_unique` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE token_validacion (
   id INT AUTO_INCREMENT PRIMARY KEY,
