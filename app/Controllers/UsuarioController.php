@@ -272,7 +272,8 @@ class UsuarioController
         $this->usuarioModel->borrarToken($row['id']);
 
    
-        require_once __DIR__ . './../templates/activar_cuenta.php';
+     require_once __DIR__ . '/../templates/activar_cuenta.php';
+
     }
 
     // RESET CONTRASEÑA
