@@ -44,6 +44,16 @@ class UsuarioController
             return;
         }
 
+        $eventoModel = new EventoModel();
+        $eventoModel->registrarEvento(
+            $idUSer,
+            "registro",
+            "Nuevo usuario registrado",
+            "El usuario se ha registrado en la plataforma"
+        );
+
+
+
         $token = bin2hex(random_bytes(32));
         $validoHasta = time() + 3600; // 1 hora de validez
 
@@ -60,7 +70,7 @@ class UsuarioController
         $base   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
         $link = "{$scheme}://{$host}{$base}/index.php?ctl=activar&token=" . urlencode($token);
-       
+
         // correo de activación
         $subject = "Activa tu cuenta";
         $htmlBody = "
@@ -149,38 +159,48 @@ class UsuarioController
     // -------------------------------------------------------------
     // PERFIL
     // -------------------------------------------------------------
- public function perfil()
+   public function perfil()
+
 {
+
     $idUsuario = $_SESSION['id_usuario'] ?? null;
 
     if (!$idUsuario) {
-        echo "<h2>Error: no se pudo obtener el usuario actual.</h2>";
-        return;
+        header("Location: index.php?ctl=login");
+        exit;
     }
 
-    // Conexión
-    $conexion = Database::getConnection();
+    // Obtener usuario
+    $usuario = $this->usuarioModel->obtenerPorId($idUsuario);
 
-    // Listas del usuario
-    $listas = ListaModel::obtenerListasUsuario($conexion, $idUsuario);
-    $numeroListas = count($listas);
+    // Si falla la consulta, evitar warnings
+    if (!$usuario || !is_array($usuario)) {
+        $usuario = [
+            'nombre' => 'Usuario desconocido',
+            'bio' => '',
+            'foto' => 'web/img/default.png',
+            'top_libros' => '[]',
+            'top_peliculas' => '[]'
+        ];
+    }
 
-    // Tops
+    // Cargar top libros
     $librosModel = new Libros();
-    $pelisModel  = new Peliculas();
+    $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
+    $topLibros = $librosModel->obtenerPorIds($topLibrosIds);
 
-    $topLibros    = $librosModel->obtenerTopLibros();
-    $topPeliculas = $pelisModel->obtenerTopPeliculas();
+    // Cargar top películas
+    $pelisModel = new Peliculas();
+    $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
+    $topPeliculas = $pelisModel->obtenerPorIds($topPeliculasIds);
 
-    foreach ($topPeliculas as &$p) {
-        $p['genero_nombre'] = $pelisModel->obtenerNombreGenero($p['genero']);
-    }
-    unset($p);
+    // Cargar listas
+$listasModel = new ListaModel(); 
+    $listas = $listasModel->obtenerListasPorUsuario($idUsuario);
+    $numeroListas = count($listas);
 
     require __DIR__ . '/../templates/perfil.php';
 }
-
-
 
 
     // RECUPERAR CONTRASEÑA
@@ -243,7 +263,7 @@ class UsuarioController
         echo "<h2>Si el correo existe, recibirás un enlace para recuperar la contraseña.</h2>";
     }
 
-   
+
     // ACTIVAR CUENTA
     public function activar()
     {
@@ -271,7 +291,7 @@ class UsuarioController
 
         $this->usuarioModel->borrarToken($row['id']);
 
-   
+
         require_once __DIR__ . './../templates/activar_cuenta.php';
     }
 
@@ -330,4 +350,93 @@ class UsuarioController
 
         require __DIR__ . '/../templates/contrasena_modificado.php';
     }
+///////////////////////////////////////////////////////////////////
+ public function ajustesPerfil()
+{
+    $idUsuario = $_SESSION['id_usuario'] ?? null;
+
+    if (!$idUsuario) {
+        header("Location: index.php?ctl=login");
+        exit;
+    }
+
+    // Obtener usuario
+    $usuario = $this->usuarioModel->obtenerPorId($idUsuario);
+
+    // Asegurar claves
+    $usuario['bio']  = $usuario['bio']  ?? '';
+    $usuario['foto'] = $usuario['foto'] ?? 'web/img/default.png';
+
+    // Modelos correctos (BD, NO API)
+    $librosModel = new Libros();
+    $pelisModel  = new Peliculas();
+
+    // OBLIGATORIO: SOLO BD
+    $todosLibros = $librosModel->obtenerTodos();
+    $todasPeliculas = $pelisModel->obtenerTodas();
+
+    // Convertir JSON a array
+    $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
+    $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
+
+    if (!is_array($topLibrosIds)) $topLibrosIds = [];
+    if (!is_array($topPeliculasIds)) $topPeliculasIds = [];
+
+    require __DIR__ . '/../templates/ajustes_perfil.php';
+}
+
+
+/////////////////////////////////////////////////////////
+
+    public function guardarFotoPerfil()
+{
+    $idUsuario = $_SESSION['id_usuario'];
+
+    if (!empty($_FILES['foto']['tmp_name'])) {
+        $nombre = 'foto_' . $idUsuario . '.jpg';
+        move_uploaded_file($_FILES['foto']['tmp_name'], "web/img/perfil/$nombre");
+
+        $this->usuarioModel->actualizarFoto($idUsuario, "web/img/perfil/$nombre");
+    }
+
+    header("Location: index.php?ctl=perfil");
+}
+
+public function guardarBio()
+{
+    $idUsuario = $_SESSION['id_usuario'];
+    $bio = $_POST['bio'] ?? '';
+
+    $this->usuarioModel->actualizarBio($idUsuario, $bio);
+
+    header("Location: index.php?ctl=perfil");
+}
+
+///////////////////////////////////////////////////////
+
+public function guardarTopLibros()
+{
+    $idUsuario = $_SESSION['id_usuario'];
+
+    $seleccion = $_POST['top_libros'] ?? [];
+    $seleccion = array_slice($seleccion, 0, 4);
+
+    $this->usuarioModel->actualizarTopLibros($idUsuario, json_encode($seleccion));
+
+    header("Location: index.php?ctl=perfil");
+}
+
+
+////////////////////////////////////////////////////////////////////
+    public function guardarTopPeliculas()
+{
+    $idUsuario = $_SESSION['id_usuario'];
+    $seleccion = $_POST['top_peliculas'] ?? [];
+    $seleccion = array_slice($seleccion, 0, 4);
+
+    $this->usuarioModel->actualizarTopPeliculas($idUsuario, json_encode($seleccion));
+
+    header("Location: index.php?ctl=perfil");
+}
+
 }

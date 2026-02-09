@@ -1,191 +1,90 @@
-/* --------------------------------------------------
-   TIPOGRAFÍAS (LORA + SOURCE SANS PRO)
--------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+/* =========================
+   TIMELINE / ACTIVIDAD
+   ========================= */
 
-/* --------------------------------------------------
-   VARIABLES DE DISEÑO
--------------------------------------------------- */
-:root {
-    --primary: #C47A4A;        /* Terracota elegante */
-    --bg: #FAF8F5;             /* Blanco cálido editorial */
-    --card-bg: #FFFFFF;        /* Tarjetas estilo papel */
-    --border: #E8E2DA;         /* Borde beige suave */
-    --text: #2A2A2A;           /* Texto principal */
-    --text-soft: #6F6A63;      /* Texto secundario cálido */
-    --radius: 10px;            /* Redondeado suave */
-}
-
-/* --------------------------------------------------
-   RESET BÁSICO
--------------------------------------------------- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: "Source Sans Pro", sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 0 24px;
-}
-
-h1, h2, h3, h4 {
-    font-family: "Lora", serif;
-}
-
-/* --------------------------------------------------
-   NAVEGACIÓN
--------------------------------------------------- */
-header {
-    width: 100%;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav h1 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-nav ul {
-    display: flex;
-    gap: 24px;
-    list-style: none;
-}
-
-nav a {
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 600;
-    transition: color 0.2s ease;
-}
-
-nav a:hover {
-    color: var(--primary);
-}
-
-/* --------------------------------------------------
-   CONTENIDO PRINCIPAL
--------------------------------------------------- */
-main {
-    max-width: 1100px;
+.timeline {
+    max-width: 800px;
     margin: 0 auto;
+    padding: 20px 0;
 }
 
-/* --------------------------------------------------
-   TIMELINE (ESTILO EDITORIAL)
--------------------------------------------------- */
-
-#timeline {
-    margin-top: 40px;
-}
-
-#timeline h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: var(--primary);
-}
-
-.timeline-list {
-    list-style: none;
+/* Tarjeta de evento */
+.evento {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Tarjeta base de cada evento */
-.timeline-item {
+    align-items: flex-start;
+    gap: 16px;
     background: var(--card-bg);
     border: 1px solid var(--border);
+    padding: 18px 20px;
     border-radius: var(--radius);
-    padding: 20px 24px;
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.timeline-item:hover {
+.evento:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* Fecha del evento */
-.timestamp {
-    font-family: "Lora", serif;
-    font-size: 15px;
-    color: var(--text-soft);
-    min-width: 110px;
-    display: block;
-    margin-top: 4px;
+/* Icono del evento */
+.evento-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 /* Contenido del evento */
-.timeline-item .content h3 {
-    font-size: 20px;
-    margin-bottom: 6px;
+.evento-contenido h4 {
+    font-family: "Lora", serif;
+    font-size: 18px;
+    margin-bottom: 4px;
     color: var(--text);
 }
 
-.timeline-item .content p {
+.evento-contenido p {
     font-size: 15px;
     color: var(--text-soft);
+    margin-bottom: 6px;
 }
 
-/* --------------------------------------------------
-   COLORES POR TIPO DE EVENTO
--------------------------------------------------- */
-
-.evento-lista {
-    border-left: 6px solid #C47A4A; /* Terracota */
+.evento-fecha {
+    font-size: 13px;
+    color: #999;
 }
 
-.evento-lectura {
-    border-left: 6px solid #8C6E4A; /* Marrón suave */
+/* Línea vertical opcional (estilo timeline clásico) */
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: calc(50% - 1px);
+    width: 2px;
+    height: 100%;
+    background: var(--border);
+    display: none; /* Actívalo si quieres un timeline vertical */
 }
 
-.evento-valoracion {
-    border-left: 6px solid #D4A017; /* Dorado */
-}
-
-.evento-usuario {
-    border-left: 6px solid #6A8CAF; /* Azul suave */
-}
-
-.evento-admin {
-    border-left: 6px solid #B94A48; /* Rojo elegante */
-}
-
-.evento-resena {
-    border-left: 6px solid #7A5C99; /* Morado editorial */
-}
-
-.evento-comentario {
-    border-left: 6px solid #4A8C6E; /* Verde suave */
-}
-
-/* --------------------------------------------------
-   RESPONSIVE
--------------------------------------------------- */
-@media (max-width: 700px) {
-    .timeline-item {
-        flex-direction: column;
-        gap: 10px;
+/* Responsive */
+@media (max-width: 600px) {
+    .evento {
+        flex-direction: row;
+        padding: 16px;
     }
 
-    .timestamp {
-        margin-bottom: -10px;
+    .evento-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .evento-contenido h4 {
+        font-size: 16px;
     }
 }

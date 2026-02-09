@@ -22,6 +22,7 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,71 +39,74 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
 
-        <!-- LOGO -->
-        <a class="navbar-brand fw-bold" href="<?= $inicioUrl ?>">
-            <img src="<?= $logoUrl ?>" alt="INDEX" height="40">
-        </a>
+            <!-- LOGO -->
+            <a class="navbar-brand" href="<?= $inicioUrl ?>">
+                <img src="<?= $logoUrl ?>" alt="INDEX" class="navbar-logo">
+            </a>
 
-        <!-- Botón responsive -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <!-- Contenido -->
-        <div class="collapse navbar-collapse" id="navbarNav">
+            </a>
 
-            <!-- IZQUIERDA -->
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $inicioUrl ?>">Inicio</a>
-                </li>
-            </ul>
+            <!-- Botón responsive -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <!-- BUSCADOR -->
-            <form class="d-flex me-3 position-relative" role="search">
-                <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
-                <div id="resultadosBusqueda" 
-                     class="list-group position-absolute w-100 mt-5"
-                     style="z-index: 2000;"></div>
-            </form>
+            <!-- Contenido -->
+            <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- DERECHA (según sesión) -->
-            <ul class="navbar-nav">
-
-                <?php if ($loggedIn): ?>
-
+                <!-- IZQUIERDA -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $base_url ?>index.php?ctl=perfil">
-                            <i class="bi bi-person-circle"></i> Perfil
-                        </a>
+                        <a class="nav-link" href="<?= $inicioUrl ?>">Inicio</a>
                     </li>
+                </ul>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="<?= $base_url ?>index.php?ctl=cerrarSesion">
-                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                        </a>
-                    </li>
+                <!-- BUSCADOR -->
+                <form class="d-flex me-3 position-relative" role="search">
+                    <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
+                    <div id="resultadosBusqueda"
+                        class="list-group position-absolute w-100 mt-5"
+                        style="z-index: 2000;"></div>
+                </form>
 
-                <?php else: ?>
+                <!-- DERECHA (según sesión) -->
+                <ul class="navbar-nav">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $base_url ?>index.php?ctl=registro">
-                            <i class="bi bi-person-plus"></i> Registrarse
-                        </a>
-                    </li>
+                    <?php if ($loggedIn): ?>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $base_url ?>index.php?ctl=login">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $base_url ?>index.php?ctl=perfil">
+                                <i class="bi bi-person-circle"></i> Perfil
+                            </a>
+                        </li>
 
-                <?php endif; ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="<?= $base_url ?>index.php?ctl=cerrarSesion">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                            </a>
+                        </li>
 
-            </ul>
+                    <?php else: ?>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $base_url ?>index.php?ctl=registro">
+                                <i class="bi bi-person-plus"></i> Registrarse
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $base_url ?>index.php?ctl=login">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                            </a>
+                        </li>
+
+                    <?php endif; ?>
+
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>

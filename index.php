@@ -38,6 +38,11 @@ require_once __DIR__ . '/app/Controllers/PeliculasController.php';
 require_once __DIR__ . '/app/Controllers/TimelineController.php';
 require_once __DIR__ . '/app/Controllers/UsuarioController.php';
 
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/Exception.php';
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
+
+
 // ============================================================
 // SESIÓN SEGURA
 // ============================================================
@@ -123,6 +128,14 @@ $map = [
         'action'     => 'guardarLikesYCalificacion',
         'nivel'      => 1
     ],
+
+    // AJUSTES DE PERFIL
+    'ajustesPerfil' => ['controller' => 'UsuarioController', 'action' => 'ajustesPerfil', 'nivel' => 1],
+    'guardarFotoPerfil' => ['controller' => 'UsuarioController', 'action' => 'guardarFotoPerfil', 'nivel' => 1],
+    'guardarBio' => ['controller' => 'UsuarioController', 'action' => 'guardarBio', 'nivel' => 1],
+    'guardarTopLibros' => ['controller' => 'UsuarioController', 'action' => 'guardarTopLibros', 'nivel' => 1],
+    'guardarTopPeliculas' => ['controller' => 'UsuarioController', 'action' => 'guardarTopPeliculas', 'nivel' => 1],
+
 
     // LISTAS
     'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],

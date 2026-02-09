@@ -36,9 +36,13 @@ if (!isset($listas)) $listas = [];
     <main>
 
         <section id="perfil">
-            <img src="<?= $usuario['foto'] ?>" alt="Foto de perfil">
+            <img src="<?= $usuario['foto'] ?? 'web/img/default.png' ?>" alt="Foto de perfil">
             <h2><?= htmlspecialchars($usuario['nombre']) ?></h2>
-            <p><?= htmlspecialchars($usuario['bio']) ?></p>
+            <p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
+            <a href="index.php?ctl=ajustesPerfil" class="btn btn-outline-primary mt-3">
+                Ajustes del perfil
+            </a>
+
 
             <div id="estadisticas">
                 <div class="stat"><strong>32</strong><span>Libros leídos</span></div>
@@ -57,17 +61,15 @@ if (!isset($listas)) $listas = [];
                     <!-- TOP LIBROS -->
                     <div class="col-lg-4">
                         <div class="p-3 border rounded bg-light h-100">
-                            <h4 class="text-center mb-3">📚 Top 5 Libros</h4>
+                            <h4 class="text-center mb-3">📚 Top 4 Libros</h4>
                             <div class="row g-2">
                                 <?php foreach ($topLibros as $libro): ?>
-                                    <div class="col-6 col-md-6">
-                                        <div class="top-item">
-                                            <img src="<?= $libro['imagen_url'] ?? 'web/img/fallback.png' ?>" alt="<?= htmlspecialchars($libro['titulo'] ?? 'Libro') ?>">
-                                            <strong><?= htmlspecialchars($libro['titulo'] ?? 'Sin título') ?></strong>
-                                            <small><?= htmlspecialchars($libro['autores'] ?? 'Desconocido') ?></small>
-                                        </div>
+                                    <div class="col-6 col-md-3">
+                                        <img src="<?= $libro['imagen_url'] ?>" class="img-fluid rounded">
+                                        <p><?= htmlspecialchars($libro['titulo']) ?></p>
                                     </div>
                                 <?php endforeach; ?>
+
                             </div>
                         </div>
                     </div>
@@ -75,7 +77,7 @@ if (!isset($listas)) $listas = [];
                     <!-- TOP PELÍCULAS -->
                     <div class="col-lg-4">
                         <div class="p-3 border rounded bg-light h-100">
-                            <h4 class="text-center mb-3">🎬 Top 5 Películas</h4>
+                            <h4 class="text-center mb-3">🎬 Top 4 Películas</h4>
                             <div class="row g-2">
                                 <?php foreach ($topPeliculas as $peli): ?>
                                     <div class="col-6 col-md-6">
