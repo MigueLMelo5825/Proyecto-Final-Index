@@ -6,7 +6,7 @@ class fichaLibroPeliculaController {
         require __DIR__ . '/../templates/ficha_Libro_Y_Peliculas.php';
     }
 
-    public static function guardarLikesYCalificacion(){
+    function guardarLikesYCalificacion(){
         
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
