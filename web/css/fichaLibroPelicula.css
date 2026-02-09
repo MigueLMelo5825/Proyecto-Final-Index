@@ -322,6 +322,21 @@ body {
     height: 100px;
 }
 
+.img-perfil-mini {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.comentario-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
 .btn-publicar {
     background-color: var(--white);
     color: black;

@@ -124,6 +124,18 @@ $map = [
         'nivel'      => 1
     ],
 
+    'guardarComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'guardarComentario',
+        'nivel'      => 1
+    ],
+
+    'eliminarComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'eliminarComentario',
+        'nivel'      => 1
+    ],
+
     // LISTAS
     'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],
     'anadirALista' => ['controller' => 'ListaController', 'action' => 'anadir', 'nivel' => 1],
