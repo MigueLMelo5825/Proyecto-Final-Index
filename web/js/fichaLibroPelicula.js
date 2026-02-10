@@ -151,14 +151,15 @@ async function agregarComentario(){
             textarea.value = "";
 
             //obtenemos la foto del usuario si tiene una personal la ponemos si no usamos default.png
-            const fotoUsuario = datos.comentario.foto_usuario ? datos.comentario.foto_usuario : "default.png";
+            const fotoUsuario = datos.comentario.foto ? datos.comentario.foto : "default.png";
 
             //pintamos los valores obtenidos
             contenido = `
                 <div class="comentario-item">
                     <img src="${urlFotoUsuario}/${fotoUsuario}" class="img-perfil-mini">
                     <div class="comentario-cuerpo">
-                        <strong>${datos.comentario.nombre_usuario}</strong>
+                        <strong>${datos.comentario.username}</strong>
+                        <strong>${datos.comentario.pais}</strong>
                         <p>${datos.comentario.texto}</p>
                         <small>Recién publicado</small>
                     </div>
@@ -166,11 +167,11 @@ async function agregarComentario(){
             `;
 
             //borramos el comentario de motivacion a publicar
-            const msjVacio = listaComentarios.querySelector('.sin-comentarios');
+            const msjVacio = listaComentarios.querySelector('.msj-vacio');
             if(msjVacio) msjVacio.remove();
 
             //insertamos el comentario
-            infoComentario.insertAdjacentHTML("afterbegin", contenido);
+            listaComentarios.insertAdjacentHTML("afterbegin", contenido);
 
 
         }catch(error){
