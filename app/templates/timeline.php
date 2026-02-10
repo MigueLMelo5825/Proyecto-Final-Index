@@ -28,13 +28,20 @@
             <?php else: ?>
                 <?php foreach ($eventos as $evento): ?>
 
+
                     <div class="evento <?= $evento['id_usuario'] == $_SESSION['id_usuario'] ? 'propio' : '' ?>">
 
                         <!-- AVATAR -->
                         <div class="evento-avatar">
-                            <img src="<?= (!isset($evento['foto']) || trim($evento['foto']) === '')
-                                            ? 'web/img/perfil/default.png'
-                                            : htmlspecialchars($evento['foto']) ?>">
+                            <?php
+                            $foto = trim($evento['foto'] ?? '');
+
+                            // Si la ruta está vacía o el archivo NO existe → usar la default
+                            if ($foto === '' || !file_exists($foto)) {
+                                $foto = 'web/img/perfil/default.png';
+                            }
+                            ?>
+                            <img src="<?= htmlspecialchars($foto) ?>" alt="Foto de perfil">
 
                         </div>
 

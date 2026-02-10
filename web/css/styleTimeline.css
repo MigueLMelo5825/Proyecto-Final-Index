@@ -189,7 +189,7 @@ body, main {
         display: none;
     }
 }
-
+    
 /* OPCIONAL: ocultarlas en móvil */
 @media (max-width: 768px) {
     body::before,
