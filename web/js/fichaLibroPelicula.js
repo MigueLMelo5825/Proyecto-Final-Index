@@ -114,19 +114,15 @@ async function agregarValoracion(){
     });
 }
 
-async function agregarComentario(){
-
-    formComentario.addEventListener("submit", async event =>{
-
+async function agregarComentario() {
+    formComentario.addEventListener("submit", async event => {
         event.preventDefault();
 
         const textarea = formComentario.querySelector("textarea");
-        const textoComentario  = textarea.value.trim();
+        const textoComentario = textarea.value.trim();
+        if (!textoComentario) return;
 
-        if(!textoComentario) return;
-
-        try{
-
+        try {
             const peticion = await fetch(urlComentario, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -135,19 +131,26 @@ async function agregarComentario(){
                     type: tipo,
                     texto: textoComentario
                 })
-            })
+            });
 
-            if(!peticion.ok){
-                throw new Error("error al enviar valores al archivo php" + peticion.status);
-            }
+            if (!peticion.ok) throw new Error("Error al enviar valores al PHP " + peticion.status);
 
             const datos = await peticion.json();
-
             textarea.value = '';
-            
-            //insertamos el comentario
-            let comunidad = document.querySelector('.comunidad');
 
+            // 1️⃣ Buscamos la descripción
+            const descripcion = document.querySelector('.seccion-descripcion');
+
+            // 2️⃣ Buscamos o creamos el panel de comunidad **debajo de la descripción**
+            let panelComunidad = descripcion.nextElementSibling;
+            if (!panelComunidad || !panelComunidad.classList.contains('panel-comunidad')) {
+                panelComunidad = document.createElement('div');
+                panelComunidad.classList.add('panel-comunidad');
+                descripcion.insertAdjacentElement('afterend', panelComunidad);
+            }
+
+            // 3️⃣ Buscamos o creamos el div comunidad dentro del panel
+            let comunidad = panelComunidad.querySelector('.comunidad');
             if (!comunidad) {
                 comunidad = document.createElement('div');
                 comunidad.classList.add('comunidad');
@@ -155,20 +158,17 @@ async function agregarComentario(){
                     <h3>Comunidad</h3>
                     <div class="lista-comentarios"></div>
                 `;
-                document.querySelector('.panel-comunidad').appendChild(comunidad);
+                panelComunidad.appendChild(comunidad);
             }
 
+            // 4️⃣ Insertamos el comentario
             const lista = comunidad.querySelector('.lista-comentarios');
             lista.insertAdjacentHTML("afterbegin", renderComentario(datos.comentario));
 
-            const msjVacio = document.querySelector('.msj-vacio');
-            if (msjVacio) msjVacio.remove();
-
-
-        }catch(error){
-            console.error("error en el fetch validar codigo" + error);
+        } catch (error) {
+            console.error("Error en el fetch al agregar comentario: ", error);
         }
-    })
+    });
 }
 
 function renderComentario(c) {
@@ -314,7 +314,7 @@ document.addEventListener('click', async (e) => {
         if (!idComentario) return;
 
         try {
-            const res = await fetch(`/${url}/index.php?ctl=eliminarComentario`, {
+            const res = await fetch(urlEliminarComentario, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -327,15 +327,24 @@ document.addEventListener('click', async (e) => {
             const data = await res.json();
 
             if (data.status === 'success') {
-                comentario.remove(); // Eliminamos el comentario del DOM
+                comentario.remove();
 
-                // Verificamos si quedan comentarios dentro de la comunidad
+                // Si no queda ningún comentario, borramos la comunidad
                 const comunidad = document.querySelector('.comunidad');
                 if (comunidad) {
                     const lista = comunidad.querySelectorAll('.comentario-item');
                     if (lista.length === 0) {
-                        comunidad.remove(); // Si no queda ninguno, eliminamos todo el contenedor
+                        comunidad.remove();
                     }
+                }
+
+                // Si se borró la última comunidad, mostramos mensaje de "Sé el primero en comentar"
+                const panelComentarios = document.querySelector('.panel-comentarios');
+                if (panelComentarios && !document.querySelector('.comunidad')) {
+                    const msjVacio = document.createElement('p');
+                    msjVacio.classList.add('msj-vacio');
+                    msjVacio.textContent = "Sé el primero en comentar";
+                    panelComentarios.appendChild(msjVacio);
                 }
             } else {
                 console.error(data.mensaje || "No se pudo eliminar el comentario");

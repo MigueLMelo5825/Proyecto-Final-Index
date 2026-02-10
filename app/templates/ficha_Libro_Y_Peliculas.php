@@ -254,13 +254,13 @@ if (!$urlImagenPortada) {
                             <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
                         </div>
                         <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
+                        <br><br> 
                     </div>
                 <?php endif; ?>
 
                 <!-- La comunidad se crea dinámicamente -->
-                <br><br> 
+                <div class="panel-comunidad">
                 <?php if (!empty($comentarios)): ?>
-                    <div class="panel-comunidad">
                         <div class="comunidad">
                             <h3>Comunidad</h3>
                             <div class="lista-comentarios">
@@ -283,9 +283,9 @@ if (!$urlImagenPortada) {
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                    </div>
-                    <?php endif; ?>
-                    
+                </div>
+                <?php endif; ?>
+
                 <!-- SECCIÓN COMENTARIOS DARK -->
                 <section class="panel-comentarios">
                     <h3>Haz un comentario</h3>
@@ -295,7 +295,7 @@ if (!$urlImagenPortada) {
                         <button type="submit" class="btn-publicar">Publicar</button>
                     </form>
 
-                    <p class="msj-vacio">Sé el primero en comentar</p>
+                    <p class="msj-vacio" style="display: <?= !$comentarios ? 'block' : 'none' ?>;">Sé el primero en comentar</p>
 
                 </section>
             </div>
