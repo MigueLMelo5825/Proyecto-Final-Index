@@ -19,45 +19,117 @@ class UsuarioController
         $pdo     = Database::getConnection();
         $paises  = $pdo->query("SELECT * FROM paises ORDER BY nombre")->fetchAll();
 
+        // Si NO es POST → mostrar formulario
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             require __DIR__ . '/../templates/registro.php';
             return;
         }
 
-        $nombre    = $_POST['name']     ?? '';
-        $email     = $_POST['email']    ?? '';
-        $password  = $_POST['password'] ?? '';
-        $password2 = $_POST['password2'] ?? '';
-        $pais_id   = $_POST['pais_id']  ?? null;
+        // ============================
+        // RECOGER DATOS
+        // ============================
+        $username   = $_POST['username']   ?? '';
+        $nombre     = $_POST['name']       ?? '';
+        $email      = $_POST['email']      ?? '';
+        $password   = $_POST['password']   ?? '';
+        $password2  = $_POST['password2']  ?? '';
+        $pais_id    = $_POST['pais_id']    ?? null;
+
+        $errores = [];
+
+        // ============================
+        // VALIDACIONES
+        // ============================
+
+        // Username
+        if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $username)) {
+            $errores["username"] = "El nombre de usuario no es válido.";
+        }
+
+        // Nombre
+        if (strlen($nombre) < 2) {
+            $errores["name"] = "El nombre es demasiado corto.";
+        }
+
+        // Email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errores["email"] = "El correo no es válido.";
+        }
+
+        // Contraseña
+        if (strlen($password) < 6) {
+            $errores["password"] = "La contraseña debe tener al menos 6 caracteres.";
+        }
 
         if ($password !== $password2) {
-            echo "<h2>Las contraseñas no coinciden</h2>";
+            $errores["password2"] = "Las contraseñas no coinciden.";
+        }
+
+        // ============================
+        // VALIDAR DUPLICADOS
+        // ============================
+
+        // Email duplicado
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $errores["email"] = "El correo ya está registrado.";
+        }
+
+        // Username duplicado
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE username = ?");
+        $stmt->execute([$username]);
+        if ($stmt->fetch()) {
+            $errores["username"] = "El nombre de usuario ya está en uso.";
+        }
+
+        // Si hay errores → volver a la vista
+        if (!empty($errores)) {
+            $params = [
+                "errores"  => $errores,
+                "username" => $username,
+                "name"     => $nombre,
+                "email"    => $email,
+                "paises"   => $paises
+            ];
+            require __DIR__ . '/../templates/registro.php';
             return;
         }
+
+        // ============================
+        // INSERTAR USUARIO
+        // ============================
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $idUSer = $this->usuarioModel->registrar($nombre, $email, $hash, $pais_id);
+        $sql = "INSERT INTO usuarios (username, nombre, email, contrasena, pais)
+            VALUES (?, ?, ?, ?, ?)";
 
-        if (!$idUSer) {
-            echo "<h2>No se pudo registrar el usuario</h2>";
-            return;
-        }
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$username, $nombre, $email, $hash, $pais_id]);
+
+        $idUser = $pdo->lastInsertId();
+
+        // ============================
+        // REGISTRAR EVENTO
+        // ============================
 
         $eventoModel = new EventoModel();
         $eventoModel->registrarEvento(
-            $idUSer,
+            $idUser,
             "registro",
             "Nuevo usuario registrado",
             "El usuario se ha registrado en la plataforma"
         );
 
-
+        // ============================
+        // TOKEN DE ACTIVACIÓN
+        // ============================
 
         $token = bin2hex(random_bytes(32));
-        $validoHasta = time() + 3600; // 1 hora de validez
+        $validoHasta = time() + 3600;
 
-        $okToken = $this->usuarioModel->guardarTokenActivacion($idUSer, $token, $validoHasta);
+        $okToken = $this->usuarioModel->guardarTokenActivacion($idUser, $token, $validoHasta);
 
         if (!$okToken) {
             echo "<h2>No se pudo guardar el token de activación</h2>";
@@ -71,14 +143,14 @@ class UsuarioController
 
         $link = "{$scheme}://{$host}{$base}/index.php?ctl=activar&token=" . urlencode($token);
 
-        // correo de activación
+        // Enviar correo
         $subject = "Activa tu cuenta";
         $htmlBody = "
-            <h2>Activación de cuenta</h2>
-            <p>Hola " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . ",</p>
-            <p>Gracias por registrarte. Para activar tu cuenta, haz clic en el siguiente enlace:</p>
-            <p><a href='{$link}'>{$link}</a></p>
-            <p>Este enlace es válido por 1 hora.</p>";
+        <h2>Activación de cuenta</h2>
+        <p>Hola " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . ",</p>
+        <p>Gracias por registrarte. Para activar tu cuenta, haz clic en el siguiente enlace:</p>
+        <p><a href='{$link}'>{$link}</a></p>
+        <p>Este enlace es válido por 1 hora.</p>";
         $altBody = "Activa tu cuenta: {$link} (válido por 1 hora)";
 
         $enviado = Mailer::enviar($email, $nombre, $subject, $htmlBody, $altBody);
@@ -88,12 +160,14 @@ class UsuarioController
             return;
         }
 
-        echo "<h2>Registro exitoso. Revisa tu correo para activar tu cuenta.</h2>";
-        echo "<a href='index.php?ctl=login'>Iniciar sesión</a>";
+        // ============================
+        // REDIRIGIR
+        // ============================
 
         header("Location: index.php?ctl=login");
         exit;
     }
+
 
     // -------------------------------------------------------------
     // LOGIN
@@ -246,17 +320,32 @@ class UsuarioController
 
     ///////////////////////////////////////////
 
-    public function buscarUsuarios()
-    {
-        $termino = $_GET['email'] ?? '';
+  public function buscarUsuarios()
+{
+    $pdo = Database::getConnection();
 
-        $usuarios = [];
-        if ($termino !== '') {
-            $usuarios = $this->usuarioModel->buscarUsuariosPorEmailParcial($termino);
-        }
+    $termino = trim($_GET['q'] ?? '');
+    $usuarios = [];
 
-        require __DIR__ . '/../templates/buscar_usuarios.php';
+    if ($termino !== '') {
+        $sql = "SELECT id, username, nombre, email, foto
+                FROM usuarios
+                WHERE username LIKE :t1
+                   OR email LIKE :t2";
+
+        $stmt = $pdo->prepare($sql);
+
+        // SOLUCIÓN: dos placeholders distintos
+        $stmt->bindValue(':t1', "%$termino%", PDO::PARAM_STR);
+        $stmt->bindValue(':t2', "%$termino%", PDO::PARAM_STR);
+
+        $stmt->execute();
+        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    require __DIR__ . '/../templates/buscar_usuarios.php';
+}
+
 
 
     // RECUPERAR CONTRASEÑA

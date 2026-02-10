@@ -27,7 +27,12 @@ DROP TABLE IF EXISTS `usuarios`;
 
 CREATE TABLE `usuarios` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(100) NOT NULL,
+
+  -- NUEVO: nombre de usuario único
+  `username` VARCHAR(50) NOT NULL UNIQUE,
+
+  `nombre` VARCHAR(100) DEFAULT NULL,
+  `apellido` VARCHAR(100) DEFAULT NULL,
 
   `bio` TEXT NULL,
   `foto` VARCHAR(255) DEFAULT 'web/img/default.png',
@@ -43,9 +48,12 @@ CREATE TABLE `usuarios` (
   `top_peliculas` TEXT NULL,
 
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email_unique` (`email`)
+  UNIQUE KEY `email_unique` (`email`),
+  UNIQUE KEY `username_unique` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+DROP TABLE IF EXISTS seguidores;
 
 CREATE TABLE seguidores (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,11 +67,14 @@ CREATE TABLE seguidores (
 
 
 
+
 -- --------------------------------------------------------
 -- Tabla: eventos (timeline)
 -- --------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `eventos` (
+DROP TABLE IF EXISTS `eventos`;
+
+CREATE TABLE `eventos` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `id_usuario` INT NOT NULL,
     `tipo` VARCHAR(50) NOT NULL,
@@ -72,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `eventos` (
     `fecha` DATETIME NOT NULL,
     FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id`) ON DELETE CASCADE
 );
+
 
 -- --------------------------------------------------------
 -- Tabla: comentarios

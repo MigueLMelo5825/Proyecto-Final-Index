@@ -20,7 +20,6 @@ class EventoModel
 
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$idUsuario, $tipo, $titulo, $descripcion]);
-
         } catch (PDOException $e) {
             error_log("Error al registrar evento: " . $e->getMessage());
             return false;
@@ -30,26 +29,39 @@ class EventoModel
     // ============================================================
     // OBTENER TODOS LOS EVENTOS (TIMELINE GENERAL)
     // ============================================================
-    public function obtenerEventos(int $limite = 50): array
-    {
-        try {
-            $sql = "SELECT e.*, u.nombre 
-                    FROM eventos e
-                    JOIN usuarios u ON u.id = e.id_usuario
-                    ORDER BY e.fecha DESC
-                    LIMIT ?";
+    public static function obtenerEventosTimeline($idUsuario)
+{
+    $conexion = Database::getConnection();
 
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindValue(1, $limite, PDO::PARAM_INT);
-            $stmt->execute();
+    $sql = "
+        SELECT 
+            e.*, 
+            u.username,
+            u.nombre,
+            u.apellido,
+            u.email
+        FROM eventos e
+        JOIN usuarios u ON u.id = e.id_usuario
+        WHERE e.id_usuario = :id1
+           OR e.id_usuario IN (
+                SELECT seguido_id
+                FROM seguidores
+                WHERE seguidor_id = :id2
+           )
+        ORDER BY e.fecha DESC
+    ";
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conexion->prepare($sql);
 
-        } catch (PDOException $e) {
-            error_log("Error al obtener eventos: " . $e->getMessage());
-            return [];
-        }
-    }
+    // IMPORTANTE: usar dos placeholders distintos
+    $stmt->bindValue(':id1', $idUsuario, PDO::PARAM_INT);
+    $stmt->bindValue(':id2', $idUsuario, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // ============================================================
     // OBTENER EVENTOS DE UN USUARIO
@@ -70,7 +82,6 @@ class EventoModel
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch (PDOException $e) {
             error_log("Error al obtener eventos del usuario: " . $e->getMessage());
             return [];

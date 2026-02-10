@@ -37,7 +37,7 @@ if (!isset($listas)) $listas = [];
 
         <section id="perfil">
             <img src="<?= $usuario['foto'] ?? 'web/img/default.png' ?>" alt="Foto de perfil">
-            <h2><?= htmlspecialchars($usuario['nombre']) ?></h2>
+            <h2><?= htmlspecialchars($usuario['username']) ?></h2>
             <p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
             <a href="index.php?ctl=ajustesPerfil" class="btn btn-outline-primary mt-3">
                 Ajustes del perfil

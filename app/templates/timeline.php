@@ -51,9 +51,34 @@
                     ?>
                 </div>
 
+                <!-- Usuario -->
+                <div class="evento-usuario">
+                    <strong>
+                        <a href="index.php?ctl=perfil&id=<?= $evento['id_usuario'] ?>">
+                            @<?= htmlspecialchars($evento['username']) ?>
+                        </a>
+                    </strong>
+        
+                </div>
+
                 <div class="evento-contenido">
+
+                    <!-- Título -->
                     <h4><?= htmlspecialchars($evento['titulo']) ?></h4>
-                    <p><?= htmlspecialchars($evento['descripcion']) ?></p>
+
+                    <!-- Descripción con ajuste Has/Ha -->
+                    <?php
+                        $descripcion = $evento['descripcion'];
+
+                        // Si el evento NO es del usuario logueado → cambiar "Has" por "Ha"
+                        if ($evento['id_usuario'] != $_SESSION['id_usuario']) {
+                            $descripcion = preg_replace('/^Has\b/i', 'Ha', $descripcion);
+                        }
+                    ?>
+
+                    <p><?= htmlspecialchars($descripcion) ?></p>
+
+                    <!-- Fecha -->
                     <span class="evento-fecha"><?= $evento['fecha'] ?></span>
                 </div>
             </div>

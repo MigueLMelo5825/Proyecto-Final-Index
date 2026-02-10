@@ -14,17 +14,8 @@ class TimelineController
         $this->session->checkSecurity();
         $idUsuario = $this->session->get('id_usuario');
 
-        $conexion = Database::getConnection();
-
-        // Traer eventos recientes
-        $sql = "SELECT tipo, titulo, descripcion, DATE_FORMAT(fecha, '%d/%m/%Y %H:%i') as fecha
-                FROM eventos
-                WHERE id_usuario = ?
-                ORDER BY fecha DESC
-                LIMIT 50";
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([$idUsuario]);
-        $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Usar el método correcto del modelo
+        $eventos = EventoModel::obtenerEventosTimeline($idUsuario);
 
         require __DIR__ . '/../templates/timeline.php';
     }
