@@ -94,7 +94,7 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-danger" href="<?= $base_url ?>index.php?ctl=cerrarSesion">
+                            <a class="nav-link text-danger" href="<?= $base_url ?>index.php?ctl=logout">
                                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
                             </a>
                         </li>
