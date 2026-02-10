@@ -7,13 +7,13 @@
                 <p>Tu biblioteca personal de libros y películas.</p>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <!--   <div class="col-md-4 mb-3">
                 <h4 class="h6">Enlaces</h4>
                 <ul class="list-unstyled">
-                    <li><a href="index.php" class="text-light text-decoration-none">Inicio</a></li>
+                  <li><a href="index.php" class="text-light text-decoration-none">Inicio</a></li>
                     <li><a href="index.php?controller=usuario&action=perfil" class="text-light text-decoration-none">Mi Perfil</a></li>
                 </ul>
-            </div>
+            </div>-->
 
             <div class="col-md-4 mb-3">
                 <h4 class="h6">Contacto</h4>

@@ -18,6 +18,7 @@ require_once __DIR__ . '/app/Models/Peliculas.php';
 require_once __DIR__ . '/app/Models/TimelineModel.php';
 require_once __DIR__ . '/app/Models/UsuarioModel.php';
 require_once __DIR__ . '/app/Models/ListaItemsModel.php';
+require_once __DIR__ . '/app/Models/SeguidorModel.php';
 
 // ============================================================
 // CORE
@@ -104,6 +105,37 @@ $map = [
         'nivel'      => 1
     ],
 
+    'seguir' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'seguir',
+    'nivel'      => 1
+],
+
+'dejarseguir' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'dejarSeguir',
+    'nivel'      => 1
+],
+
+'verSeguidores' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'verSeguidores',
+    'nivel'      => 1
+],
+
+'verSeguidos' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'verSeguidos',
+    'nivel'      => 1
+],
+
+'buscarUsuarios' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'buscarUsuarios',
+    'nivel'      => 1
+],
+
+
     'timeline' => [
         'controller' => 'TimelineController',
         'action'     => 'mostrar',
@@ -136,6 +168,17 @@ $map = [
     'guardarTopLibros' => ['controller' => 'UsuarioController', 'action' => 'guardarTopLibros', 'nivel' => 1],
     'guardarTopPeliculas' => ['controller' => 'UsuarioController', 'action' => 'guardarTopPeliculas', 'nivel' => 1],
 
+    'guardarComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'guardarComentario',
+        'nivel'      => 1
+    ],
+
+    'eliminarComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'eliminarComentario',
+        'nivel'      => 1
+    ],
 
     // LISTAS
     'crearLista' => ['controller' => 'ListaController', 'action' => 'crear', 'nivel' => 1],

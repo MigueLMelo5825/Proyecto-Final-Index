@@ -42,6 +42,21 @@ if (!isset($listas)) $listas = [];
             <a href="index.php?ctl=ajustesPerfil" class="btn btn-outline-primary mt-3">
                 Ajustes del perfil
             </a>
+            <?php if ($idUsuario !== $usuario['id']): ?>
+                <?php if ($esSeguidor): ?>
+                    <a href="index.php?ctl=dejarseguir&id=<?= $usuario['id'] ?>"
+                        class="btn btn-outline-danger mt-3">
+                        Dejar de seguir
+                    </a>
+                <?php else: ?>
+                    <a href="index.php?ctl=seguir&id=<?= $usuario['id'] ?>"
+                        class="btn btn-primary mt-3">
+                        Seguir
+                    </a>
+                <?php endif; ?>
+            <?php endif; ?>
+
+
 
 
             <div id="estadisticas">
@@ -49,6 +64,22 @@ if (!isset($listas)) $listas = [];
                 <div class="stat"><strong><?= $numeroListas ?? 0 ?></strong><span>Listas</span></div>
                 <div class="stat"><strong>14</strong><span>Reseñas</span></div>
             </div>
+
+            <div class="stat">
+                <a href="index.php?ctl=verSeguidores&id=<?= $usuario['id'] ?>" class="text-decoration-none">
+                    <strong><?= count($seguidores) ?></strong>
+                    <span>Seguidores</span>
+                </a>
+            </div>
+
+            <div class="stat">
+                <a href="index.php?ctl=verSeguidos&id=<?= $usuario['id'] ?>" class="text-decoration-none">
+                    <strong><?= count($seguidos) ?></strong>
+                    <span>Siguiendo</span>
+                </a>
+            </div>
+
+
         </section>
 
         <hr>

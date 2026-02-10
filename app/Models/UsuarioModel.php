@@ -286,4 +286,17 @@ $this->db = Database::getConnection();
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$token]);
     }
+
+
+    public function buscarUsuariosPorEmailParcial(string $email): array
+{
+    $sql = "SELECT id, nombre, foto, email 
+            FROM usuarios 
+            WHERE email LIKE :email";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':email' => "%$email%"]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 }

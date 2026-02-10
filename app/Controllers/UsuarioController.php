@@ -159,48 +159,104 @@ class UsuarioController
     // -------------------------------------------------------------
     // PERFIL
     // -------------------------------------------------------------
-   public function perfil()
+    public function perfil()
+    {
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
 
-{
+        if (!$idUsuario) {
+            header("Location: index.php?ctl=login");
+            exit;
+        }
 
-    $idUsuario = $_SESSION['id_usuario'] ?? null;
+        // ID del perfil que se está visitando
+        $idPerfil = $_GET['id'] ?? $idUsuario;
 
-    if (!$idUsuario) {
-        header("Location: index.php?ctl=login");
-        exit;
+        // Obtener usuario del perfil
+        $usuario = $this->usuarioModel->obtenerPorId($idPerfil);
+
+        // Si falla la consulta, evitar warnings
+        if (!$usuario || !is_array($usuario)) {
+            $usuario = [
+                'nombre' => 'Usuario desconocido',
+                'bio' => '',
+                'foto' => 'web/img/default.png',
+                'top_libros' => '[]',
+                'top_peliculas' => '[]'
+            ];
+        }
+
+        // Cargar top libros
+        $librosModel = new Libros();
+        $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
+        $topLibros = $librosModel->obtenerPorIds($topLibrosIds);
+
+        // Cargar top películas
+        $pelisModel = new Peliculas();
+        $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
+        $topPeliculas = $pelisModel->obtenerPorIds($topPeliculasIds);
+
+        // Cargar listas
+        $listasModel = new ListaModel();
+        $listas = $listasModel->obtenerListasPorUsuario($idPerfil);
+        $numeroListas = count($listas);
+
+        // -------------------------------
+        // NUEVO: sistema de seguidores
+        // -------------------------------
+        $seguidorModel = new SeguidorModel();
+
+        // ¿El usuario logueado sigue a este perfil?
+        $esSeguidor = $seguidorModel->esSeguidor($idUsuario, $idPerfil);
+
+        // Listas de seguidores y seguidos
+        $seguidores = $seguidorModel->obtenerSeguidores($idPerfil);
+        $seguidos   = $seguidorModel->obtenerSeguidos($idPerfil);
+
+        require __DIR__ . '/../templates/perfil.php';
     }
 
-    // Obtener usuario
-    $usuario = $this->usuarioModel->obtenerPorId($idUsuario);
+    public function verSeguidores()
+    {
+        $idPerfil = $_GET['id'] ?? null;
+        if (!$idPerfil) {
+            header("Location: index.php?ctl=inicio");
+            exit;
+        }
 
-    // Si falla la consulta, evitar warnings
-    if (!$usuario || !is_array($usuario)) {
-        $usuario = [
-            'nombre' => 'Usuario desconocido',
-            'bio' => '',
-            'foto' => 'web/img/default.png',
-            'top_libros' => '[]',
-            'top_peliculas' => '[]'
-        ];
+        $seguidorModel = new SeguidorModel();
+        $seguidores = $seguidorModel->obtenerSeguidores($idPerfil);
+
+        require __DIR__ . '/../templates/seguidores.php';
     }
 
-    // Cargar top libros
-    $librosModel = new Libros();
-    $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
-    $topLibros = $librosModel->obtenerPorIds($topLibrosIds);
+    public function verSeguidos()
+    {
+        $idPerfil = $_GET['id'] ?? null;
+        if (!$idPerfil) {
+            header("Location: index.php?ctl=inicio");
+            exit;
+        }
 
-    // Cargar top películas
-    $pelisModel = new Peliculas();
-    $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
-    $topPeliculas = $pelisModel->obtenerPorIds($topPeliculasIds);
+        $seguidorModel = new SeguidorModel();
+        $seguidos = $seguidorModel->obtenerSeguidos($idPerfil);
 
-    // Cargar listas
-$listasModel = new ListaModel(); 
-    $listas = $listasModel->obtenerListasPorUsuario($idUsuario);
-    $numeroListas = count($listas);
+        require __DIR__ . '/../templates/seguidos.php';
+    }
 
-    require __DIR__ . '/../templates/perfil.php';
-}
+
+    ///////////////////////////////////////////
+
+    public function buscarUsuarios()
+    {
+        $termino = $_GET['email'] ?? '';
+
+        $usuarios = [];
+        if ($termino !== '') {
+            $usuarios = $this->usuarioModel->buscarUsuariosPorEmailParcial($termino);
+        }
+
+        require __DIR__ . '/../templates/buscar_usuarios.php';
+    }
 
 
     // RECUPERAR CONTRASEÑA
@@ -350,93 +406,131 @@ $listasModel = new ListaModel();
 
         require __DIR__ . '/../templates/contrasena_modificado.php';
     }
-///////////////////////////////////////////////////////////////////
- public function ajustesPerfil()
-{
-    $idUsuario = $_SESSION['id_usuario'] ?? null;
+    ///////////////////////////////////////////////////////////////////
+    public function ajustesPerfil()
+    {
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
 
-    if (!$idUsuario) {
-        header("Location: index.php?ctl=login");
+        if (!$idUsuario) {
+            header("Location: index.php?ctl=login");
+            exit;
+        }
+
+        // Obtener usuario
+        $usuario = $this->usuarioModel->obtenerPorId($idUsuario);
+
+        // Asegurar claves
+        $usuario['bio']  = $usuario['bio']  ?? '';
+        $usuario['foto'] = $usuario['foto'] ?? 'web/img/default.png';
+
+        // Modelos correctos (BD, NO API)
+        $librosModel = new Libros();
+        $pelisModel  = new Peliculas();
+
+        // OBLIGATORIO: SOLO BD
+        $todosLibros = $librosModel->obtenerTodos();
+        $todasPeliculas = $pelisModel->obtenerTodas();
+
+        // Convertir JSON a array
+        $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
+        $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
+
+        if (!is_array($topLibrosIds)) $topLibrosIds = [];
+        if (!is_array($topPeliculasIds)) $topPeliculasIds = [];
+
+        require __DIR__ . '/../templates/ajustes_perfil.php';
+    }
+    // -------------------------------------------------------------
+    // SEGUIR A UN USUARIO
+    // -------------------------------------------------------------
+    public function seguir()
+    {
+        $idSeguido = $_GET['id'] ?? null;
+        $idSeguidor = $_SESSION['id_usuario'] ?? null;
+
+        if (!$idSeguidor || !$idSeguido || $idSeguidor == $idSeguido) {
+            header("Location: index.php?ctl=perfil&id=$idSeguido");
+            exit;
+        }
+
+        $seguidorModel = new SeguidorModel();
+        $seguidorModel->seguir($idSeguidor, $idSeguido);
+
+        header("Location: index.php?ctl=perfil&id=$idSeguido");
         exit;
     }
 
-    // Obtener usuario
-    $usuario = $this->usuarioModel->obtenerPorId($idUsuario);
+    // -------------------------------------------------------------
+    // DEJAR DE SEGUIR
+    // -------------------------------------------------------------
+    public function dejarSeguir()
+    {
+        $idSeguido = $_GET['id'] ?? null;
+        $idSeguidor = $_SESSION['id_usuario'] ?? null;
 
-    // Asegurar claves
-    $usuario['bio']  = $usuario['bio']  ?? '';
-    $usuario['foto'] = $usuario['foto'] ?? 'web/img/default.png';
+        if (!$idSeguidor || !$idSeguido || $idSeguidor == $idSeguido) {
+            header("Location: index.php?ctl=perfil&id=$idSeguido");
+            exit;
+        }
 
-    // Modelos correctos (BD, NO API)
-    $librosModel = new Libros();
-    $pelisModel  = new Peliculas();
+        $seguidorModel = new SeguidorModel();
+        $seguidorModel->dejarDeSeguir($idSeguidor, $idSeguido);
 
-    // OBLIGATORIO: SOLO BD
-    $todosLibros = $librosModel->obtenerTodos();
-    $todasPeliculas = $pelisModel->obtenerTodas();
-
-    // Convertir JSON a array
-    $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
-    $topPeliculasIds = json_decode($usuario['top_peliculas'] ?? '[]', true);
-
-    if (!is_array($topLibrosIds)) $topLibrosIds = [];
-    if (!is_array($topPeliculasIds)) $topPeliculasIds = [];
-
-    require __DIR__ . '/../templates/ajustes_perfil.php';
-}
-
-
-/////////////////////////////////////////////////////////
-
-    public function guardarFotoPerfil()
-{
-    $idUsuario = $_SESSION['id_usuario'];
-
-    if (!empty($_FILES['foto']['tmp_name'])) {
-        $nombre = 'foto_' . $idUsuario . '.jpg';
-        move_uploaded_file($_FILES['foto']['tmp_name'], "web/img/perfil/$nombre");
-
-        $this->usuarioModel->actualizarFoto($idUsuario, "web/img/perfil/$nombre");
+        header("Location: index.php?ctl=perfil&id=$idSeguido");
+        exit;
     }
 
-    header("Location: index.php?ctl=perfil");
-}
 
-public function guardarBio()
-{
-    $idUsuario = $_SESSION['id_usuario'];
-    $bio = $_POST['bio'] ?? '';
+    /////////////////////////////////////////////////////////
 
-    $this->usuarioModel->actualizarBio($idUsuario, $bio);
+    public function guardarFotoPerfil()
+    {
+        $idUsuario = $_SESSION['id_usuario'];
 
-    header("Location: index.php?ctl=perfil");
-}
+        if (!empty($_FILES['foto']['tmp_name'])) {
+            $nombre = 'foto_' . $idUsuario . '.jpg';
+            move_uploaded_file($_FILES['foto']['tmp_name'], "web/img/perfil/$nombre");
 
-///////////////////////////////////////////////////////
+            $this->usuarioModel->actualizarFoto($idUsuario, "web/img/perfil/$nombre");
+        }
 
-public function guardarTopLibros()
-{
-    $idUsuario = $_SESSION['id_usuario'];
+        header("Location: index.php?ctl=perfil");
+    }
 
-    $seleccion = $_POST['top_libros'] ?? [];
-    $seleccion = array_slice($seleccion, 0, 4);
+    public function guardarBio()
+    {
+        $idUsuario = $_SESSION['id_usuario'];
+        $bio = $_POST['bio'] ?? '';
 
-    $this->usuarioModel->actualizarTopLibros($idUsuario, json_encode($seleccion));
+        $this->usuarioModel->actualizarBio($idUsuario, $bio);
 
-    header("Location: index.php?ctl=perfil");
-}
+        header("Location: index.php?ctl=perfil");
+    }
+
+    ///////////////////////////////////////////////////////
+
+    public function guardarTopLibros()
+    {
+        $idUsuario = $_SESSION['id_usuario'];
+
+        $seleccion = $_POST['top_libros'] ?? [];
+        $seleccion = array_slice($seleccion, 0, 4);
+
+        $this->usuarioModel->actualizarTopLibros($idUsuario, json_encode($seleccion));
+
+        header("Location: index.php?ctl=perfil");
+    }
 
 
-////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
     public function guardarTopPeliculas()
-{
-    $idUsuario = $_SESSION['id_usuario'];
-    $seleccion = $_POST['top_peliculas'] ?? [];
-    $seleccion = array_slice($seleccion, 0, 4);
+    {
+        $idUsuario = $_SESSION['id_usuario'];
+        $seleccion = $_POST['top_peliculas'] ?? [];
+        $seleccion = array_slice($seleccion, 0, 4);
 
-    $this->usuarioModel->actualizarTopPeliculas($idUsuario, json_encode($seleccion));
+        $this->usuarioModel->actualizarTopPeliculas($idUsuario, json_encode($seleccion));
 
-    header("Location: index.php?ctl=perfil");
-}
-
+        header("Location: index.php?ctl=perfil");
+    }
 }

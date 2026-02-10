@@ -16,7 +16,7 @@ $loggedIn = isset($session) ? $session->isLoggedIn() : (isset($_SESSION['id_usua
 // Elegir URL de destino del logo y enlace "Inicio"
 $inicioUrl = $loggedIn ? $base_url . 'index.php?ctl=timeline' : $base_url . 'index.php';
 
-// Elegir logo: INDEX-02 para navbar oscuro, INDEX-01 para fondos claros
+// Elegir logo
 $logoUrl = $base_url . 'web/img/INDEX-02.png';
 ?>
 
@@ -27,6 +27,7 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= $base_url ?>web/css/styles.css">
+    <link rel="icon" type="image/png" href="web/img/INDEX-01_favicon.png">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,9 +46,6 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
             <!-- LOGO -->
             <a class="navbar-brand" href="<?= $inicioUrl ?>">
                 <img src="<?= $logoUrl ?>" alt="INDEX" class="navbar-logo">
-            </a>
-
-
             </a>
 
             <!-- Botón responsive -->
@@ -69,9 +67,20 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
                 <form class="d-flex me-3 position-relative" role="search">
                     <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
                     <div id="resultadosBusqueda"
-                        class="list-group position-absolute w-100 mt-5"
-                        style="z-index: 2000;"></div>
+                         class="list-group position-absolute w-100 mt-5"
+                         style="z-index: 2000;"></div>
                 </form>
+
+                <!-- EXPLORAR COMUNIDAD (solo si está logueado) -->
+                <?php if ($loggedIn): ?>
+                <ul class="navbar-nav me-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $base_url ?>index.php?ctl=buscarUsuarios">
+                            Explorar comunidad
+                        </a>
+                    </li>
+                </ul>
+                <?php endif; ?>
 
                 <!-- DERECHA (según sesión) -->
                 <ul class="navbar-nav">

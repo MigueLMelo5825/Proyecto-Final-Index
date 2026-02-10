@@ -46,6 +46,19 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+CREATE TABLE seguidores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    seguidor_id INT NOT NULL,
+    seguido_id INT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(seguidor_id, seguido_id),
+    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (seguido_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+
+
 -- --------------------------------------------------------
 -- Tabla: eventos (timeline)
 -- --------------------------------------------------------
@@ -76,6 +89,9 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   KEY `id_libro` (`id_libro`),
   KEY `id_pelicula` (`id_pelicula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `comentarios` ADD UNIQUE KEY unique_user_libro (`usuario_id`, `id_libro`);
+ALTER TABLE `comentarios` ADD UNIQUE KEY unique_user_pelicula (`usuario_id`, `id_pelicula`);
 
 -- --------------------------------------------------------
 -- Tabla: libros

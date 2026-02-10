@@ -64,7 +64,7 @@ public function guardarLibros(array $libros, int $cantidad): bool {
 
     return true;
 }
-
+    
     public function obtenerTodos(): array {
     $sql = "SELECT id, titulo, autores, categoria, imagen_url 
             FROM libros 
