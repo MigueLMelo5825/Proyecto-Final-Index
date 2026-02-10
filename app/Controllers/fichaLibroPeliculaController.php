@@ -140,7 +140,7 @@ class fichaLibroPeliculaController {
 
             // OBTENEMOS LOS DATOS DEL USUARIO (para mostrar el nombre en el feed dinámico)
             $cons = $pdo->prepare("
-                SELECT c.texto, c.fecha, u.nombre_usuario, u.foto_usuario
+                SELECT c.texto, c.fecha, u.username, u.foto, u.pais
                 FROM comentarios c 
                 LEFT JOIN usuarios u ON c.usuario_id = u.id 
                 WHERE c.usuario_id = :uId AND c.$tipoId = :lpId

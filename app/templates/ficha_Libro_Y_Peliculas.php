@@ -244,7 +244,6 @@ if (!$urlImagenPortada) {
                         <button type="submit" class="btn-publicar">Publicar</button>
                     </form>
                     <div class="lista-comentarios">
-                        <div id="info-comentario"></div>
                         <p class="msj-vacio">No hay opiniones todavía. ¡Sé el primero!</p>
                     </div>
                 </section>
