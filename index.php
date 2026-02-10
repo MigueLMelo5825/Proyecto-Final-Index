@@ -74,6 +74,13 @@ $map = [
         'nivel'      => 0
     ],
 
+    'anadir' => [
+    'controller' => 'ListaController',
+    'action'     => 'anadir',
+    'nivel'      => 1
+],
+
+
 
     'recupero' => [
         'controller' => 'UsuarioController',

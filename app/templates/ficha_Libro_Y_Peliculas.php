@@ -75,14 +75,15 @@ if (!$libroPelicula) {
     exit;
 }
 
-function escaparHTML(string $texto): string {
+function escaparHTML(string $texto): string
+{
     return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
 }
 
 //validamos segun el tipo trae la imagen de portada del objeto 
-if($type === "libro"){
+if ($type === "libro") {
     $urlImagenPortada = $libroPelicula['imagen_url'] ?? '';
-}else{
+} else {
     $urlImagenPortada = $libroPelicula['portada'] ?? '';
 }
 
@@ -92,165 +93,169 @@ if ($urlImagenPortada) {
 
 //validamos que si no encuentra un valor ponemos nuestra imagen preterminada
 if (!$urlImagenPortada) {
-    $urlImagenPortada = $urlImgFallback ;
+    $urlImagenPortada = $urlImgFallback;
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
     <link rel="stylesheet" href="<?php echo $root ?>web/css/fichaLibroPelicula.css">
 </head>
+
 <body>
 
-<?php include_once __DIR__.'/../templates/header.php'; ?>
+    <?php include_once __DIR__ . '/../templates/header.php'; ?>
 
-<main class="detalle">
-    <div class="detalle-grid">
-        <!-- Columna Portada -->
-        <div class="portada">
-            <div class="portada-wrapper">
-                <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
-            </div>
-            <?php
-                
+    <main class="detalle">
+        <div class="detalle-grid">
+            <!-- Columna Portada -->
+            <div class="portada">
+                <div class="portada-wrapper">
+                    <img src="<?= escaparHTML($urlImagenPortada) ?>" alt="<?= escaparHTML($libroPelicula['titulo']) ?>">
+                </div>
+                <?php
+
 
                 if ($idUsuario):
-                    $listasUsuario = ListaModel::obtenerListasUsuario($conexionBD, $idUsuario);
-            ?>
-            <div class="añadir-lista">
-                <form action="index.php?ctl=añadirALista" method="POST">
+                    $listaModel = new ListaModel();
+                    $listasUsuario = $listaModel->obtenerListasPorUsuario($idUsuario);
+                ?>
+                    <div class="añadir-lista">
+                        <form action="index.php?ctl=anadir" method="POST">
 
-                    <input type="hidden" name="id_libro" value="<?= $type === 'libro' ? $id : '' ?>">
-                    <input type="hidden" name="id_pelicula" value="<?= $type === 'pelicula' ? $id : '' ?>">
+                            <input type="hidden" name="id_libro" value="<?= $type === 'libro' ? $id : '' ?>">
+                            <input type="hidden" name="id_pelicula" value="<?= $type === 'pelicula' ? $id : '' ?>">
 
-                    <label>Añadir a una lista:</label>
-                    <select name="id_lista" required>
-                        <option value="">Selecciona una lista</option>
+                            <label>Añadir a una lista:</label>
+                            <select name="id_lista" required>
+                                <option value="">Selecciona una lista</option>
 
-                        <?php foreach ($listasUsuario as $lista): ?>
-                            <option value="<?= $lista['id_lista'] ?>">
-                                <?= escaparHTML($lista['nombre']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                                <?php foreach ($listasUsuario as $lista): ?>
+                                    <option value="<?= $lista['id'] ?>">
+                                        <?= escaparHTML($lista['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
 
-                    <button type="submit" class="boton-externo">Añadir</button>
-                </form>
+                            <button type="submit" class="boton-externo">Añadir</button>
+                        </form>
 
-                <a href="index.php?ctl=crearLista" class="boton-externo">
-                    Crear nueva lista
-                </a>
-            </div>
+                        <a href="index.php?ctl=crearLista" class="boton-externo">
+                            Crear nueva lista
+                        </a>
+                    </div>
 
                 <?php else: ?>
 
-                <!-- Mostrar mensaje si NO está logueado -->
-                <div class="añadir-lista">
-                    <a href="index.php?ctl=login" class="boton-externo">
-                        Inicia sesión para añadir a una lista
-                    </a>
-                </div>
+                    <!-- Mostrar mensaje si NO está logueado -->
+                    <div class="añadir-lista">
+                        <a href="index.php?ctl=login" class="boton-externo">
+                            Inicia sesión para añadir a una lista
+                        </a>
+                    </div>
 
-            <?php endif; ?>
+                <?php endif; ?>
 
-        </div>
+            </div>
 
-        <!-- Columna Información -->
-        <div class="contenido">
-            <h2><?= escaparHTML($libroPelicula['titulo']) ?></h2>
+            <!-- Columna Información -->
+            <div class="contenido">
+                <h2><?= escaparHTML($libroPelicula['titulo']) ?></h2>
 
-            <!-- BARRA DE VALORACIÓN SOCIAL -->
-            <div class="rating-social-bar">
-                <div class="estrellas-voto">
-                    <?php for ($i = 5; $i >= 1; $i--): ?>
-                        <input
-                            type="radio"
-                            name="star"
-                            value="<?= $i ?>"
-                            id="star<?= $i ?>"
-                            <?= ($valoracionUsuario == $i) ? 'checked' : '' ?>
-                        >
-                        <label for="star<?= $i ?>">★</label>
-                    <?php endfor; ?>
-                </div>
-                <span class="puntuacion-texto" id="calificacion"><?= $promedio ?: '0.0' ?> de 5</span>
-                
-                <button id="btn-favorito" class="btn-interaccion-like <?= $usuarioHaDadoLike ? 'active' : '' ?>" title="Añadir a mis favoritos">
-                    <span class="corazon-icono">❤</span>
-                </button>
-                <?php if($totalLikes > 0): ?>
-                        <span id="contador-likes" class="badge-likes">&nbsp;A <?php echo $totalLikes ?> Usuarios les gusta 
-                            <?php if($type ==="libro"): ?>
+                <!-- BARRA DE VALORACIÓN SOCIAL -->
+                <div class="rating-social-bar">
+                    <div class="estrellas-voto">
+                        <?php for ($i = 5; $i >= 1; $i--): ?>
+                            <input
+                                type="radio"
+                                name="star"
+                                value="<?= $i ?>"
+                                id="star<?= $i ?>"
+                                <?= ($valoracionUsuario == $i) ? 'checked' : '' ?>>
+                            <label for="star<?= $i ?>">★</label>
+                        <?php endfor; ?>
+                    </div>
+                    <span class="puntuacion-texto" id="calificacion"><?= $promedio ?: '0.0' ?> de 5</span>
+
+                    <button id="btn-favorito" class="btn-interaccion-like <?= $usuarioHaDadoLike ? 'active' : '' ?>" title="Añadir a mis favoritos">
+                        <span class="corazon-icono">❤</span>
+                    </button>
+                    <?php if ($totalLikes > 0): ?>
+                        <span id="contador-likes" class="badge-likes">&nbsp;A <?php echo $totalLikes ?> Usuarios les gusta
+                            <?php if ($type === "libro"): ?>
                                 este Libro
                             <?php else: ?>
                                 esta Pelicula
                             <?php endif; ?>
                         </span>
                     <?php endif; ?>
+                </div>
+
+                <?php if (!empty($libroPelicula['subtitulo'])): ?>
+                    <h3 class="subtitulo-ficha"><?= escaparHTML($libroPelicula['subtitulo']) ?></h3>
+                <?php endif; ?>
+
+                <?php if ($type === "libro"): ?>
+                    <div class="info-tecnica">
+                        <p><strong>Autor(es):</strong> <?= escaparHTML($libroPelicula['autores'] ?? 'Desconocido') ?></p>
+                        <p><strong>Categoría:</strong> <?= escaparHTML($libroPelicula['categoria'] ?? 'N/A') ?></p>
+                        <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
+                        <p><strong>Fecha:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
+                        <p><strong>Páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
+                        <?php if ($libroPelicula['idioma'] === "es"): ?>
+                            <p><strong>Idioma:</strong> <?= escaparHTML("Español" ?? 'N/A') ?></p>
+                        <?php else: ?>
+                            <p><strong>Idioma:</strong> <?= escaparHTML("Ingles" ?? 'N/A') ?></p>
+                        <?php endif ?>
+                    </div>
+
+                    <div class="seccion-descripcion">
+                        <h3>Descripción</h3>
+                        <div id="descripcion-texto" class="texto-recortado">
+                            <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
+                        </div>
+                        <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Mismo bloque para Película pero con sus datos -->
+                <?php if ($type === "pelicula"): ?>
+                    <div class="info-tecnica">
+                        <p><strong>Año:</strong> <?= escaparHTML($libroPelicula['anio'] ?? 'N/A') ?></p>
+                        <p><strong>Género:</strong> <?= escaparHTML($genero ?? 'N/A') ?></p>
+                    </div>
+                    <div class="seccion-descripcion">
+                        <h3>Descripción</h3>
+                        <div id="descripcion-texto" class="texto-recortado">
+                            <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
+                        </div>
+                        <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
+                    </div>
+                <?php endif; ?>
+
+                <!-- SECCIÓN COMENTARIOS DARK -->
+                <section class="panel-comentarios">
+                    <h3>Comunidad</h3>
+                    <form class="form-post">
+                        <textarea placeholder="¿Qué te ha parecido?..."></textarea>
+                        <button type="submit" class="btn-publicar">Publicar</button>
+                    </form>
+                    <div class="lista-comentarios">
+                        <div id="info-comentario"></div>
+                        <p class="msj-vacio">No hay opiniones todavía. ¡Sé el primero!</p>
+                    </div>
+                </section>
             </div>
-
-            <?php if (!empty($libroPelicula['subtitulo'])): ?>
-                <h3 class="subtitulo-ficha"><?= escaparHTML($libroPelicula['subtitulo']) ?></h3>
-            <?php endif; ?>
-            
-            <?php if($type === "libro"): ?>
-                <div class="info-tecnica">
-                    <p><strong>Autor(es):</strong> <?= escaparHTML($libroPelicula['autores'] ?? 'Desconocido') ?></p>
-                    <p><strong>Categoría:</strong> <?= escaparHTML($libroPelicula['categoria'] ?? 'N/A') ?></p>
-                    <p><strong>Editorial:</strong> <?= escaparHTML($libroPelicula['editorial'] ?? 'N/A') ?></p>
-                    <p><strong>Fecha:</strong> <?= escaparHTML($libroPelicula['fecha_publicacion'] ?? 'N/A') ?></p>
-                    <p><strong>Páginas:</strong> <?= escaparHTML($libroPelicula['paginas'] ?? 'N/A') ?></p>
-                    <?php if($libroPelicula['idioma'] === "es"): ?>
-                        <p><strong>Idioma:</strong> <?= escaparHTML("Español" ?? 'N/A') ?></p>
-                    <?php else: ?>
-                        <p><strong>Idioma:</strong> <?= escaparHTML("Ingles" ?? 'N/A') ?></p>
-                    <?php endif ?>
-                </div>
-                
-                <div class="seccion-descripcion">
-                    <h3>Descripción</h3>
-                    <div id="descripcion-texto" class="texto-recortado">
-                        <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
-                    </div>
-                    <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
-                </div>
-            <?php endif; ?>
-
-            <!-- Mismo bloque para Película pero con sus datos -->
-            <?php if($type === "pelicula"): ?>
-                <div class="info-tecnica">
-                    <p><strong>Año:</strong> <?= escaparHTML($libroPelicula['anio'] ?? 'N/A') ?></p>
-                    <p><strong>Género:</strong> <?= escaparHTML($genero ?? 'N/A') ?></p>
-                </div>
-                <div class="seccion-descripcion">
-                    <h3>Descripción</h3>
-                    <div id="descripcion-texto" class="texto-recortado">
-                        <p><?= nl2br(escaparHTML($libroPelicula['descripcion'] ?? 'Sin descripción')) ?></p>
-                    </div>
-                    <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
-                </div>
-            <?php endif; ?>
-
-            <!-- SECCIÓN COMENTARIOS DARK -->
-            <section class="panel-comentarios">
-                <h3>Comunidad</h3>
-                <form class="form-post">
-                    <textarea placeholder="¿Qué te ha parecido?..."></textarea>
-                    <button type="submit" class="btn-publicar">Publicar</button>
-                </form>
-                <div class="lista-comentarios">
-                    <div id="info-comentario"></div>
-                    <p class="msj-vacio">No hay opiniones todavía. ¡Sé el primero!</p>
-                </div>
-            </section>
         </div>
-    </div>
-</main>
+    </main>
 
-<?php include_once __DIR__.'/../templates/footer.php'; ?>
-
-<script src="<?php echo $root ?>web/js/fichaLibroPelicula.js"></script>
+    <?php include_once __DIR__ . '/../templates/footer.php'; ?>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+               
+    <script src="<?php echo $root ?>web/js/fichaLibroPelicula.js"></script>
 </body>
+
 </html>

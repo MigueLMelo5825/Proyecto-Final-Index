@@ -3,10 +3,19 @@
 <div class="container mt-5">
     <h2>Explorar usuarios</h2>
 
-    <form method="GET" action="index.php" class="mt-3 mb-4">
-        <input type="hidden" name="ctl" value="buscarUsuarios">
-        <input type="text" name="email" class="form-control" placeholder="Buscar por email...">
-    </form>
+   <form method="GET" action="index.php" class="mt-3 mb-4 d-flex" style="max-width: 400px;">
+    <input type="hidden" name="ctl" value="buscarUsuarios">
+
+    <input type="text" 
+           name="email" 
+           class="form-control me-2" 
+           placeholder="Buscar por email...">
+
+    <button type="submit" class="btn btn-primary">
+        Buscar
+    </button>
+</form>
+
 
     <?php if (!empty($usuarios)): ?>
         <ul class="list-group">

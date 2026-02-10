@@ -203,8 +203,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+async function agregarALista() {
+    const form = document.querySelector(".añadir-lista form");
+    if (!form) return;
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(`/${url}/index.php?ctl=anadir`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.status === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Añadido a la lista",
+                    text: data.mensaje,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: data.mensaje || "No se pudo añadir"
+                });
+            }
+
+        } catch (error) {
+            console.error("Error al añadir a la lista:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error inesperado",
+                text: "No se pudo procesar la solicitud"
+            });
+        }
+    });
+}
+
+
 window.onload = function (){
     enviarLike();
     agregarValoracion();
     agregarComentario();
+    agregarALista();
 }
