@@ -10,59 +10,80 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+ /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+ /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `indexproyecto`
 --
 
--- Estructura de tabla para la tabla `usuarios`
---
+-- --------------------------------------------------------
+-- Tabla: usuarios
+-- --------------------------------------------------------
 
 DROP TABLE IF EXISTS `usuarios`;
 
 CREATE TABLE `usuarios` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
+
+  `bio` TEXT NULL,
+  `foto` VARCHAR(255) DEFAULT 'web/img/default.png',
+
   `email` VARCHAR(150) NOT NULL,
   `contrasena` VARCHAR(200) NOT NULL,
   `rol` ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
   `pais` VARCHAR(100) DEFAULT NULL,
   `nivel` INT NOT NULL DEFAULT 1,
   `activo` INT NOT NULL DEFAULT 0,
+
+  `top_libros` TEXT NULL,
+  `top_peliculas` TEXT NULL,
+
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
--- --------------------------------------------------------
--- Estructura de tabla para la tabla `eventos' (timeline.php)`
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS eventos (
+
+CREATE TABLE seguidores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    tipo VARCHAR(50) NOT NULL,
-    titulo VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    fecha DATETIME NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+    seguidor_id INT NOT NULL,
+    seguido_id INT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(seguidor_id, seguido_id),
+    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (seguido_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
---
--- Estructura de tabla para la tabla `comentarios`
---
+
+
+-- --------------------------------------------------------
+-- Tabla: eventos (timeline)
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `eventos` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `id_usuario` INT NOT NULL,
+    `tipo` VARCHAR(50) NOT NULL,
+    `titulo` VARCHAR(255) NOT NULL,
+    `descripcion` TEXT,
+    `fecha` DATETIME NOT NULL,
+    FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id`) ON DELETE CASCADE
+);
+
+-- --------------------------------------------------------
+-- Tabla: comentarios
+-- --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `comentarios` (
-  `id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `id_libro` varchar(20) DEFAULT NULL,
-  `id_pelicula` int(11) DEFAULT NULL,
-  `texto` text NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` INT(11) NOT NULL,
+  `id_libro` VARCHAR(20) DEFAULT NULL,
+  `id_pelicula` INT(11) DEFAULT NULL,
+  `texto` TEXT NOT NULL,
+  `fecha` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `id_libro` (`id_libro`),
@@ -73,33 +94,30 @@ ALTER TABLE `comentarios` ADD UNIQUE KEY unique_user_libro (`usuario_id`, `id_li
 ALTER TABLE `comentarios` ADD UNIQUE KEY unique_user_pelicula (`usuario_id`, `id_pelicula`);
 
 -- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `libros`
---
+-- Tabla: libros
+-- --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `libros` (
-  `id` varchar(20) NOT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `subtitulo` varchar(255) DEFAULT NULL,
-  `autores` text DEFAULT NULL,
-  `editorial` varchar(100) DEFAULT NULL,
-  `fecha_publicacion` varchar(20) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `isbn_10` varchar(10) DEFAULT NULL,
-  `isbn_13` varchar(13) DEFAULT NULL,
-  `paginas` int(11) DEFAULT NULL,
-  `categoria` varchar(100) DEFAULT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL,
-  `idioma` varchar(10) DEFAULT NULL,
-  `preview_link` varchar(255) DEFAULT NULL,
-  `fecha_importacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` VARCHAR(20) NOT NULL,
+  `titulo` VARCHAR(255) NOT NULL,
+  `subtitulo` VARCHAR(255) DEFAULT NULL,
+  `autores` TEXT DEFAULT NULL,
+  `editorial` VARCHAR(100) DEFAULT NULL,
+  `fecha_publicacion` VARCHAR(20) DEFAULT NULL,
+  `descripcion` TEXT DEFAULT NULL,
+  `isbn_10` VARCHAR(10) DEFAULT NULL,
+  `isbn_13` VARCHAR(13) DEFAULT NULL,
+  `paginas` INT(11) DEFAULT NULL,
+  `categoria` VARCHAR(100) DEFAULT NULL,
+  `imagen_url` VARCHAR(255) DEFAULT NULL,
+  `idioma` VARCHAR(10) DEFAULT NULL,
+  `preview_link` VARCHAR(255) DEFAULT NULL,
+  `fecha_importacion` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `libros`
---
+COMMIT;
+
 
 INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fecha_publicacion`, `descripcion`, `isbn_10`, `isbn_13`, `paginas`, `categoria`, `imagen_url`, `idioma`, `preview_link`, `fecha_importacion`) VALUES
 ('-93olOJ4kJ8C', 'Historia general de España, o Continuacion de la historia de España, del R. P. Juan de Mariana... divida en cinco tomos. Y en la que se haze relacion de lo sucedido en ella desde la muerte del catolico rey Don Fernando, asta à el principio del reynado del', NULL, 'Juan de Mariana', NULL, '1756', NULL, NULL, NULL, 408, NULL, 'http://books.google.com/books/content?id=-93olOJ4kJ8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'es', 'http://books.google.es/books?id=-93olOJ4kJ8C&printsec=frontcover&dq=Historia&hl=&cd=8&source=gbs_api', '2026-01-26 14:42:36'),

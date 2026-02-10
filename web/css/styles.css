@@ -1,15 +1,19 @@
-/* VARIABLES DE DISEÑO */
+/* =========================
+   VARIABLES DE DISEÑO
+   ========================= */
 :root {
-    --primary: #C47A4A;        /* Terracota elegante */
-    --bg: #FAF8F5;             /* Blanco cálido editorial */
-    --card-bg: #FFFFFF;        /* Tarjetas estilo papel */
-    --border: #E8E2DA;         /* Borde beige suave */
-    --text: #2A2A2A;           /* Texto principal */
-    --text-soft: #6F6A63;      /* Texto secundario cálido */
-    --radius: 10px;            /* Redondeado suave */
+    --primary: #C47A4A;
+    --bg: #FAF8F5;
+    --card-bg: #FFFFFF;
+    --border: #E8E2DA;
+    --text: #2A2A2A;
+    --text-soft: #6F6A63;
+    --radius: 10px;
 }
 
-/* RESET BÁSICO */
+/* =========================
+   RESET BÁSICO
+   ========================= */
 * {
     margin: 0;
     padding: 0;
@@ -21,144 +25,162 @@ body {
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.6;
-    padding: 0 24px; /* Se mantiene padding general excepto barra */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Tipografía editorial clara para títulos */
+/* Tipografía editorial */
 h1, h2, h3, h4 {
     font-family: "Lora", serif;
+
 }
 
-/* NAVEGACIÓN */
-header {
-    width: 100%;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
+
+/* =========================
+   NAVBAR (BOOTSTRAP) COMPLETA
+   ========================= */
+
+/* altura natural de Bootstrap */
+.navbar {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
-nav {
+/* eliminamos padding lateral del container para que el logo quede pegado al borde */
+.navbar > .container,
+.navbar > .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* todo a la izquierda */
     align-items: center;
+    gap: 1rem; /* espacio entre logo y nav items */
 }
 
-nav h1 {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-nav ul {
-    display: flex;
-    gap: 24px;
-    list-style: none;
-}
-
-nav a {
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 600;
-    transition: color 0.2s ease;
-}
-
-nav a:hover {
-    color: var(--primary);
-}
-
-/* CONTENIDO PRINCIPAL */
-main {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-/* BUSCADOR MIGUEL MELO */
-#buscador {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    position: relative; /* IMPORTANTE: Para que la lista flote respecto a esto */
-}
-
-/* LA VENTANA FLOTANTE DE RESULTADOS */
-#libroOPeliculaEncontrada {
-    position: absolute;
-    top: 100%;       /* Aparece justo debajo del input */
-    left: 0;
-    width: 350px;    /* Ancho de la ventana de resultados */
-    background-color: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    z-index: 999;
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 5px;
-    display: none;
-}
-
-#infoLibro ul {
-    list-style: none;
+/* LOGO */
+.navbar-brand {
     padding: 0;
-    margin: 0;
-    display: block;
-}
-
-#infoLibro li {
-    padding: 12px;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.2s;
     display: flex;
     align-items: center;
-    gap: 15px;
+    margin-right: 1rem; /* espacio entre logo y resto de navbar */
 }
 
-#infoLibro li:hover, #infoLibro li:focus {
-    background-color: #f0f0f0;
-    outline: none;
+.navbar-logo {
+    height: 72px;
+    width: auto;
+    object-fit: contain;
 }
 
-#infoLibro img {
-    width: 50px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-#infoLibro div p {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.2;
-    color: var(--text-soft);
-}
-
-#infoLibro div p strong {
-    color: var(--text);
-    font-size: 14px;
-    display: block;
-    margin-bottom: 2px;
-}
-
-/* FIN BUSCADOR */
-.perfil a {
+/* items centrados verticalmente */
+.navbar-nav .nav-link {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.salir {
-    margin-left: auto;
+/* contenedor colapsable (nav items + buscador) */
+.navbar-collapse {
+    display: flex;
+    justify-content: space-between; /* izquierda y derecha separadas */
+    flex-grow: 1;
+    align-items: center;
 }
 
-/* CONTENIDO PRINCIPAL */
+/* nav items izquierda */
+.navbar-nav.me-auto {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* buscador */
+.navbar form {
+    position: relative;
+    flex-shrink: 0; /* no se achica */
+}
+
+/* autocomplete buscador */
+#resultadosBusqueda {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2000;
+}
+
+#resultadosBusqueda .list-group-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#resultadosBusqueda .list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* nav items derecha */
+.navbar-nav:last-child {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* responsive: el logo sigue pegado al borde */
+@media (max-width: 991.98px) {
+    .navbar > .container,
+    .navbar > .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/* =========================
+   AUTOCOMPLETE BUSCADOR
+   ========================= */
+#resultadosBusqueda {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2000;
+}
+
+#resultadosBusqueda .list-group-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#resultadosBusqueda .list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* =========================
+   CONTENIDO PRINCIPAL
+   ========================= */
 main {
+    flex: 1;
     max-width: 800px;
     margin: 0 auto;
+    padding: 40px 24px;
 }
 
-/* TIMELINE / POSTS */
+/* =========================
+   POSTS / TIMELINE
+   ========================= */
 .post {
-    background: #ffffff;
+    background: var(--card-bg);
     border: 1px solid #e5e5e5;
     padding: 24px;
     border-radius: 8px;
@@ -181,7 +203,9 @@ main {
     color: #333;
 }
 
-/* PERFIL */
+/* =========================
+   PERFIL
+   ========================= */
 #perfil img {
     width: 120px;
     height: 120px;
@@ -200,24 +224,36 @@ main {
     color: #444;
 }
 
-/* FOOTER STYLE */
+/* =========================
+   HERO (INICIO)
+   ========================= */
+.hero-logo {
+    max-width: 420px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
 .main-footer {
     width: 100%;
     background-color: #ffffff;
     border-top: 1px solid #e5e5e5;
-    margin-top: 60px;
-    padding: 40px 0 20px 0;
-    color: #1a1a1a;
+    padding: 40px 0 20px;
 }
 
 .footer-content {
     max-width: 1000px;
     margin: 0 auto;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 30px;
-    padding: 0 24px;
 }
 
 .footer-section {
@@ -228,7 +264,6 @@ main {
 .footer-section h3 {
     font-size: 20px;
     font-weight: 800;
-    letter-spacing: 1px;
     margin-bottom: 15px;
 }
 
@@ -239,7 +274,8 @@ main {
     text-transform: uppercase;
 }
 
-.footer-section p, .footer-section ul li {
+.footer-section p,
+.footer-section ul li {
     font-size: 14px;
     color: #666;
     margin-bottom: 10px;
@@ -253,121 +289,20 @@ main {
 .footer-section a {
     text-decoration: none;
     color: #666;
-    transition: color 0.2s ease;
 }
 
 .footer-section a:hover {
     color: #1a1a1a;
 }
 
-.social-links {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
 .footer-bottom {
     text-align: center;
-    margin-top: 40px;
-    padding-top: 20px;
+    margin-top: 30px;
+    padding-top: 15px;
     border-top: 1px solid #f0f0f0;
 }
 
 .footer-bottom p {
     font-size: 12px;
     color: #999;
-}
-
-/* Ajuste para que el footer no flote si hay poco contenido */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1; /* Esto empuja el footer hacia abajo */
-}
-
-/* AUTOCOMPLETE BUSCADOR INDEX */
-#resultadosBusqueda {
-    max-height: 350px;
-    overflow-y: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    background: white;
-    border: 1px solid #ddd;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 2000;
-}
-
-#resultadosBusqueda .list-group-item {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-#resultadosBusqueda .list-group-item:last-child {
-    border-bottom: none;
-}
-
-/* =========================
-   LOGO NAVBAR Y HERO
-   ========================= */
-
-/* Logo navbar grande */
-.navbar-logo {
-    height: 120px;        /* Logo grande para la barra */
-    object-fit: contain;
-    display: block;
-}
-
-/* Logo en la sección de inicio (hero) */
-.hero-logo {
-    max-width: 400px;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-}
-
-/* HEADER / NAV: ancho completo */
-header, nav.navbar {
-    width: 100%;
-    padding: 0;        /* Quitamos padding que reduce ancho */
-    max-width: none;
-}
-
-.navbar .container {
-    max-width: 1200px;  /* Contenido centrado */
-    margin: 0 auto;
-    padding: 0 24px;    /* padding interno solo del contenido */
-}
-
-/* Alineación de nav-items */
-.navbar-nav .nav-item {
-    display: flex;
-    align-items: center;
-}
-
-
-/* Logo navbar más grande */
-.navbar-logo {
-    height: 120px;        /* altura del logo más visible */
-    object-fit: contain;
-    display: block;
-}
-
-/* Mantener ancho de la barra negra */
-nav.navbar {
-    width: 100%;          /* ocupa todo el ancho */
-}
-
-.navbar .container {
-    max-width: 1200px;    /* contenido centrado y no estirado */
-    margin: 0 auto;
-    padding: 0 24px;      /* padding interno solo del contenido */
 }

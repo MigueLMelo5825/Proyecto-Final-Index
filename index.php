@@ -18,6 +18,7 @@ require_once __DIR__ . '/app/Models/Peliculas.php';
 require_once __DIR__ . '/app/Models/TimelineModel.php';
 require_once __DIR__ . '/app/Models/UsuarioModel.php';
 require_once __DIR__ . '/app/Models/ListaItemsModel.php';
+require_once __DIR__ . '/app/Models/SeguidorModel.php';
 
 // ============================================================
 // CORE
@@ -37,6 +38,11 @@ require_once __DIR__ . '/app/Controllers/ListaController.php';
 require_once __DIR__ . '/app/Controllers/PeliculasController.php';
 require_once __DIR__ . '/app/Controllers/TimelineController.php';
 require_once __DIR__ . '/app/Controllers/UsuarioController.php';
+
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/Exception.php';
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
+
 
 // ============================================================
 // SESIÓN SEGURA
@@ -104,6 +110,37 @@ $map = [
         'nivel'      => 1
     ],
 
+    'seguir' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'seguir',
+    'nivel'      => 1
+],
+
+'dejarseguir' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'dejarSeguir',
+    'nivel'      => 1
+],
+
+'verSeguidores' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'verSeguidores',
+    'nivel'      => 1
+],
+
+'verSeguidos' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'verSeguidos',
+    'nivel'      => 1
+],
+
+'buscarUsuarios' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'buscarUsuarios',
+    'nivel'      => 1
+],
+
+
     'timeline' => [
         'controller' => 'TimelineController',
         'action'     => 'mostrar',
@@ -128,6 +165,13 @@ $map = [
         'action'     => 'guardarLikesYCalificacion',
         'nivel'      => 1
     ],
+
+    // AJUSTES DE PERFIL
+    'ajustesPerfil' => ['controller' => 'UsuarioController', 'action' => 'ajustesPerfil', 'nivel' => 1],
+    'guardarFotoPerfil' => ['controller' => 'UsuarioController', 'action' => 'guardarFotoPerfil', 'nivel' => 1],
+    'guardarBio' => ['controller' => 'UsuarioController', 'action' => 'guardarBio', 'nivel' => 1],
+    'guardarTopLibros' => ['controller' => 'UsuarioController', 'action' => 'guardarTopLibros', 'nivel' => 1],
+    'guardarTopPeliculas' => ['controller' => 'UsuarioController', 'action' => 'guardarTopPeliculas', 'nivel' => 1],
 
     'guardarComentario' => [
         'controller' => 'fichaLibroPeliculaController',

@@ -1,47 +1,78 @@
-<?php
-if (!isset($eventos)) $eventos = [];
-?>
+<?php if (!isset($eventos)) $eventos = []; ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>INDEX – Actividad reciente</title>
+    <title>Actividad reciente</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="web/bootstrap/css/bootstrap.min.css">
+
+    <!-- CSS general -->
+    <link rel="stylesheet" href="web/css/style.css">
+
+    <!-- CSS específico del timeline -->
     <link rel="stylesheet" href="web/css/styleTimeline.css">
 </head>
+
 <body>
 
-<header>
-    <nav>
-        <h1>Actividad</h1>
-        <ul>
-            <li><a href="index.php?ctl=perfil">Perfil</a></li>
-            <li><a href="index.php?ctl=listas">Listas</a></li>
-            <li><a href="index.php?ctl=cerrarSesion">Salir</a></li>
-        </ul>
-    </nav>
-</header>
+<!-- =========================
+     HEADER GLOBAL
+     ========================= -->
+<?php require __DIR__ . "/header.php"; ?>
 
+
+<!-- =========================
+     CONTENIDO PRINCIPAL
+     ========================= -->
 <main>
-<section id="timeline">
-    <h2>Actividad reciente</h2>
+<section class="timeline">
+    <h2 class="mb-4">Actividad reciente</h2>
 
-    <ul class="timeline-list">
-        <?php if (count($eventos) === 0): ?>
-            <li>No hay actividad reciente.</li>
-        <?php else: ?>
-            <?php foreach ($eventos as $evento): ?>
-                <li class="timeline-item <?= htmlspecialchars($evento['tipo']) ?>">
-                    <span class="timestamp"><?= $evento['fecha'] ?></span>
-                    <div class="content">
-                        <h3><?= htmlspecialchars($evento['titulo']) ?></h3>
-                        <p><?= htmlspecialchars($evento['descripcion']) ?></p>
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </ul>
+    <?php if (count($eventos) === 0): ?>
+        <p>No hay actividad reciente.</p>
+
+    <?php else: ?>
+        <?php foreach ($eventos as $evento): ?>
+
+            <div class="evento">
+                <div class="evento-icon">
+                    <?php
+                        // Iconos según tipo de evento
+                        $iconos = [
+                            'registro'      => '👤',
+                            'lista_creada'  => '📝',
+                            'libro'         => '📚',
+                            'pelicula'      => '🎬',
+                            'login'         => '🔐'
+                        ];
+                        echo $iconos[$evento['tipo']] ?? '⭐';
+                    ?>
+                </div>
+
+                <div class="evento-contenido">
+                    <h4><?= htmlspecialchars($evento['titulo']) ?></h4>
+                    <p><?= htmlspecialchars($evento['descripcion']) ?></p>
+                    <span class="evento-fecha"><?= $evento['fecha'] ?></span>
+                </div>
+            </div>
+
+        <?php endforeach; ?>
+    <?php endif; ?>
+
 </section>
 </main>
+
+
+<!-- =========================
+     FOOTER GLOBAL
+     ========================= -->
+<?php require __DIR__ . "/footer.php"; ?>
+
+
+<!-- Bootstrap JS -->
+<script src="web/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

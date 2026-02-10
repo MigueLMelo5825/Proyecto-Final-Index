@@ -37,6 +37,16 @@ class Peliculas {
         return $generos[$id] ?? "Desconocido";
     }
 
+    public function obtenerTodas(): array {
+    $sql = "SELECT id, titulo, genero, portada, descripcion, anio 
+            FROM peliculas 
+            ORDER BY titulo ASC";
+
+    $stmt = $this->pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
     // ------------------------------------------------------
     //  OBTENER TOP 5 PELÍCULAS PARA EL PERFIL
     // ------------------------------------------------------
@@ -44,11 +54,24 @@ class Peliculas {
         $sql = "SELECT id, titulo, genero, portada, descripcion, anio 
                 FROM peliculas 
                 ORDER BY id DESC 
-                LIMIT 5";
+                LIMIT 4";
 
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function obtenerPorIds(array $ids): array {
+    if (empty($ids)) return [];
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    $sql = "SELECT * FROM peliculas WHERE id IN ($placeholders)";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute($ids);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     // ------------------------------------------------------
     //  GUARDAR PELÍCULAS IMPORTADAS DESDE TMDB

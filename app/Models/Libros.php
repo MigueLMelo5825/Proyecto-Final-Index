@@ -15,44 +15,78 @@ class Libros {
         $sql = "SELECT id, titulo, autores, categoria, imagen_url 
                 FROM libros 
                 ORDER BY id DESC 
-                LIMIT 5";
+                LIMIT 4";
 
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Guardar libros importados desde API
-    public function guardarLibros(array $libros, int $cantidad): bool {
+   // Guardar libros importados desde API
+public function guardarLibros(array $libros, int $cantidad): bool {
 
-        $libros = array_slice($libros, 0, $cantidad);
+    $libros = array_slice($libros, 0, $cantidad);
 
-        $sql = "INSERT INTO libros (titulo, autores, categoria, imagen_url)
-                VALUES (:titulo, :autores, :categoria, :imagen_url)";
+    $sql = "INSERT INTO libros (id, titulo, autores, categoria, imagen_url)
+            VALUES (:id, :titulo, :autores, :categoria, :imagen_url)
+            ON DUPLICATE KEY UPDATE 
+                titulo = VALUES(titulo),
+                autores = VALUES(autores),
+                categoria = VALUES(categoria),
+                imagen_url = VALUES(imagen_url)";
 
-        $stmt = $this->pdo->prepare($sql);
+    $stmt = $this->pdo->prepare($sql);
 
-        foreach ($libros as $l) {
+    foreach ($libros as $l) {
 
-            $titulo = $l['volumeInfo']['title'] ?? 'Sin título';
-            $autores = isset($l['volumeInfo']['authors'])
-                ? implode(', ', $l['volumeInfo']['authors'])
-                : 'Autor desconocido';
+        // ID REAL de Google Books
+        $id = $l['id'] ?? null;
+        if (!$id) continue; // si no tiene ID, lo saltamos
 
-            $categoria = $l['volumeInfo']['categories'][0] ?? 'Sin categoría';
+        $titulo = $l['volumeInfo']['title'] ?? 'Sin título';
 
-            $imagen = $l['volumeInfo']['imageLinks']['thumbnail']
-                ?? 'web/img/fallback.png';
+        $autores = isset($l['volumeInfo']['authors'])
+            ? implode(', ', $l['volumeInfo']['authors'])
+            : 'Autor desconocido';
 
-            $stmt->execute([
-                ':titulo' => $titulo,
-                ':autores' => $autores,
-                ':categoria' => $categoria,
-                ':imagen_url' => $imagen
-            ]);
-        }
+        $categoria = $l['volumeInfo']['categories'][0] ?? 'Sin categoría';
 
-        return true;
+        $imagen = $l['volumeInfo']['imageLinks']['thumbnail']
+            ?? 'web/img/fallback.png';
+
+        $stmt->execute([
+            ':id' => $id,
+            ':titulo' => $titulo,
+            ':autores' => $autores,
+            ':categoria' => $categoria,
+            ':imagen_url' => $imagen
+        ]);
     }
+
+    return true;
+}
+    
+    public function obtenerTodos(): array {
+    $sql = "SELECT id, titulo, autores, categoria, imagen_url 
+            FROM libros 
+            ORDER BY titulo ASC";
+
+    $stmt = $this->pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function obtenerPorIds(array $ids): array {
+    if (empty($ids)) return [];
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    $sql = "SELECT * FROM libros WHERE id IN ($placeholders)";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute($ids);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 
     public static function obtenerLibroPelicula(PDO $conexionBD, string $id, string $type): ?array {
         
@@ -89,4 +123,5 @@ class Libros {
             return null; // Retorna null si algo falla
         }
     }
+    
 }
