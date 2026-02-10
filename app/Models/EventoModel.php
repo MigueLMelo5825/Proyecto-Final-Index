@@ -12,6 +12,7 @@ class EventoModel
     // ============================================================
     // REGISTRAR EVENTO
     // ============================================================
+
     public function registrarEvento(int $idUsuario, string $tipo, string $titulo, string $descripcion = null): bool
     {
         try {
@@ -39,7 +40,8 @@ class EventoModel
             u.username,
             u.nombre,
             u.apellido,
-            u.email
+            u.email,
+            u.foto
         FROM eventos e
         JOIN usuarios u ON u.id = e.id_usuario
         WHERE e.id_usuario = :id1

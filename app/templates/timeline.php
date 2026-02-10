@@ -5,56 +5,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Actividad reciente</title>
+
     <link rel="stylesheet" href="web/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="web/css/styleBase.css">
     <link rel="stylesheet" href="web/css/styleLayout.css">
     <link rel="stylesheet" href="web/css/styleComponents.css">
     <link rel="stylesheet" href="web/css/styleTimeline.css">
-
 </head>
 
 <body>
 
-    <!-- =========================
-     HEADER GLOBAL
-     ========================= -->
+    <!-- HEADER -->
     <?php require __DIR__ . "/header.php"; ?>
 
-
-    <!-- =========================
-     CONTENIDO PRINCIPAL
-     ========================= -->
     <main>
         <section class="timeline">
-            <h2 class="mb-4">Actividad reciente</h2>
+            <h2>Actividad reciente</h2>
 
-            <?php if (count($eventos) === 0): ?>
+            <?php if (empty($eventos)): ?>
                 <p>No hay actividad reciente.</p>
 
             <?php else: ?>
                 <?php foreach ($eventos as $evento): ?>
 
-                    <div class="evento">
+                    <div class="evento <?= $evento['id_usuario'] == $_SESSION['id_usuario'] ? 'propio' : '' ?>">
 
-                        <!-- Avatar -->
+                        <!-- AVATAR -->
                         <div class="evento-avatar">
-                            <img
-                                src="<?= !empty($evento['foto'])
-                                            ? htmlspecialchars($evento['foto'])
-                                            : 'web/img/default.png' ?>"
-                                alt="Foto de perfil">
+                            <img src="<?= (!isset($evento['foto']) || trim($evento['foto']) === '')
+                                            ? 'web/img/perfil/default.png'
+                                            : htmlspecialchars($evento['foto']) ?>">
+
                         </div>
 
-
-                        <!-- Cuerpo del evento -->
+                        <!-- CUERPO -->
                         <div class="evento-body">
 
-                            <!-- Cabecera -->
+                            <!-- CABECERA -->
                             <div class="evento-header">
-                                <a class="evento-usuario" href="index.php?ctl=perfil&id=<?= $evento['id_usuario'] ?>">
+
+                                <!-- Usuario -->
+                                <a class="evento-usuario"
+                                    href="index.php?ctl=perfil&id=<?= $evento['id_usuario'] ?>">
                                     @<?= htmlspecialchars($evento['username']) ?>
                                 </a>
 
+                                <!-- Icono -->
                                 <span class="evento-icon">
                                     <?php
                                     $iconos = [
@@ -68,14 +64,20 @@
                                     ?>
                                 </span>
 
+                                <!-- Tipo -->
+                                <span class="tag"><?= htmlspecialchars($evento['tipo']) ?></span>
+
+                                <!-- Fecha -->
                                 <span class="evento-fecha"><?= $evento['fecha'] ?></span>
                             </div>
 
-                            <!-- Contenido -->
+                            <!-- CONTENIDO -->
                             <div class="evento-contenido">
+
                                 <h4><?= htmlspecialchars($evento['titulo']) ?></h4>
 
                                 <?php
+                                // Ajustar "Has" → "Ha" si el evento no es del usuario actual
                                 $descripcion = $evento['descripcion'];
                                 if ($evento['id_usuario'] != $_SESSION['id_usuario']) {
                                     $descripcion = preg_replace('/^Has\b/i', 'Ha', $descripcion);
@@ -83,26 +85,21 @@
                                 ?>
 
                                 <p><?= htmlspecialchars($descripcion) ?></p>
+
                             </div>
 
                         </div>
                     </div>
 
                 <?php endforeach; ?>
-
             <?php endif; ?>
 
         </section>
     </main>
 
-
-    <!-- =========================
-     FOOTER GLOBAL
-     ========================= -->
+    <!-- FOOTER -->
     <?php require __DIR__ . "/footer.php"; ?>
 
-
-    <!-- Bootstrap JS -->
     <script src="web/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>

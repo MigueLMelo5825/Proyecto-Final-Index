@@ -35,7 +35,7 @@ CREATE TABLE `usuarios` (
   `apellido` VARCHAR(100) DEFAULT NULL,
 
   `bio` TEXT NULL,
-  `foto` VARCHAR(255) DEFAULT 'web/img/default.png',
+  `foto` VARCHAR(255) DEFAULT 'web/img/perfil/default.png',
 
   `email` VARCHAR(150) NOT NULL,
   `contrasena` VARCHAR(200) NOT NULL,

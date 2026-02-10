@@ -253,7 +253,7 @@ class UsuarioController
             $usuario = [
                 'nombre' => 'Usuario desconocido',
                 'bio' => '',
-                'foto' => 'web/img/default.png',
+                'foto' => 'web/img/perfil/default.png',
                 'top_libros' => '[]',
                 'top_peliculas' => '[]'
             ];
@@ -515,7 +515,7 @@ class UsuarioController
 
         // Asegurar claves
         $usuario['bio']  = $usuario['bio']  ?? '';
-        $usuario['foto'] = $usuario['foto'] ?? 'web/img/default.png';
+        $usuario['foto'] = $usuario['foto'] ?? 'web/img/perfil/default.png';
 
         // Modelos correctos (BD, NO API)
         $librosModel = new Libros();

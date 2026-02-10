@@ -8,7 +8,7 @@ if (!isset($usuario)) {
     $usuario = [
         'nombre' => 'Usuario invitado',
         'bio' => '',
-        'foto' => 'web/img/default.png'
+        'foto' => 'web/img/perfil/default.png'
     ];
 }
 
@@ -32,13 +32,26 @@ if (!isset($listas)) $listas = [];
 <body>
 
     <?php include_once __DIR__ . '/../templates/header.php'; ?>
+<main>
 
-    <main>
+<section id="perfil">
 
-        <section id="perfil">
-            <img src="<?= $usuario['foto'] ?? 'web/img/default.png' ?>" alt="Foto de perfil">
-            <h2><?= htmlspecialchars($usuario['username']) ?></h2>
-            <p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
+<?php
+$fotoPerfil = $usuario['foto'] ?? '';
+$fotoPerfil = trim($fotoPerfil);
+
+if ($fotoPerfil === '' || !file_exists($fotoPerfil)) {
+    $fotoPerfil = 'web/img/perfil/default.png';
+}
+?>
+
+<img class="foto-perfil" src="<?= htmlspecialchars($fotoPerfil) ?>" alt="Foto de perfil">
+
+<h2><?= htmlspecialchars($usuario['username']) ?></h2>
+<p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
+
+
+
             <a href="index.php?ctl=ajustesPerfil" class="btn btn-outline-primary mt-3">
                 Ajustes del perfil
             </a>

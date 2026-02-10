@@ -144,3 +144,12 @@
         grid-template-columns: 1fr;
     }
 }
+#perfil img.foto-perfil {
+    width: 140px;          /* tamaño perfecto */
+    height: 140px;
+    object-fit: cover;     /* recorta sin deformar */
+    border-radius: 50%;    /* redonda */
+    border: 3px solid #3b82f6; /* borde azul eléctrico */
+    display: block;
+    margin: 0 auto 15px;   /* centrada */
+}

@@ -1,74 +1,72 @@
+/* =========================
+   VARIABLES TIMELINE
+   ========================= */
+:root {
+    --bg-page: #f8f9fa;          /* fondo general blanco/gris muy claro */
+    --bg-card: #ffffff;           /* contenedor blanco */
+    --bg-card-propio: #e0f0ff;    /* azul muy claro para propios */
+    --border-soft: #d1d5db;       /* gris claro */
+    --text-main: #111111;         /* negro fuerte */
+    --text-soft: #4b5563;         /* gris oscuro para textos secundarios */
+    --accent: #3b82f6;            /* azul eléctrico */
+}
+
+/* =========================
+   CONTENEDOR TIMELINE
+   ========================= */
 body, main {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-}
-
-
-/* =========================
-   VARIABLES TIMELINE
-   ========================= */
-
-:root {
-    --bg-page: #0e1117;          /* fondo general */
-    --bg-card: #111827;          /* azul noche */
-    --border-soft: #1f2933;
-    --text-main: #e5e7eb;
-    --text-soft: #9ca3af;
-    --accent: #3b82f6;           /* azul eléctrico */
-}
-
-//* =========================
-   CONTENEDOR TIMELINE
-   ========================= */
-
-.timeline {
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 24px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
     background-color: var(--bg-page);
 }
 
+.timeline {
+    position: relative; /* necesario para las imágenes laterales */
+    max-width: 1200px;
+    width: 95%;
+    margin: 0 auto;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 
 /* =========================
    EVENTO (ITEM FEED)
    ========================= */
-
 .evento {
     display: flex;
     gap: 16px;
     padding: 16px 20px;
-
-    width: 100% !important;
-    max-width: none !important;
+    width: 100%;
     box-sizing: border-box;
 
     border-radius: 8px;
-    transition: background 0.2s ease, transform 0.15s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background-color: var(--bg-card);
 
-    background-color: #1c1f28; /* gris oscuro para otros usuarios */
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    opacity: 0;
+    transform: translateY(10px);
+    animation: appear 0.4s forwards;
 }
 
-/* Diferenciar actividad propia */
 .evento.propio {
-    background-color: #111d3a; /* azul noche más suave */
+    background-color: var(--bg-card-propio);
+    border-color: var(--accent);
 }
 
-/* Hover */
 .evento:hover {
-    background-color: #0f172a;
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* =========================
    AVATAR
    ========================= */
-
 .evento-avatar img {
     width: 48px;
     height: 48px;
@@ -78,21 +76,12 @@ body, main {
 }
 
 /* =========================
-   CUERPO
-   ========================= */
-
-.evento-body {
-    flex: 1;
-}
-/* =========================
    CABECERA
    ========================= */
-
 .evento-header {
     display: flex;
     align-items: center;
     gap: 8px;
-
     font-size: 0.85rem;
     color: var(--text-soft);
 }
@@ -118,11 +107,9 @@ body, main {
     color: var(--text-soft);
 }
 
-
 /* =========================
    CONTENIDO
    ========================= */
-
 .evento-contenido h4 {
     margin: 0;
     font-size: 0.95rem;
@@ -135,4 +122,78 @@ body, main {
     font-size: 0.9rem;
     line-height: 1.45;
     color: var(--text-soft);
+}
+
+/* =========================
+   TÍTULO Y LÍNEA DECORATIVA
+   ========================= */
+.timeline h2::after {
+    content: "";
+    display: block;
+    width: 60px;          
+    height: 3px;          
+    background-color: var(--accent);
+    margin-top: 8px;      
+    border-radius: 2px;
+}
+
+/* =========================
+   ETIQUETAS
+   ========================= */
+.evento .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+/* =========================
+   ANIMACIONES
+   ========================= */
+@keyframes appear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.timeline::before,
+.timeline::after {
+    transform: translateY(10px);
+    opacity: 0;
+    animation: fadeInSide 0.6s forwards;
+}
+
+@keyframes fadeInSide {
+    to {
+        transform: translateY(0);
+        opacity: 0.6;
+    }
+}
+
+/* =========================
+   IMÁGENES LATERALES
+   ========================= */
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+    .timeline::before,
+    .timeline::after {
+        display: none;
+    }
+}
+
+/* OPCIONAL: ocultarlas en móvil */
+@media (max-width: 768px) {
+    body::before,
+    body::after {
+        display: none;
+    }
 }
