@@ -126,7 +126,7 @@ class ListaController
                 $idUsuario,
                 "libro",
                 "Añadido libro a lista",
-                "Has añadido '$titulo' a tu lista"
+                "Has añadido '$titulo' a la lista"
             );
         }
 
@@ -135,7 +135,7 @@ class ListaController
                 $idUsuario,
                 "pelicula",
                 "Añadida película a lista",
-                "Has añadido '$titulo' a tu lista"
+                "Has añadido '$titulo' a la lista"
             );
         }
 

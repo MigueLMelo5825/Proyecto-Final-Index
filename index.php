@@ -39,9 +39,9 @@ require_once __DIR__ . '/app/Controllers/PeliculasController.php';
 require_once __DIR__ . '/app/Controllers/TimelineController.php';
 require_once __DIR__ . '/app/Controllers/UsuarioController.php';
 
-require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/Exception.php';
-require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . './app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
 
 
 // ============================================================
