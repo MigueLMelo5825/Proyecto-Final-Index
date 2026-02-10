@@ -2,7 +2,7 @@
 const valores = new URLSearchParams(window.location.search);
 const idLibroPelicula = valores.get('id');
 const tipo = valores.get('type');
-const promedio = document.getElementById('calificacion');
+
 
 //creamos variables para enviar peticion
 // Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
@@ -12,13 +12,23 @@ const nombrePath = path[1]; // Esto tomará el nombre de proyecto que cada uno t
 
 const url = nombrePath;
 
+//guardar likes y calificacion
 const urlLikeCalificacion = `/${url}/index.php?ctl=guardarLikesYCalificacion`;
+
+//guardar comentario, modificar y eliminar
+const urlComentario = `/${url}/index.php?ctl=guardarComentario`;
+const urlEliminarComentario = `/${url}/index.php?ctl=eliminarComentario`;
+const urlFotoUsuario = `/${url}/web/img`;
 
 
 //obtenemos los botones e inputs del DOM
 const like = document.getElementById("btn-favorito");
 const inputsEstrellas = document.querySelectorAll('.estrellas-voto input');
+const promedio = document.getElementById('calificacion');
 const contadorLikes = document.getElementById('contador-likes');
+const formComentario = document.querySelector('.form-post');
+const listaComentarios = document.querySelector('.lista-comentarios');
+const infoComentario = document.getElementById('info-comentario');
 
 
 //funcion para enviar like y guardarlo
@@ -104,6 +114,70 @@ async function agregarValoracion(){
     });
 }
 
+async function agregarComentario(){
+
+    formComentario.addEventListener("submit", async event =>{
+
+        event.preventDefault();
+
+        const textarea = formComentario.querySelector("textarea");
+        const textoComentario  = textarea.value.trim();
+
+        if(!textoComentario) return;
+
+        try{
+
+            const peticion = await fetch(urlComentario, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: idLibroPelicula,
+                    type: tipo,
+                    texto: textoComentario
+                })
+            })
+
+            if(!peticion.ok){
+                throw new Error("error al enviar valores al archivo php" + peticion.status);
+            }
+
+            const datos = await peticion.json();
+            console.log(datos);
+            
+            //variable de diseño y control
+            let contenido = ""
+
+            //limpiamos luego de insertar
+            textarea.value = "";
+
+            //obtenemos la foto del usuario si tiene una personal la ponemos si no usamos default.png
+            const fotoUsuario = datos.comentario.foto_usuario ? datos.comentario.foto_usuario : "default.png";
+
+            //pintamos los valores obtenidos
+            contenido = `
+                <div class="comentario-item">
+                    <img src="${urlFotoUsuario}/${fotoUsuario}" class="img-perfil-mini">
+                    <div class="comentario-cuerpo">
+                        <strong>${datos.comentario.nombre_usuario}</strong>
+                        <p>${datos.comentario.texto}</p>
+                        <small>Recién publicado</small>
+                    </div>
+                </div>
+            `;
+
+            //borramos el comentario de motivacion a publicar
+            const msjVacio = listaComentarios.querySelector('.sin-comentarios');
+            if(msjVacio) msjVacio.remove();
+
+            //insertamos el comentario
+            infoComentario.insertAdjacentHTML("afterbegin", contenido);
+
+
+        }catch(error){
+            console.error("error en el fetch validar codigo" + error);
+        }
+    })
+}
 
 //funcion para dar al boton leer mas en descripcion
 document.addEventListener("DOMContentLoaded", () => {
@@ -132,4 +206,5 @@ document.addEventListener("DOMContentLoaded", () => {
 window.onload = function (){
     enviarLike();
     agregarValoracion();
+    agregarComentario();
 }
