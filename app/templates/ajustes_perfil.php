@@ -38,7 +38,7 @@
             <div class="card-body">
                 <h4>Cambiar foto de perfil</h4>
 
-                <form action="index.php?ctl=guardarFotoPerfil" method="POST" enctype="multipart/form-data">
+                <form method="POST" action="index.php?ctl=guardarFotoPerfil" enctype="multipart/form-data">
                     <input type="file" name="foto" class="form-control mb-3" accept="image/*" required>
                     <button class="btn btn-primary">Guardar foto</button>
                 </form>
