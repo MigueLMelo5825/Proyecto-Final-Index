@@ -86,6 +86,11 @@ $map = [
         'action'     => 'reset',
         'nivel'      => 0
     ],
+    'logout' => [
+    'controller' => 'UsuarioController',
+    'action'     => 'logout',
+    'nivel'      => 0 
+],
 
     'buscar' => [
         'controller' => 'BuscadorController',
@@ -141,6 +146,7 @@ $map = [
     'importarPeliculas' => ['controller' => 'ImportarPeliculasController', 'action' => 'importar', 'nivel' => 3],
     'importarLibros' => ['controller' => 'ImportarLibrosController', 'action' => 'importar', 'nivel' => 3],
 ];
+
 
 
 // ============================================================
