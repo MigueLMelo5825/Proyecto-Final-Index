@@ -140,10 +140,12 @@ class fichaLibroPeliculaController {
 
             // OBTENEMOS LOS DATOS DEL USUARIO (para mostrar el nombre en el feed dinámico)
             $cons = $pdo->prepare("
-                SELECT c.texto, c.fecha, u.username, u.foto, u.pais
+                SELECT c.id AS id_comentario, c.usuario_id, c.texto, c.fecha, u.username, u.foto, p.nombre AS pais, (c.usuario_id = :uId) AS esPropio
                 FROM comentarios c 
-                LEFT JOIN usuarios u ON c.usuario_id = u.id 
-                WHERE c.usuario_id = :uId AND c.$tipoId = :lpId
+                LEFT JOIN usuarios u ON c.usuario_id = u.id
+                INNER JOIN paises p ON u.pais = p.id_pais
+                WHERE c.$tipoId = :lpId
+                ORDER BY c.fecha DESC
             ");
             $cons->execute([
                 ':uId' => $idUsuario,
@@ -169,49 +171,38 @@ class fichaLibroPeliculaController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        // Solo procesamos si hay sesión iniciado
-        $idUsuario = $_SESSION['id_usuario'] ?? null;
 
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
         if (!$idUsuario) {
             echo json_encode(["status" => "error", "mensaje" => "Debes iniciar sesión"]);
             exit;
         }
 
-        // Obtener datos del Fetch (JSON)
         $input = json_decode(file_get_contents("php://input"), true);
-        $idLibroPelicula = $input['id'] ?? null;
-        $tipo = $input['type'] ?? null; // 'libro' o 'pelicula'
+        $id_comentario = $input['id_comentario'] ?? null;
 
-        if (!$idLibroPelicula || !$tipo) {
-            echo json_encode(["status" => "error", "mensaje" => "Datos incompletos"]);
+        if (!$id_comentario) {
+            echo json_encode(["status" => "error", "mensaje" => "ID de comentario faltante"]);
             exit;
         }
 
         $pdo = Database::getConnection();
 
-        try{
-            // Definimos qué columna usar según el tipo
-            $tipoId = ($tipo === 'libro') ? 'id_libro' : 'id_pelicula';
-
-            $eliminarComentario = "DELETE FROM comentarios WHERE usuario_id = ? AND $tipoId = ?";
-            
-                                
+        try {
+            $eliminarComentario = "DELETE FROM comentarios WHERE id = ? AND usuario_id = ?";
             $stmt = $pdo->prepare($eliminarComentario);
-            $stmt->execute([
-                $idUsuario,
-                $idLibroPelicula,
-            ]);
-            $resultado = "eliminado";
+            $stmt->execute([$id_comentario, $idUsuario]);
 
-            echo json_encode([
-                    "status" => "success", 
-                    "resultado" => $resultado, // "agregado"
-                ]);
-                exit;
-
-        }catch(PDOException $e){
-            error_log($e->getMessage());
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(["status" => "success", "resultado" => "eliminado"]);
+            } else {
+                echo json_encode(["status" => "error", "mensaje" => "No se pudo eliminar el comentario. Quizá no te pertenece o ya fue eliminado."]);
+            }
+        } catch(PDOException $e) {
+            echo json_encode(["status" => "error", "mensaje" => "Error al eliminar comentario: " . $e->getMessage()]);
         }
+
+        exit;
     }
 }
 

@@ -11,6 +11,7 @@ $root = '/' . trim($root, '/') . '/';
 
 //url para cargar las rutas de stylos e imagenes
 $urlImgFallback = $root . 'web/img/fallback.png';
+$urlFotoUsuario = "";
 
 //variables de control
 $id = $_GET['id'] ?? '';
@@ -61,6 +62,26 @@ $conusltaTotalLikes = $conexionBD->prepare("SELECT COUNT(*) FROM likes WHERE $ti
 $conusltaTotalLikes->execute([$id]);
 $totalLikes = $conusltaTotalLikes->fetchColumn();
 
+//codigo para obtener los comentarios en la base de datos
+$comentarios = [];
+if ($id) {
+    $tipoId = ($type === 'libro') ? 'id_libro' : 'id_pelicula';
+    $stmt = $conexionBD->prepare("
+        SELECT c.id AS id_comentario, c.usuario_id, c.texto, c.fecha,
+               u.username, u.foto, p.nombre AS pais,
+               (c.usuario_id = :idUsuario) AS esPropio
+        FROM comentarios c
+        LEFT JOIN usuarios u ON c.usuario_id = u.id
+        INNER JOIN paises p ON u.pais = p.id_pais
+        WHERE c.$tipoId = :lpId
+        ORDER BY c.fecha DESC
+    ");
+    $stmt->execute([
+        ':idUsuario' => $idUsuario ?? 0,
+        ':lpId' => $id
+    ]);
+    $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 //funcion para obtener el genero de la pelicula
 $genero = null;
@@ -236,16 +257,46 @@ if (!$urlImagenPortada) {
                     </div>
                 <?php endif; ?>
 
+                <!-- La comunidad se crea dinámicamente -->
+                <br><br> 
+                <?php if (!empty($comentarios)): ?>
+                    <div class="panel-comunidad">
+                        <div class="comunidad">
+                            <h3>Comunidad</h3>
+                            <div class="lista-comentarios">
+                                <?php foreach ($comentarios as $c): ?>
+                                    <div class="comentario-item" data-id="<?= $c['id_comentario'] ?>">
+                                        <img src="<?= $root . $c['foto'] ?>" class="img-perfil-mini">
+                                        <div class="comentario-cuerpo">
+                                            <strong><?= htmlspecialchars($c['username']) ?></strong>
+                                            <small><?= htmlspecialchars($c['pais']) ?></small>
+                                            <p class="texto-comentario"><?= htmlspecialchars($c['texto']) ?></p>
+                                            <small><?= date('d/m/Y H:i', strtotime($c['fecha'])) ?></small>
+                                            <?php if ($c['esPropio']): ?>
+                                            <div class="acciones-comentario">
+                                                <button class="btn-editar" data-id="<?= $c['id_comentario'] ?>">Editar</button>
+                                                <button class="btn-eliminar" data-id="<?= $c['id_comentario'] ?>">Eliminar</button>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    
                 <!-- SECCIÓN COMENTARIOS DARK -->
                 <section class="panel-comentarios">
-                    <h3>Comunidad</h3>
+                    <h3>Haz un comentario</h3>
+
                     <form class="form-post">
-                        <textarea placeholder="¿Qué te ha parecido?..."></textarea>
+                        <textarea placeholder="¿Qué te ha parecido?..." required></textarea>
                         <button type="submit" class="btn-publicar">Publicar</button>
                     </form>
-                    <div class="lista-comentarios">
-                        <p class="msj-vacio">No hay opiniones todavía. ¡Sé el primero!</p>
-                    </div>
+
+                    <p class="msj-vacio">Sé el primero en comentar</p>
+
                 </section>
             </div>
         </div>

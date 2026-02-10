@@ -18,7 +18,7 @@ const urlLikeCalificacion = `/${url}/index.php?ctl=guardarLikesYCalificacion`;
 //guardar comentario, modificar y eliminar
 const urlComentario = `/${url}/index.php?ctl=guardarComentario`;
 const urlEliminarComentario = `/${url}/index.php?ctl=eliminarComentario`;
-const urlFotoUsuario = `/${url}/web/img`;
+const urlFotoUsuario = `/${url}/`;
 
 
 //obtenemos los botones e inputs del DOM
@@ -142,36 +142,27 @@ async function agregarComentario(){
             }
 
             const datos = await peticion.json();
-            console.log(datos);
+
+            textarea.value = '';
             
-            //variable de diseño y control
-            let contenido = ""
-
-            //limpiamos luego de insertar
-            textarea.value = "";
-
-            //obtenemos la foto del usuario si tiene una personal la ponemos si no usamos default.png
-            const fotoUsuario = datos.comentario.foto ? datos.comentario.foto : "default.png";
-
-            //pintamos los valores obtenidos
-            contenido = `
-                <div class="comentario-item">
-                    <img src="${urlFotoUsuario}/${fotoUsuario}" class="img-perfil-mini">
-                    <div class="comentario-cuerpo">
-                        <strong>${datos.comentario.username}</strong>
-                        <strong>${datos.comentario.pais}</strong>
-                        <p>${datos.comentario.texto}</p>
-                        <small>Recién publicado</small>
-                    </div>
-                </div>
-            `;
-
-            //borramos el comentario de motivacion a publicar
-            const msjVacio = listaComentarios.querySelector('.msj-vacio');
-            if(msjVacio) msjVacio.remove();
-
             //insertamos el comentario
-            listaComentarios.insertAdjacentHTML("afterbegin", contenido);
+            let comunidad = document.querySelector('.comunidad');
+
+            if (!comunidad) {
+                comunidad = document.createElement('div');
+                comunidad.classList.add('comunidad');
+                comunidad.innerHTML = `
+                    <h3>Comunidad</h3>
+                    <div class="lista-comentarios"></div>
+                `;
+                document.querySelector('.panel-comunidad').appendChild(comunidad);
+            }
+
+            const lista = comunidad.querySelector('.lista-comentarios');
+            lista.insertAdjacentHTML("afterbegin", renderComentario(datos.comentario));
+
+            const msjVacio = document.querySelector('.msj-vacio');
+            if (msjVacio) msjVacio.remove();
 
 
         }catch(error){
@@ -179,6 +170,54 @@ async function agregarComentario(){
         }
     })
 }
+
+function renderComentario(c) {
+
+    const botones = c.esPropio
+        ? `
+            <div class="acciones-comentario">
+                <button class="btn-editar" data-id="${c.id_comentario}">Editar</button>
+                <button class="btn-eliminar" data-id="${c.id_comentario}">Eliminar</button>
+            </div>`
+        : '';
+
+    return `
+        <div class="comentario-item" data-id="${c.id_comentario}">
+            <img src="${urlFotoUsuario}${c.foto}" class="img-perfil-mini">
+            <div class="comentario-cuerpo">
+                <strong>${c.username}</strong>
+                <small>${c.pais}</small>
+                <p class="texto-comentario">${c.texto}</p>
+                <small>Recién publicado</small>
+                ${botones}
+            </div>
+        </div>
+    `;
+}
+
+document.addEventListener('click', async e => {
+
+    if (e.target.classList.contains('btn-eliminar')) {
+
+        const idComentario = e.target.dataset.id;
+
+        const res = await fetch(urlEliminarComentario, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: idLibroPelicula,
+                type: tipo,
+                id_comentario: idComentario
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            document.querySelector(`.comentario-item[data-id="${idComentario}"]`).remove();
+        }
+    }
+});
 
 //funcion para dar al boton leer mas en descripcion
 document.addEventListener("DOMContentLoaded", () => {
@@ -202,6 +241,109 @@ document.addEventListener("DOMContentLoaded", () => {
             contenedor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     });
+});
+
+
+document.addEventListener('click', async (e) => {
+
+    // EDITAR
+    if (e.target.classList.contains('btn-editar')) {
+        const comentario = e.target.closest('.comentario-item');
+        if (!comentario) return;
+
+        const texto = comentario.querySelector('.texto-comentario');
+        if (!texto) return;
+
+        texto.dataset.original = texto.textContent;
+
+        texto.innerHTML = `
+            <textarea class="edit-text">${texto.dataset.original}</textarea>
+            <button class="btn-guardar">Guardar</button>
+            <button class="btn-cancelar">Cancelar</button>
+        `;
+    }
+
+    // CANCELAR
+    if (e.target.classList.contains('btn-cancelar')) {
+        const comentario = e.target.closest('.comentario-item');
+        const texto = comentario.querySelector('.texto-comentario');
+
+        // Restaurar texto original
+        texto.textContent = texto.dataset.original;
+    }
+
+    // GUARDAR
+    if (e.target.classList.contains('btn-guardar')) {
+        const comentario = e.target.closest('.comentario-item');
+        const textarea = comentario.querySelector('.edit-text');
+        const nuevoTexto = textarea.value.trim();
+
+        if (!nuevoTexto) return;
+
+        try {
+            const res = await fetch(`/${url}/index.php?ctl=guardarComentario`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: idLibroPelicula,
+                    type: tipo,
+                    id_comentario: comentario.dataset.id,
+                    texto: nuevoTexto
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                const texto = comentario.querySelector('.texto-comentario');
+                texto.textContent = nuevoTexto; // Actualizamos el DOM
+            } else {
+                alert(data.mensaje || "No se pudo guardar el comentario");
+            }
+        } catch (error) {
+            console.error("Error al guardar comentario:", error);
+        }
+    }
+
+    // ELIMINAR
+    if (e.target.classList.contains('btn-eliminar')) {
+        const comentario = e.target.closest('.comentario-item');
+        if (!comentario) return;
+
+        const idComentario = comentario.dataset.id;
+        if (!idComentario) return;
+
+        try {
+            const res = await fetch(`/${url}/index.php?ctl=eliminarComentario`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: idLibroPelicula,
+                    type: tipo,
+                    id_comentario: idComentario
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                comentario.remove(); // Eliminamos el comentario del DOM
+
+                // Verificamos si quedan comentarios dentro de la comunidad
+                const comunidad = document.querySelector('.comunidad');
+                if (comunidad) {
+                    const lista = comunidad.querySelectorAll('.comentario-item');
+                    if (lista.length === 0) {
+                        comunidad.remove(); // Si no queda ninguno, eliminamos todo el contenedor
+                    }
+                }
+            } else {
+                console.error(data.mensaje || "No se pudo eliminar el comentario");
+            }
+        } catch (error) {
+            console.error("Error al eliminar comentario:", error);
+        }
+    }
 });
 
 async function agregarALista() {
