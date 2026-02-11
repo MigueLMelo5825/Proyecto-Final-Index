@@ -144,6 +144,106 @@
             margin: 0 auto 30px;
         }
 
+/* --- SECCIÓN RANKING DE PELICULAS --- */
+
+.seccion-ranking {
+    padding: 60px 0;
+    background: #f8f9fa;
+    border-radius: 20px;
+    margin: 40px 0;
+}
+
+#contenedor-top-peliculas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Alinea abajo para que el #1 sobresalga */
+    gap: 25px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.top-card {
+    background: white;
+    width: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+}
+
+.top-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* Resalte para el Top 1 */
+.top-card.gold-rank {
+    width: 240px; /* Más grande */
+    border: 3px solid #ffb703;
+}
+
+.medalla-puesto {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 35px;
+    height: 35px;
+    background: rgb(33, 37, 41);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.gold-rank .medalla-puesto {
+    background: #ffb703;
+    color: #000;
+}
+
+.top-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: 0.3s;
+}
+
+.info-top {
+    padding: 15px;
+    text-align: center;
+}
+
+.info-top h4 {
+    margin: 0;
+    font-size: 16px;
+    color: rgb(33, 37, 41);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-top p {
+    color: #ff4d6d;
+    font-weight: 700;
+    margin: 5px 0 0 0;
+}
+
+/* --- REVEAL ANIMATIONS --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
        
         @keyframes fadeUp{
             from{opacity:0; transform:translateY(30px);}

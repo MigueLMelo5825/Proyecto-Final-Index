@@ -61,10 +61,21 @@ async function enviarLike(){
                     like.classList.add("active");
 
                     if (contadorLikes && typeof datos.nuevoTotal !== 'undefined') {
-                        contadorLikes.textContent = datos.nuevoTotal;
+                        if(tipo === "libro"){
+                            
+                            contadorLikes.textContent = `A ${datos.nuevoTotal} Usuarios les gusta este libro`;
+                        }else{
+                            contadorLikes.textContent = `A ${datos.nuevoTotal} Usuarios les gusta esta pelicula`;
+                        }
                     }
                 } else {
-                    like.classList.remove("active");
+                    if(tipo === "libro"){
+                            
+                        contadorLikes.textContent = `A ${datos.nuevoTotal} Usuarios les gusta este libro`;
+                    }else{
+                        contadorLikes.textContent = `A ${datos.nuevoTotal} Usuarios les gusta esta pelicula`;
+                    }
+                    like.classList.remove("active");  
                 }
             } else {
                 alert(datos.mensaje); // "Debes iniciar sesión"

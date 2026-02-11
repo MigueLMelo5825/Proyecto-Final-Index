@@ -1,6 +1,13 @@
+<?php
+
+//codigo php para obtener las rutas y darles la direccion correcta
+$root = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', dirname(__DIR__, 2)));
+$root = '/' . trim($root, '/') . '/';
 
 
-<?php include_once __DIR__ . '/header.php'; ?>
+include_once __DIR__ . '/header.php'; 
+
+?>
 
 
 <!DOCTYPE html>
@@ -63,6 +70,11 @@
         <h2 class="section-title">Películas</h2>
         <p class="section-subtitle">Todo el cine que te gusta</p>
 
+        <section class="seccion-ranking">
+            <h2 style="text-align: center; margin-top: 50px;">🔥 Top Tres Mas Gustadas de la comunidad</h2>
+            <div id="contenedor-top-peliculas">
+            </div>
+        </section>
         <div class="grid">
             <div class="card-item reveal">
                 <div class="big-icon">🎬</div>
@@ -107,6 +119,8 @@
 
 
 <?php include_once __DIR__ . '/footer.php'; ?>
+
+<script src="<?php echo $root ?>web/js/inicio.js"></script>
 
 </body>
 </html>

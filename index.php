@@ -172,6 +172,12 @@ $map = [
         'nivel'      => 1
     ],
 
+    'topTresPeliculas' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'topTresPeliculas',
+        'nivel'      => 0
+    ],
+
     // AJUSTES DE PERFIL
     'ajustesPerfil' => ['controller' => 'UsuarioController', 'action' => 'ajustesPerfil', 'nivel' => 1],
     'guardarFotoPerfil' => ['controller' => 'UsuarioController', 'action' => 'guardarFotoPerfil', 'nivel' => 1],
