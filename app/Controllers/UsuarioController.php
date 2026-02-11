@@ -486,7 +486,7 @@ class UsuarioController
     public function logout()
     {
         $this->session->logout();
-        header("Location: index.php?ctl=login");
+        header("Location: index.php?ctl=inicio");
         exit;
     }
     public function ajustesPerfil()
