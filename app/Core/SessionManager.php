@@ -58,24 +58,24 @@ class SessionManager
     // -------------------------------------------------------------
     // LOGIN
     // -------------------------------------------------------------
-    public function login($id, string $name, int $level = self::ROLE_USER): void
-    {
-        session_regenerate_id(true);
+ public function login($id, string $name, int $level = self::ROLE_USER): void
+{
+    session_regenerate_id(true);
 
-        // Claves oficiales del sistema
-        $_SESSION['usuarioId']     = $id;
-        $_SESSION['usuarioNombre'] = $name;
-        $_SESSION['usuarioNivel']  = $level;
+    $_SESSION['id_usuario'] = $id;
+    $_SESSION['nivel']      = $level;
 
-        // Clave que tu router y tu UsuarioController necesitan
-        $_SESSION['id_usuario'] = $id;
+    $_SESSION['usuarioId']     = $id;
+    $_SESSION['usuarioNombre'] = $name;
+    $_SESSION['usuarioNivel']  = $level;
 
-        // Seguridad
-        $_SESSION['remoteAddr'] = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-        $_SESSION['userAgent']  = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown Agent';
+    $_SESSION['remoteAddr'] = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    $_SESSION['userAgent']  = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown Agent';
 
-        $this->refreshActivity();
-    }
+    $this->refreshActivity();
+}
+
+
 
     // -------------------------------------------------------------
     // LOGOUT

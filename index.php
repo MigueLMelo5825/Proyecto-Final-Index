@@ -29,7 +29,6 @@ require_once __DIR__ . '/app/Core/Database.php';
 // ============================================================
 // CONTROLADORES
 // ============================================================
-require_once __DIR__ . '/app/Controllers/AdminController.php';
 require_once __DIR__ . '/app/Controllers/BuscadorController.php';
 require_once __DIR__ . '/app/Controllers/fichaLibroPeliculaController.php';
 require_once __DIR__ . '/app/Controllers/InicioController.php';
@@ -204,6 +203,10 @@ $map = [
     'panelAdmin' => ['controller' => 'AdminController', 'action' => 'index', 'nivel' => 3],
     'cambiarRol' => ['controller' => 'AdminController', 'action' => 'cambiarRol', 'nivel' => 3],
     'eliminarUsuario' => ['controller' => 'AdminController', 'action' => 'eliminarUsuario', 'nivel' => 3],
+    'guardarRol' => ['controller' => 'AdminController', 'action' => 'guardarRol', 'nivel' => 3],
+    
+
+
 
     // IMPORTACIÓN
     'importarPeliculas' => ['controller' => 'ImportarPeliculasController', 'action' => 'importar', 'nivel' => 3],
@@ -215,7 +218,7 @@ $map = [
 // ============================================================
 // RESOLUCIÓN DE RUTA
 // ============================================================
-$ruta = $_GET['ctl'] ?? 'inicio';
+$ruta = $_REQUEST['ctl'] ?? 'inicio';
 
 if (!isset($map[$ruta])) {
     die("<h1>Error 404: Ruta '$ruta' no encontrada</h1>");

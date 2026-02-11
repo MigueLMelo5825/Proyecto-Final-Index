@@ -1,59 +1,58 @@
 <?php
 
-/**
- * Controlador de administración
- * Gestiona usuarios, roles y cualquier funcionalidad reservada a administradores.
- */
-class AdminController {
-
+class AdminController
+{
     private $session;
     private $usuarioModel;
 
-    public function __construct($session) {
+    public function __construct($session)
+    {
         $this->session = $session;
         $this->usuarioModel = new UsuarioModel();
     }
 
-    // -------------------------------------------------------------
-    // PANEL PRINCIPAL DEL ADMIN
-    // -------------------------------------------------------------
-    public function index() {
-
-        // Obtener todos los usuarios para mostrarlos en el panel
-        $usuarios = $this->usuarioModel->obtenerTodos();
+    public function index()
+    {
+        // Cargar todos los usuarios
+        $usuarios = $this->usuarioModel->getAllUsuarios();
 
         require __DIR__ . '/../templates/panelAdmin.php';
     }
 
-    // -------------------------------------------------------------
-    // CAMBIAR ROL DE UN USUARIO
-    // -------------------------------------------------------------
-    public function cambiarRol() {
-
-        $id = $_POST['id_usuario'] ?? null;
-        $rol = $_POST['rol'] ?? null;
-
-        if ($id && $rol) {
-            $this->usuarioModel->actualizarRol($id, $rol);
+    public function cambiarRol()
+    {
+        if (!isset($_GET['id'])) {
+            die("ID de usuario no proporcionado");
         }
+
+        $id = $_GET['id'];
+        $usuario = $this->usuarioModel->getUsuarioById($id);
+
+        require __DIR__ . '/../templates/cambiarRol.php';
+    }
+
+    public function guardarRol()
+    {
+        $id = $_POST['id'];
+        $nivel = $_POST['nivel'];
+
+        $this->usuarioModel->actualizarNivel($id, $nivel);
 
         header("Location: index.php?ctl=panelAdmin");
         exit;
     }
 
-    // -------------------------------------------------------------
-    // ELIMINAR USUARIO (opcional, por si lo quieres añadir)
-    // -------------------------------------------------------------
-    public function eliminarUsuario() {
+    public function eliminarUsuario()
+    {
+        if (!isset($_GET['id'])) {
+            die("ID de usuario no proporcionado");
+        }
 
-    $id = $_GET['id'] ?? null;
+        $id = $_GET['id'];
 
-    if ($id) {
-        $this->usuarioModel->eliminar($id);
+        $this->usuarioModel->eliminarUsuario($id);
+
+        header("Location: index.php?ctl=panelAdmin");
+        exit;
     }
-
-    header("Location: index.php?ctl=panelAdmin");
-    exit;
-}
-
 }

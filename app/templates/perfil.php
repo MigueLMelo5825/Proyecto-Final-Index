@@ -32,29 +32,43 @@ if (!isset($listas)) $listas = [];
 <body>
 
     <?php include_once __DIR__ . '/../templates/header.php'; ?>
-<main>
+    <main>
 
-<section id="perfil">
+        <section id="perfil">
 
-<?php
-$fotoPerfil = $usuario['foto'] ?? '';
-$fotoPerfil = trim($fotoPerfil);
+            <?php
+            $fotoPerfil = $usuario['foto'] ?? '';
+            $fotoPerfil = trim($fotoPerfil);
 
-if ($fotoPerfil === '' || !file_exists($fotoPerfil)) {
-    $fotoPerfil = 'web/img/perfil/default.png';
-}
-?>
+            if ($fotoPerfil === '' || !file_exists($fotoPerfil)) {
+                $fotoPerfil = 'web/img/perfil/default.png';
+            }
+            ?>
 
-<img class="foto-perfil" src="<?= htmlspecialchars($fotoPerfil) ?>" alt="Foto de perfil">
+            <img class="foto-perfil" src="<?= htmlspecialchars($fotoPerfil) ?>" alt="Foto de perfil">
 
-<h2><?= htmlspecialchars($usuario['username']) ?></h2>
-<p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
+            <h2><?= htmlspecialchars($usuario['username']) ?></h2>
+            <p><?= htmlspecialchars($usuario['bio'] ?? '') ?></p>
 
 
 
             <a href="index.php?ctl=ajustesPerfil" class="btn btn-outline-primary mt-3">
                 Ajustes del perfil
             </a>
+            <?php if (
+                isset($_SESSION['usuarioNivel'])
+                && $_SESSION['usuarioNivel'] == 3
+                && $_SESSION['usuarioId'] == $usuario['id']
+            ): ?>
+                <a href="index.php?ctl=panelAdmin" class="btn btn-warning mt-3">
+                    Panel de administración
+                </a>
+            <?php endif; ?>
+
+
+
+
+
             <?php if ($idUsuario !== $usuario['id']): ?>
                 <?php if ($esSeguidor): ?>
                     <a href="index.php?ctl=dejarseguir&id=<?= $usuario['id'] ?>"

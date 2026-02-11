@@ -173,62 +173,50 @@ class UsuarioController
     // LOGIN
     // -------------------------------------------------------------
     public function login()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            require __DIR__ . '/../templates/login.php';
-            return;
-        }
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        require __DIR__ . '/../templates/login.php';
+        return;
+    }
 
-        $email    = $_POST['email']    ?? '';
-        $password = $_POST['password'] ?? '';
+    $email    = $_POST['email']    ?? '';
+    $password = $_POST['password'] ?? '';
 
-        $usuario = $this->usuarioModel->validarLogin($email, $password);
-        //var_dump($usuario); // Depuración: muestra el resultado de validarLogin
-        //exit;
+    $usuario = $this->usuarioModel->validarLogin($email, $password);
 
-        if ($usuario && !isset($usuario['__inactivo__'])) {
+    if ($usuario && !isset($usuario['__inactivo__'])) {
 
-            $rol   = $usuario['rol'] ?? 'user';
-            $nivel = ($rol === 'admin') ? 3 : 1;
-            //$activo = $usuario['activo'] ? 0 : 1;
+        // ⭐ Usa el nivel REAL de la BD
+        $nivel = $usuario['nivel'];
 
-            // LOGIN OFICIAL
-            $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
+        // ⭐ LOGIN OFICIAL DEL SISTEMA (guarda nivel, id, nombre, etc.)
+        $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
 
-            // Compatibilidad con código antiguo
-            $_SESSION['id_usuario'] = $usuario['id'];
+        CookieManager::set('usuarioNombre', $usuario['nombre']);
 
-            CookieManager::set('usuarioNombre', $usuario['nombre']);
+        header("Location: index.php?ctl=perfil");
+        exit;
+    }
 
-            header("Location: index.php?ctl=perfil");
-            exit;
-        }
-
-        if (is_array($usuario) && isset($usuario['__inactivo__'])) {
-            $_SESSION['swal'] = [
-                'title' => 'Cuenta inactiva',
-                'text'  => 'Tu cuenta no está activa. Revisa tu correo para activar tu cuenta.',
-                'icon'  => 'warning'
-            ];
-            header("Location: index.php?ctl=login");
-            exit;
-        }
-
+    if (is_array($usuario) && isset($usuario['__inactivo__'])) {
         $_SESSION['swal'] = [
-            'title' => 'Error de login',
-            'text'  => 'Contraseña incorrecta. Inténtalo de nuevo.',
-            'icon'  => 'error'
+            'title' => 'Cuenta inactiva',
+            'text'  => 'Tu cuenta no está activa. Revisa tu correo para activar tu cuenta.',
+            'icon'  => 'warning'
         ];
         header("Location: index.php?ctl=login");
         exit;
-
-        /*if (isset($usuario['__inactivo__'])) {
-            echo "<h2>La cuenta no está activa. Por favor, revisa tu correo para activar tu cuenta.</h2>";
-            return;
-        }
-
-        echo "<h2>Credenciales incorrectas</h2>";*/
     }
+
+    $_SESSION['swal'] = [
+        'title' => 'Error de login',
+        'text'  => 'Contraseña incorrecta. Inténtalo de nuevo.',
+        'icon'  => 'error'
+    ];
+    header("Location: index.php?ctl=login");
+    exit;
+}
+
 
     // -------------------------------------------------------------
     // PERFIL
@@ -320,31 +308,31 @@ class UsuarioController
 
     ///////////////////////////////////////////
 
-  public function buscarUsuarios()
-{
-    $pdo = Database::getConnection();
+    public function buscarUsuarios()
+    {
+        $pdo = Database::getConnection();
 
-    $termino = trim($_GET['q'] ?? '');
-    $usuarios = [];
+        $termino = trim($_GET['q'] ?? '');
+        $usuarios = [];
 
-    if ($termino !== '') {
-        $sql = "SELECT id, username, nombre, email, foto
+        if ($termino !== '') {
+            $sql = "SELECT id, username, nombre, email, foto
                 FROM usuarios
                 WHERE username LIKE :t1
                    OR email LIKE :t2";
 
-        $stmt = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sql);
 
-        // SOLUCIÓN: dos placeholders distintos
-        $stmt->bindValue(':t1', "%$termino%", PDO::PARAM_STR);
-        $stmt->bindValue(':t2', "%$termino%", PDO::PARAM_STR);
+            // SOLUCIÓN: dos placeholders distintos
+            $stmt->bindValue(':t1', "%$termino%", PDO::PARAM_STR);
+            $stmt->bindValue(':t2', "%$termino%", PDO::PARAM_STR);
 
-        $stmt->execute();
-        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        require __DIR__ . '/../templates/buscar_usuarios.php';
     }
-
-    require __DIR__ . '/../templates/buscar_usuarios.php';
-}
 
 
 
