@@ -62,15 +62,6 @@ $this->db = Database::getConnection();
         return $stmt->execute([$id]);
     }
 
-    // -------------------------------------------------------------
-    // OBTENER TODOS LOS USUARIOS (admin)
-    // -------------------------------------------------------------
-    public function obtenerTodos(): array
-    {
-        $sql = "SELECT id, titulo, autores, categoria, imagen_url FROM libros ORDER BY titulo ASC";
-        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
 
     // -------------------------------------------------------------
     // ACTUALIZAR ROL (admin)
@@ -296,6 +287,46 @@ $this->db = Database::getConnection();
     $stmt = $this->db->prepare($sql);
     $stmt->execute([':email' => "%$email%"]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+// -------------------------------------------------------------
+// OBTENER TODOS LOS USUARIOS (admin)
+// -------------------------------------------------------------
+public function getAllUsuarios(): array
+{
+    $sql = "SELECT id, username, nombre, email, nivel FROM usuarios ORDER BY id ASC";
+    $stmt = $this->db->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// -------------------------------------------------------------
+// OBTENER USUARIO POR ID (admin)
+// -------------------------------------------------------------
+public function getUsuarioById($id)
+{
+    $sql = "SELECT * FROM usuarios WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// -------------------------------------------------------------
+// ACTUALIZAR NIVEL (admin)
+// -------------------------------------------------------------
+public function actualizarNivel($id, $nivel)
+{
+    $sql = "UPDATE usuarios SET nivel = ? WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$nivel, $id]);
+}
+
+// -------------------------------------------------------------
+// ELIMINAR USUARIO (admin)
+// -------------------------------------------------------------
+public function eliminarUsuario($id)
+{
+    $sql = "DELETE FROM usuarios WHERE id = ?";
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([$id]);
 }
 
 
