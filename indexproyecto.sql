@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   KEY `usuario_id` (`usuario_id`),
   KEY `id_libro` (`id_libro`),
   KEY `id_pelicula` (`id_pelicula`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 -- Tabla: libros
