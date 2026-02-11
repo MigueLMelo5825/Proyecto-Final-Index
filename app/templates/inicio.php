@@ -1,63 +1,112 @@
+
+
 <?php include_once __DIR__ . '/header.php'; ?>
 
-<div class="container mt-5">
 
-    <!-- HERO -->
-    <div class="row align-items-center mb-5">
-        <div class="col-md-6">
-            <h1 class="display-4 fw-bold">Tu espacio para libros y películas</h1>
-            <p class="lead">
-                Organiza tus listas, guarda tus favoritos y lleva un registro de todo lo que lees y ves.
-            </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="web/css/style_inicio.css">
+    <title>Inicio</title>
+</head>
+<body>
+    
 
-            <div class="mt-4">
-                <a href="index.php?ctl=registro" class="btn btn-primary btn-lg me-2">Registrarse</a>
-                <a href="index.php?ctl=login" class="btn btn-outline-secondary btn-lg">Iniciar sesión</a>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>Libros y películas<br>en un solo lugar</h1>
+        <p>
+            Descubre, valora y guarda tus libros y películas favoritas.
+            Crea listas, sigue a otros usuarios y encuentra nuevas historias.
+        </p>
+        <div class="hero-actions">
+      
 
-        <div class="col-md-6 text-center">
-            <!-- Logo INDEX-01 -->
-            <img src="<?= $base_url ?>web/img/INDEX-01.png" 
-                 alt="INDEX" 
-                 class="img-fluid shadow" 
-                 style="max-width: 350px;">
-        </div>
-    </div>
-
-    <!-- FEATURES -->
-    <div class="row text-center mb-5">
-        <h2 class="mb-4 fw-semibold">¿Qué puedes hacer aquí?</h2>
-
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm h-100">
-                <h3 class="fs-4">📚 Crear listas</h3>
-                <p>Organiza tus libros y películas como quieras: favoritos, pendientes, terminados…</p>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm h-100">
-                <h3 class="fs-4">⭐ Guardar fichas</h3>
-                <p>Accede rápidamente a toda la información de cada obra.</p>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="p-4 border rounded shadow-sm h-100">
-                <h3 class="fs-4">🎬 Descubrir contenido</h3>
-                <p>Explora nuevas recomendaciones y amplía tu biblioteca personal.</p>
-            </div>
         </div>
     </div>
+</section>
 
-    <!-- CTA FINAL -->
-    <div class="text-center py-5 bg-light rounded shadow-sm">
-        <h2 class="fw-bold">¿Listo para empezar?</h2>
-        <p class="lead">Crea tu cuenta y empieza a construir tus listas.</p>
-        <a href="index.php?ctl=registro" class="btn btn-primary btn-lg">Crear cuenta</a>
+<!-- LIBROS -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Libros</h2>
+        <p class="section-subtitle">Encuentra tu próxima lectura</p>
+
+        <div class="grid">
+            <div class="card-item reveal">
+                <div class="big-icon">📚</div>
+                <h3>Catálogo amplio</h3>
+                <p>Explora miles de libros de todos los géneros.</p>
+            </div>
+
+            <div class="card-item reveal">
+                <div class="big-icon">⭐</div>
+                <h3>Valoraciones</h3>
+                <p>Puntúa libros y mira opiniones de otros lectores.</p>
+            </div>
+
+            <div class="card-item reveal">
+                <div class="big-icon">📝</div>
+                <h3>Listas personales</h3>
+                <p>Crea listas de lectura y compártelas.</p>
+            </div>
+        </div>
     </div>
+</section>
 
-</div>
+<!-- PELÍCULAS -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Películas</h2>
+        <p class="section-subtitle">Todo el cine que te gusta</p>
+
+        <div class="grid">
+            <div class="card-item reveal">
+                <div class="big-icon">🎬</div>
+                <h3>Estrenos y clásicos</h3>
+                <p>Desde lo último hasta las películas de siempre.</p>
+            </div>
+
+            <div class="card-item reveal">
+                <div class="big-icon">❤️</div>
+                <h3>Favoritas</h3>
+                <p>Marca películas y vuelve a ellas cuando quieras.</p>
+            </div>
+
+            <div class="card-item reveal">
+                <div class="big-icon">👥</div>
+                <h3>Comunidad</h3>
+                <p>Descubre qué está viendo la gente.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<script>
+    // Reveal on scroll
+    const items = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+            if(e.isIntersecting){
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, {threshold:0.15});
+
+    items.forEach(el=>observer.observe(el));
+</script>
+
+
 
 <?php include_once __DIR__ . '/footer.php'; ?>
+
+</body>
+</html>

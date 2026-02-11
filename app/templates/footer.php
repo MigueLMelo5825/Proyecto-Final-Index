@@ -6,7 +6,8 @@
                 <h3 class="h5">INDEX</h3>
                 <p>Tu biblioteca personal de libros y películas.</p>
             </div>
-
+    
+            
             <!--   <div class="col-md-4 mb-3">
                 <h4 class="h6">Enlaces</h4>
                 <ul class="list-unstyled">
