@@ -29,6 +29,7 @@ const contadorLikes = document.getElementById('contador-likes');
 const formComentario = document.querySelector('.form-post');
 const listaComentarios = document.querySelector('.lista-comentarios');
 const infoComentario = document.getElementById('info-comentario');
+let panelComunidad = document.querySelector(".panel-comunidad");
 
 
 //funcion para enviar like y guardarlo
@@ -138,9 +139,6 @@ async function agregarComentario() {
             const datos = await peticion.json();
             textarea.value = '';
 
-           //traemos el div panel-comunidad
-           let panelComunidad = document.querySelector(".panel-comunidad");
-
             // Buscamos o creamos el div comunidad dentro del panel
             let comunidad = panelComunidad.querySelector('.comunidad');
             if (!comunidad) {
@@ -150,6 +148,9 @@ async function agregarComentario() {
                     <h3>Comunidad</h3>
                     <div class="lista-comentarios"></div>
                 `;
+                //mostramos el panel de seguridad
+                panelComunidad.style.display = "block";
+                //agregamos el comentario
                 panelComunidad.appendChild(comunidad);
             }
 
@@ -320,12 +321,14 @@ document.addEventListener('click', async (e) => {
 
             if (data.status === 'success') {
                 comentario.remove();
+                
 
                 // Si no queda ningún comentario, borramos la comunidad
                 const comunidad = document.querySelector('.comunidad');
                 if (comunidad) {
                     const lista = comunidad.querySelectorAll('.comentario-item');
                     if (lista.length === 0) {
+                        panelComunidad.style.display = "none";
                         comunidad.remove();
                     }
                 }

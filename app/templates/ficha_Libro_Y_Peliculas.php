@@ -258,7 +258,11 @@ if (!$urlImagenPortada) {
                 <?php endif; ?>
                 
                 <!-- La comunidad se crea dinámicamente -->
-                <section class="panel-comunidad">
+                <?php if(count($comentarios) > 0): ?>
+                    <section class="panel-comunidad" style="display: block;">
+                <?php else: ?>
+                    <section class="panel-comunidad" style="display: none;">
+                <?php endif; ?>
                 <?php if (!empty($comentarios)): ?>
                         <div class="comunidad">
                             <h3>Comunidad</h3>

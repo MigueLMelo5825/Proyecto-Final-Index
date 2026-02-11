@@ -193,11 +193,11 @@ class fichaLibroPeliculaController {
             $stmt = $pdo->prepare($eliminarComentario);
             $stmt->execute([$id_comentario, $idUsuario]);
 
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(["status" => "success", "resultado" => "eliminado"]);
-            } else {
-                echo json_encode(["status" => "error", "mensaje" => "No se pudo eliminar el comentario. Quizá no te pertenece o ya fue eliminado."]);
-            }
+            echo json_encode([
+                "status" => "success", 
+                "resultado" => "eliminado"
+            ]);
+            exit;
         } catch(PDOException $e) {
             echo json_encode(["status" => "error", "mensaje" => "Error al eliminar comentario: " . $e->getMessage()]);
         }
