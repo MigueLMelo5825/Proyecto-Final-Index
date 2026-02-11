@@ -180,7 +180,7 @@ function renderComentario(c) {
                 <strong>${c.username}</strong>
                 <small>${c.pais}</small>
                 <p class="texto-comentario">${c.texto}</p>
-                <small>Recién publicado</small>
+                <small class="tiempo-relativo" data-fecha="${c.fecha}">${c.fecha}</small>
                 ${botones}
             </div>
         </div>
@@ -391,10 +391,37 @@ async function agregarALista() {
     });
 }
 
+function formatearTiempoRelativo() {
+    const elementosFecha = document.querySelectorAll('.tiempo-relativo');
+    
+    elementosFecha.forEach(el => {
+        const fechaComentario = new Date(el.dataset.fecha);
+        const ahora = new Date();
+        const diferenciaSegundos = Math.floor((ahora - fechaComentario) / 1000);
+
+        let texto = "";
+
+        if (diferenciaSegundos < 60) {
+            texto = "hace un momento";
+        } else if (diferenciaSegundos < 3600) {
+            const min = Math.floor(diferenciaSegundos / 60);
+            texto = `hace ${min} min`;
+        } else if (diferenciaSegundos < 86400) {
+            const horas = Math.floor(diferenciaSegundos / 3600);
+            texto = `hace ${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+        } else {
+            const dias = Math.floor(diferenciaSegundos / 86400);
+            texto = `hace ${dias} ${dias === 1 ? 'día' : 'días'}`;
+        }
+
+        el.textContent = texto;
+    });
+}
 
 window.onload = function (){
     enviarLike();
     agregarValoracion();
     agregarComentario();
     agregarALista();
+    formatearTiempoRelativo();
 }

@@ -270,7 +270,7 @@ if (!$urlImagenPortada) {
                                             <strong><?= htmlspecialchars($c['username']) ?></strong>
                                             <small><?= htmlspecialchars($c['pais']) ?></small>
                                             <p class="texto-comentario"><?= htmlspecialchars($c['texto']) ?></p>
-                                            <small><?= date('d/m/Y H:i', strtotime($c['fecha'])) ?></small>
+                                            <small class="tiempo-relativo" data-fecha="<?= $c['fecha'] ?>"><?= $c['fecha'] ?></small>
                                             <?php if ($c['esPropio']): ?>
                                             <div class="acciones-comentario">
                                                 <button class="btn-editar" data-id="<?= $c['id_comentario'] ?>">Editar</button>

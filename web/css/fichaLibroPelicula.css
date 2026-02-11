@@ -464,6 +464,13 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Tiempo Relativo */
+.tiempo-relativo {
+    color: #888;
+    font-size: 11px;
+    text-transform: lowercase;
+}
+
 /* TEXTAREA DE EDICIÓN */
 .edit-text {
     width: 100%;
