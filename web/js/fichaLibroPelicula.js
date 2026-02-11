@@ -138,18 +138,10 @@ async function agregarComentario() {
             const datos = await peticion.json();
             textarea.value = '';
 
-            // 1️⃣ Buscamos la descripción
-            const descripcion = document.querySelector('.seccion-descripcion');
+           //traemos el div panel-comunidad
+           let panelComunidad = document.querySelector(".panel-comunidad");
 
-            // 2️⃣ Buscamos o creamos el panel de comunidad **debajo de la descripción**
-            let panelComunidad = descripcion.nextElementSibling;
-            if (!panelComunidad || !panelComunidad.classList.contains('panel-comunidad')) {
-                panelComunidad = document.createElement('div');
-                panelComunidad.classList.add('panel-comunidad');
-                descripcion.insertAdjacentElement('afterend', panelComunidad);
-            }
-
-            // 3️⃣ Buscamos o creamos el div comunidad dentro del panel
+            // Buscamos o creamos el div comunidad dentro del panel
             let comunidad = panelComunidad.querySelector('.comunidad');
             if (!comunidad) {
                 comunidad = document.createElement('div');
@@ -161,7 +153,7 @@ async function agregarComentario() {
                 panelComunidad.appendChild(comunidad);
             }
 
-            // 4️⃣ Insertamos el comentario
+            //  Insertamos el comentario
             const lista = comunidad.querySelector('.lista-comentarios');
             lista.insertAdjacentHTML("afterbegin", renderComentario(datos.comentario));
 

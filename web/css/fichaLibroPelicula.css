@@ -322,21 +322,6 @@ body {
     height: 100px;
 }
 
-.img-perfil-mini {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-.comentario-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-    padding: 10px;
-    border-bottom: 1px solid #444;
-}
-
 .btn-publicar {
     background-color: var(--white);
     color: black;
@@ -360,6 +345,185 @@ body {
     margin-top: 20px;
     font-style: italic;
 }
+
+/* SECCION DE COMUNIDAD */
+/* CONTENEDOR PRINCIPAL */
+.panel-comunidad {
+    margin-top: 50px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.comunidad h3 {
+    font-size: 24px;
+    color: rgb(33, 37, 41);
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* LISTA DE COMENTARIOS */
+.lista-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comentario-item {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background: #f9f9fb;
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.comentario-item:hover {
+    transform: translateX(5px);
+    background: #f1f1f5;
+}
+
+/* AVATAR */
+.img-perfil-mini {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* CUERPO DEL COMENTARIO */
+.comentario-cuerpo {
+    flex: 1;
+}
+
+.comentario-cuerpo strong {
+    color: rgb(33, 37, 41);
+    font-size: 16px;
+}
+
+.comentario-cuerpo small {
+    display: block;
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.texto-comentario {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+/* ACCIONES (EDITAR / ELIMINAR) */
+.acciones-comentario {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-editar, .btn-eliminar {
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.btn-editar {
+    color: #007185;
+    border: 1px solid #007185;
+}
+
+.btn-editar:hover {
+    background: #007185;
+    color: #fff;
+}
+
+.btn-eliminar {
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+}
+
+.btn-eliminar:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* CONTENEDOR DE EDICIÓN */
+.texto-comentario {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* TEXTAREA DE EDICIÓN */
+.edit-text {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #333;
+    background-color: #ffffff;
+    resize: vertical;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    display: block;
+}
+
+.edit-text:focus {
+    border-color: rgb(33, 37, 41);
+    box-shadow: 0 0 0 4px rgba(33, 37, 41, 0.1);
+}
+
+/* GRUPO DE BOTONES DE EDICIÓN */
+.edit-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn-guardar, .btn-cancelar {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-guardar {
+    background-color: rgb(33, 37, 41);
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #495057;
+    transform: translateY(-1px);
+}
+
+.btn-cancelar {
+    background-color: #f1f1f1;
+    color: #666;
+}
+
+.btn-cancelar:hover {
+    background-color: #e5e5e5;
+    color: #333;
+}
+
 
 /* --- RESPONSIVE --- */
 @media (max-width: 850px) {
