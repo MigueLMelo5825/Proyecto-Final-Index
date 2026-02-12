@@ -4,19 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recuperar contraseña</title>
-
-<link rel="stylesheet" href="./web/css/styleRecupero.css">
-
-
+  <link rel="stylesheet" href="web/css/forms.css">
 </head>
-
 <body>
-  <div class="container">
+
+<?php include_once __DIR__ . '/header.php'; ?>
+
+<div class="form-page">
+  <div class="form-container">
     <h1>Recuperar contraseña</h1>
-    <br>
     <p>Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
 
-<form method="POST" action="index.php?ctl=recupero">
+    <form method="POST" action="index.php?ctl=recupero">
       <div>
         <label for="email">Correo electrónico</label>
         <input type="email" id="email" name="email" required />
@@ -29,9 +28,10 @@
       ¿Recordaste tu contraseña? <a href="index.php?ctl=login">Inicia sesión</a>
     </div>
   </div>
-  
+</div>
 
-  
-  <script src="./web/js/validacionRecupero.js"></script>
+<script src="./web/js/validacionRecupero.js"></script>
+<?php include_once __DIR__ . '/footer.php'; ?>
+
 </body>
 </html>

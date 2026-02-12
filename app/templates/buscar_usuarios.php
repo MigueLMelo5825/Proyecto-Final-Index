@@ -1,45 +1,41 @@
 <?php include_once __DIR__ . '/header.php'; ?>
-<?php
-$usuarios = $usuarios ?? [];
-$termino  = $termino ?? '';
-?>
+<link rel="stylesheet" href="web/css/forms.css">
 
-<div class="container mt-5">
+<div class="list-page">
+  <div class="list-container">
     <h2>Explorar usuarios</h2>
-    <form method="GET" action="index.php" class="mt-3 mb-4 d-flex" style="max-width: 400px;">
-        <input type="hidden" name="ctl" value="buscarUsuarios">
 
-        <input type="text"
-            name="q"
-            class="form-control me-2"
-            placeholder="Buscar por usuario o email...">
+    <!-- Formulario de búsqueda -->
+    <form method="GET" action="index.php" class="usuarios-form">
+      <input type="hidden" name="ctl" value="buscarUsuarios">
 
-        <button type="submit" class="btn btn-primary">
-            Buscar
-        </button>
+      <input type="text"
+             name="q"
+             placeholder="Buscar por usuario o email..."
+             value="<?= htmlspecialchars($termino ?? '') ?>">
+
+      <button type="submit">Buscar</button>
     </form>
 
-
-
+    <!-- Lista de usuarios -->
     <?php if (!empty($usuarios)): ?>
-        <ul class="list-group">
-            <?php foreach ($usuarios as $u): ?>
-                <li class="list-group-item d-flex align-items-center">
-                    <img src="<?= $u['foto'] ?>" width="40" height="40" class="rounded-circle me-3">
-                    <div>
-                        <a href="index.php?ctl=perfil&id=<?= $u['id'] ?>">
-                            @<?= htmlspecialchars($u['username']) ?>
-                        </a>
-                        <br>
-                        <small><?= htmlspecialchars($u['email']) ?></small>
-
-                    </div>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php elseif ($termino !== ''): ?>
-        <p>No se encontraron usuarios con ese email.</p>
+      <ul class="usuarios-list list-group">
+        <?php foreach ($usuarios as $u): ?>
+          <li class="usuario-item list-group-item">
+            <img src="<?= $u['foto'] ?>" width="40" height="40" alt="@<?= htmlspecialchars($u['username']) ?>">
+            <div class="usuario-info">
+              <a href="index.php?ctl=perfil&id=<?= $u['id'] ?>">
+                @<?= htmlspecialchars($u['username']) ?>
+              </a>
+              <small><?= htmlspecialchars($u['email']) ?></small>
+            </div>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php elseif (!empty($termino)): ?>
+      <p class="no-results">No se encontraron usuarios con ese email.</p>
     <?php endif; ?>
+  </div>
 </div>
 
 <?php include_once __DIR__ . '/footer.php'; ?>

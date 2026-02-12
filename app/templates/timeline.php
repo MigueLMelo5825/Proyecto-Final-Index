@@ -7,9 +7,7 @@
     <title>Actividad reciente</title>
 
     <link rel="stylesheet" href="web/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="web/css/styleBase.css">
-    <link rel="stylesheet" href="web/css/styleLayout.css">
-    <link rel="stylesheet" href="web/css/styleComponents.css">
+
     <link rel="stylesheet" href="web/css/styleTimeline.css">
 </head>
 

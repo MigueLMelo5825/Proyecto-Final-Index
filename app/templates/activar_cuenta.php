@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Activar cuenta</title>
+<?php include_once __DIR__ . '/header.php'; ?>
 
-  <link rel="stylesheet" href="./web/css/activar_cuenta.css">
-</head>
-
-<body>
-  <div class="container">
+<div class="form-page">
+  <div class="form-container">
     <h1>Cuenta activada</h1>
-    <br>
-    <p>Tu cuenta ha sido activada correctamente. </p>
-
+    <p>Tu cuenta ha sido activada correctamente.</p>
 
     <a href="index.php?ctl=login">
       <button type="button">Iniciar sesión</button>
     </a>
-
   </div>
-</body>
-</html>
+</div>
+
+<?php include_once __DIR__ . '/footer.php'; ?>

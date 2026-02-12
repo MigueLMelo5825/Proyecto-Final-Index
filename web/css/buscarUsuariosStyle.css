@@ -1,0 +1,135 @@
+.usuarios-page {
+    padding: 50px 20px;
+    background: #e6eaf0;
+    min-height: 80vh;
+}
+
+.usuarios-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.usuarios-container h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 30px;
+}
+
+.usuarios-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.usuarios-form input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #ececec;
+    background: #fdfdfd;
+    font-size: 14px;
+    color: #0f172a;
+    transition: 0.3s ease;
+}
+
+.usuarios-form input:focus {
+    outline: none;
+    border-color: #1e293b;
+    box-shadow: 0 0 12px rgba(30, 41, 59, 0.2);
+}
+
+.usuarios-form button {
+    background: #1e293b;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.usuarios-form button:hover {
+    background: #0f172a;
+    transform: translateY(-2px);
+}
+
+/* Lista de usuarios */
+.usuarios-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.usuario-item {
+    display: flex;
+    align-items: center;
+    background: #fdfdfd;
+    padding: 15px 20px;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    transition: 0.3s ease;
+}
+
+.usuario-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.12);
+}
+
+.usuario-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.usuario-info a {
+    font-weight: 600;
+    color: #1e293b;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.usuario-info a:hover {
+    text-decoration: underline;
+}
+
+.usuario-info small {
+    display: block;
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.no-results {
+    color: #64748b;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .usuarios-form {
+        flex-direction: column;
+    }
+
+    .usuarios-form button {
+        width: 100%;
+    }
+
+    .usuario-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .usuario-item img {
+        margin-right: 0;
+    }
+}

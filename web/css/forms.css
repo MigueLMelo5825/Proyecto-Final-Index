@@ -1,0 +1,269 @@
+/* ============================= */
+/* FORMULARIOS CINEMATOGRÁFICOS */
+/* ============================= */
+
+.form-page {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  background: #e6eaf0;
+}
+
+.form-container {
+  max-width: 450px;
+  width: 100%;
+  padding: 40px 30px;
+  background: #fdfdfd;
+  border-radius: 22px;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.08);
+  transition: 0.3s ease;
+}
+
+.form-container:hover {
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.12);
+}
+
+.form-card h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 25px;
+  text-align: left; /* Título alineado a la izquierda */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column; /* etiqueta arriba, input abajo */
+  gap: 6px;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0f172a;
+  text-align: left; /* Label alineado a la izquierda */
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #ececec;
+  background: #fdfdfd;
+  font-size: 14px;
+  color: #0f172a;
+  transition: 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left; /* Texto dentro del input alineado a la izquierda */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1e293b;
+  box-shadow: 0 0 10px rgba(30, 41, 59, 0.15);
+}
+
+/* Errores */
+.form-group .error {
+  color: #d33;
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: left; /* Errores alineados a la izquierda */
+}
+
+/* Botón */
+button[type="submit"] {
+  background: #1e293b;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 12px 0;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background: #0f172a;
+  transform: translateY(-2px);
+}
+
+/* Footer del formulario */
+.form-container .footer {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #64748b;
+  text-align: left; /* Footer alineado a la izquierda */
+}
+
+.form-container .footer a {
+  color: #1e293b;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.form-container .footer a:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 30px 20px;
+  }
+
+  .form-card h1 {
+    font-size: 24px;
+  }
+}
+
+
+/* ============================= */
+/* LISTA CINEMATOGRÁFICA*/
+/* ============================= */
+
+.list-page {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  background: #e6eaf0;
+}
+
+.list-container {
+  max-width: 500px;
+  width: 100%;
+  background: #fdfdfd;
+  border-radius: 22px;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.08);
+  padding: 30px 25px;
+  transition: 0.3s ease;
+}
+
+.list-container:hover {
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.12);
+}
+
+.list-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fdfdfd;
+  border: 1px solid #ececec;
+  margin-bottom: 10px;
+  transition: 0.3s ease;
+}
+
+.list-group-item:hover {
+  background: #f0f4f8;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.list-group-item img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.list-group-item a {
+  font-weight: 600;
+  color: #1e293b;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.list-group-item a:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .list-container {
+    padding: 25px 15px;
+    margin: 20px;
+  }
+
+  .list-container h2 {
+    font-size: 24px;
+  }
+
+  .list-group-item a {
+    font-size: 14px;
+  }
+} /* <-- cierre del media query */
+
+/* Formulario de búsqueda de usuarios */
+.usuarios-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.usuarios-form input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #ececec;
+  font-size: 14px;
+  color: #0f172a;
+  transition: 0.3s ease;
+}
+
+.usuarios-form input[type="text"]:focus {
+  outline: none;
+  border-color: #1e293b;
+  box-shadow: 0 0 10px rgba(30, 41, 59, 0.15);
+}
+
+.usuarios-form button {
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: none;
+  background: #1e293b;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.usuarios-form button:hover {
+  background: #0f172a;
+  transform: translateY(-2px);
+}
+
+/* Información dentro del item de usuario */
+.usuario-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Mensaje de no resultados */
+.no-results {
+  font-size: 14px;
+  color: #64748b;
+  text-align: left;
+  margin-top: 10px;
+}
