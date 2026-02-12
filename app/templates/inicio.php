@@ -71,7 +71,7 @@ include_once __DIR__ . '/header.php';
         <p class="section-subtitle">Todo el cine que te gusta</p>
 
         <section class="seccion-ranking">
-            <h2 style="text-align: center; margin-top: 50px;">🔥 Top Tres Mas Gustadas de la comunidad</h2>
+            <h2 style="text-align: center; margin-top: 50px;">🔥El contenido que más gusta en nuestra comunidad</h2>
             <div id="contenedor-top-peliculas">
             </div>
         </section>

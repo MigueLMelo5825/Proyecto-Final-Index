@@ -111,7 +111,7 @@ if (!isset($listas)) $listas = [];
 
             <!-- TOP LIBROS -->
             <div class="card">
-                <h3>📚 Top Libros</h3>
+                <h3>Top Libros</h3>
                 <div class="top-grid">
                     <?php foreach ($topLibros as $libro): ?>
                         <div class="top-item">
@@ -124,7 +124,7 @@ if (!isset($listas)) $listas = [];
 
             <!-- TOP PELÍCULAS -->
             <div class="card">
-                <h3>🎬 Top Películas</h3>
+                <h3>Top Películas</h3>
                 <div class="top-grid">
                     <?php foreach ($topPeliculas as $peli): ?>
                         <div class="top-item">
@@ -137,26 +137,28 @@ if (!isset($listas)) $listas = [];
 
         </div>
 
-        <!-- LISTAS -->
-        <div class="card listas">
-            <h3>Mis listas (<?= $numeroListas ?? 0 ?>)</h3>
+<!-- LISTAS -->
+<div class="card listas">
+    <h3>Mis listas (<?= $numeroListas ?? 0 ?>)</h3>
 
-            <?php foreach ($listas as $lista): ?>
-                <div class="lista-item">
-    <div class="lista-texto">
-        <strong><?= htmlspecialchars($lista['nombre']) ?></strong>
-        <p><?= htmlspecialchars($lista['descripcion']) ?></p>
+    <div class="listas-container">
+        <?php foreach ($listas as $lista): ?>
+            <div class="lista-item-card">
+                <div class="lista-texto">
+                    <strong><?= htmlspecialchars($lista['nombre']) ?></strong>
+                    <p><?= htmlspecialchars($lista['descripcion']) ?></p>
+                </div>
+                <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" class="btn-lista">
+                    Ver lista
+                </a>
+            </div>
+        <?php endforeach; ?>
     </div>
 
-    <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" class="btn-primary small">Ver lista</a>
+    <a href="index.php?ctl=crearLista" class="btn-success crear-lista">
+        Crear nueva lista
+    </a>
 </div>
-<a href="index.php?ctl=crearLista" class="btn-success crear-lista">
-    Crear nueva lista
-</a>
-
-            <?php endforeach; ?>
-
-        </div>
 
     </section>
 
