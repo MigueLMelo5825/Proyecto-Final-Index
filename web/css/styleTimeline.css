@@ -2,7 +2,7 @@
    VARIABLES TIMELINE
    ========================= */
 :root {
-    --bg-page: #f8f9fa;          /* fondo general blanco/gris muy claro */
+   
     --bg-card: #ffffff;           /* contenedor blanco */
     --bg-card-propio: #e0f0ff;    /* azul muy claro para propios */
     --border-soft: #d1d5db;       /* gris claro */
@@ -18,7 +18,7 @@ body, main {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    background-color: var(--bg-page);
+
 }
 
 .timeline {

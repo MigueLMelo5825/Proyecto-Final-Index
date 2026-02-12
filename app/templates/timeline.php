@@ -1,20 +1,47 @@
+
 <?php if (!isset($eventos)) $eventos = []; ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Actividad reciente</title>
-
-    <link rel="stylesheet" href="web/bootstrap/css/bootstrap.min.css">
-
+  <meta charset="UTF-8">
+  <title> Home </title>
+    
+    <link rel="stylesheet" href="web/css/styleBase.css">
+    <link rel="stylesheet" href="web/css/styleLayout.css">
+    <link rel="stylesheet" href="web/css/styleComponents.css">
     <link rel="stylesheet" href="web/css/styleTimeline.css">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+     <script src="./web/js/frases.js"></script>
 </head>
+
 
 <body>
 
     <!-- HEADER -->
     <?php require __DIR__ . "/header.php"; ?>
+
+
+
+<section class="home-welcome py-4">
+    <div class="container">
+        <div class="p-4 rounded-4 welcome-card">
+            <h2 class="fw-bold">
+  Bienvenido, <?= htmlspecialchars($_SESSION['usuarioNombre'] ?? 'Usuario') ?> 👋
+</h2>
+   </div>   
+    </div>
+</section>
+ 
+
+
+
 
     <main>
         <section class="timeline">
@@ -102,10 +129,29 @@
         </section>
     </main>
 
+<div class="container my-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="ext-card p-4 text-center">
+                <h5 class="mb-3"> Frase literaria</h5>
+
+                <blockquote id="quoteText" class="mb-3 fs-5"></blockquote>
+                <div id="quoteAuthor" class="text-secondary small"></div>
+
+                <button class="btn btn-outline-dark btn-sm mt-3" id="newQuoteBtn">
+                    Otra frase
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
     <!-- FOOTER -->
     <?php require __DIR__ . "/footer.php"; ?>
 
-    <script src="web/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
