@@ -58,22 +58,22 @@ class SessionManager
     // -------------------------------------------------------------
     // LOGIN
     // -------------------------------------------------------------
- public function login($id, string $name, int $level = self::ROLE_USER): void
-{
-    session_regenerate_id(true);
+    public function login($id, string $name, int $level = self::ROLE_USER): void
+    {
+        session_regenerate_id(true);
 
-    $_SESSION['id_usuario'] = $id;
-    $_SESSION['nivel']      = $level;
+        $_SESSION['id_usuario'] = $id;
+        $_SESSION['nivel']      = $level;
 
-    $_SESSION['usuarioId']     = $id;
-    $_SESSION['usuarioNombre'] = $name;
-    $_SESSION['usuarioNivel']  = $level;
+        $_SESSION['usuarioId']     = $id;
+        $_SESSION['usuarioNombre'] = $name;
+        $_SESSION['usuarioNivel']  = $level;
 
-    $_SESSION['remoteAddr'] = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-    $_SESSION['userAgent']  = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown Agent';
+        $_SESSION['remoteAddr'] = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $_SESSION['userAgent']  = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown Agent';
 
-    $this->refreshActivity();
-}
+        $this->refreshActivity();
+    }
 
 
 
@@ -86,12 +86,17 @@ class SessionManager
         session_destroy();
 
         $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params['path'], $params['domain'],
-            $params['secure'], $params['httponly']
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
         );
 
-        header("Location: {$this->loginPage}");
+        header("Location: index.php?ctl=inicio");
         exit;
     }
 
@@ -114,8 +119,10 @@ class SessionManager
             $this->logout();
         }
 
-        if (isset($_SESSION['lastActivity']) &&
-            (time() - $_SESSION['lastActivity'] > $this->timeout)) {
+        if (
+            isset($_SESSION['lastActivity']) &&
+            (time() - $_SESSION['lastActivity'] > $this->timeout)
+        ) {
             $this->logout();
         }
 
@@ -156,7 +163,7 @@ class SessionManager
     public function isLoggedIn(): bool
     {
         return isset($_SESSION['id_usuario']) &&
-               $this->getUserLevel() > self::ROLE_GUEST;
+            $this->getUserLevel() > self::ROLE_GUEST;
     }
 
     public function hasLevel(int $requiredLevel): bool
@@ -164,4 +171,3 @@ class SessionManager
         return $this->getUserLevel() >= $requiredLevel;
     }
 }
-?>
