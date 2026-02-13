@@ -10,6 +10,21 @@ class Libros {
         $this->pdo = Database::getConnection();
     }
 
+    /*public function obtenerLibrosAleatorios(int $limite = 4): array {
+
+        $sql = "SELECT id, titulo, autores, categoria, imagen_url 
+                FROM libros
+                ORDER BY RAND()
+                LIMIT :limite";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }*/
+
+
     // Obtener top 5 libros
     public function obtenerTopLibros(): array {
         $sql = "SELECT id, titulo, autores, categoria, imagen_url 

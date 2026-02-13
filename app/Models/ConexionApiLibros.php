@@ -12,7 +12,7 @@ class ConexionApiLibros
         $url = "https://www.googleapis.com/books/v1/volumes?q=" . urlencode($query) . "&key=" . $apiKey . "&maxResults=10";
 
         // Intentamos obtener los datos
-        $response = @file_get_contents($url);
+        $response = file_get_contents($url);
 
         if ($response === false) {
             throw new Exception("Error al conectar con la API de Google Books.");

@@ -40,9 +40,77 @@
 </section>
  
 
+<?php if (!isset($topPeliculas)) $topPeliculas = []; ?>
+
+<section class="pb-4">
+  <div class="container">
+
+    <div class="d-flex align-items-center justify-content-center mb-4">
+      <h3 class="fw-bold mb-0">  Películas recomendadas</h3>
+      
+    </div>
+
+    <?php if (empty($topPeliculas)): ?>
+      <div class="bg-body-tertiary rounded-4 p-4">
+        No se pudo cargar la recomendación de películas.
+      </div>
+    <?php else: ?>
+
+      <?php
+        
+        $chunks = array_chunk($topPeliculas, 4);
+      ?>
+
+        <div class="carousel-inner bg-body-tertiary p-3 p-md-4">
+          <?php foreach ($chunks as $i => $grupo): ?>
+            <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+              <div class="row g-3">
+
+                <?php foreach ($grupo as $peli): ?>
+                  <div class="col-6 col-md-3">
+                    <div class="card h-100 shadow-sm">
+
+                      <img
+                        src="<?= htmlspecialchars($peli['portada'] ?? 'web/img/fallback.png') ?>"
+                        class="card-img-top"
+                        alt="Portada"
+                        style="height:340px; object-fit:cover;"
+                        >
+
+                      <div class="card-body">
+                        <h6 class="card-title fw-bold mb-1">
+                          <?= htmlspecialchars($peli['titulo'] ?? '') ?>
+                        </h6>
+
+                        <div class="text-secondary small mb-2">
+                          <?= htmlspecialchars($peli['anio'] ?? '') ?>
+                        </div>
+
+                        <a class="btn btn-dark btn-sm"
+                           href="index.php?ctl=fichaLibroPelicula&id=<?= (int)($peli['id'] ?? 0) ?>&type=pelicula">
+                          Ver
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+
+      </div>
+
+    <?php endif; ?>
+
+  </div>
+</section>
 
 
-
+  
+  
     <main>
         <section class="timeline">
             <h2>Actividad reciente</h2>

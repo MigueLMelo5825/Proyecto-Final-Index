@@ -14,7 +14,16 @@ class TimelineController
         $this->session->checkSecurity();
         $idUsuario = $this->session->get('id_usuario');
 
-        // Usar el método correcto del modelo
+        // Cargar top películas
+        $pelisModel = new Peliculas();
+        $topPeliculas = $pelisModel->obtenerPeliculasAleatorias();
+
+        // Cargar top películas
+        //$librosModel = new Libros();
+       // $topLibros = $librosModel->obtenerLibrosAleatorios();
+
+       
+        
         $eventos = EventoModel::obtenerEventosTimeline($idUsuario);
 
         require __DIR__ . '/../templates/timeline.php';

@@ -153,5 +153,6 @@ function seleccionarLibro(li) {
     if (!id || !type) return;
 
     const url = `${urlRedireccion}&id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`;
-    window.location.href = url;
+    console.log("Redirigiendo a:", url);
+    //window.location.href = url;
 }
