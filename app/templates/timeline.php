@@ -240,6 +240,20 @@
 <div class="ext-card p-4 text-center curiosidad-card">
   <div id="sabiasQue">Cargando curiosidad...</div>
 </div>
+ 
+<!-- FRASE LITERARIA -->
+<div class="ext-card p-4 text-center curiosidad-card">
+  <h3>Frase literaria</h3>
+
+  <blockquote id="quoteText" class="mb-3 fs-5"></blockquote>
+  <div id="quoteAuthor" class="text-secondary small"></div>
+
+  <button class="btn btn-sm mt-3"
+          style="background-color: var(--accent); color: white;"
+          id="newQuoteBtn">
+    Otra frase
+  </button>
+</div>
 
 
     </aside>
@@ -247,23 +261,7 @@
   </div>
 </main>
 
-    <!-- FRASE LITERARIA -->
-    <div class="container my-4">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <div class="ext-card p-4 text-center">
-            <h5 class="mb-3">Frase literaria</h5>
-
-            <blockquote id="quoteText" class="mb-3 fs-5"></blockquote>
-            <div id="quoteAuthor" class="text-secondary small"></div>
-
-            <button class="btn btn-outline-dark btn-sm mt-3" id="newQuoteBtn">
-              Otra frase
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  
 
     <!-- FOOTER -->
     <?php require __DIR__ . "/footer.php"; ?>

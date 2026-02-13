@@ -317,6 +317,23 @@ body, main {
 }
 
 
+.curiosidad-card blockquote {
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    color: var(--text-main);
+}
+
+.curiosidad-card button {
+    border-radius: 6px;
+    padding: 5px 12px;
+}
+
+.curiosidad-card button:hover {
+    background-color: #556070;
+}
+
+
 /* ============================================
    RESPONSIVE
    ============================================ */
