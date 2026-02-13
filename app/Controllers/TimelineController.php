@@ -14,16 +14,16 @@ class TimelineController
         $this->session->checkSecurity();
         $idUsuario = $this->session->get('id_usuario');
 
-        // Cargar top películas
-        $pelisModel = new Peliculas();
-        $topPeliculas = $pelisModel->obtenerPeliculasAleatorias();
+        $librosModel = new Libros();
+        $pelisModel  = new Peliculas();
 
-        // Cargar top películas
-        //$librosModel = new Libros();
-       // $topLibros = $librosModel->obtenerLibrosAleatorios();
+        // 4 libros aleatorios
+        $topLibros = $librosModel->obtenerLibrosAleatorios(4);
 
-       
-        
+        // 4 pelis aleatorias (esto ya lo tenías parecido)
+        $topPeliculas = $pelisModel->obtenerPeliculasAleatorias(4);
+
+        // Eventos del timeline
         $eventos = EventoModel::obtenerEventosTimeline($idUsuario);
 
         require __DIR__ . '/../templates/timeline.php';

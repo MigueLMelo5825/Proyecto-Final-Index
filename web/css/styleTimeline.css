@@ -242,6 +242,82 @@ body, main {
 }
 
 /* ============================================
+   LAYOUT HOME (2/3 + 1/3)
+   ============================================ */
+
+.home-layout {
+    max-width: 1200px;
+    width: 95%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* Columna izquierda mantiene estilo timeline */
+.timeline-col {
+    width: 100%;
+}
+
+/* Columna derecha */
+.curiosidades-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Estilo integrado con tu diseño */
+.curiosidad-card {
+    border: 1px solid var(--border-soft);
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.curiosidad-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.curiosidad-card:hover {
+    transform: translateY(-2px);
+    transition: 0.15s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* ============================================
+   MEJORA ESPACIADO CURIOSIDADES
+   ============================================ */
+
+.curiosidad-card {
+    padding: 24px 22px;   /* más aire interno */
+}
+
+.curiosidad-card div {
+    line-height: 1.55;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+}
+
+/* Espacio entre título generado por JS y texto */
+.curiosidad-card h2,
+.curiosidad-card h3 {
+    margin-bottom: 12px;
+}
+
+/* Separación del botón/enlace tipo Wikipedia */
+.curiosidad-card a {
+    display: inline-block;
+    margin-top: 14px;
+}
+/* Alinear curiosidades con inicio de timeline */
+.curiosidades-col {
+    padding-top: 24px;
+}
+
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
@@ -256,4 +332,11 @@ body, main {
     body::after {
         display: none;
     }
+    /* Responsive: se apilan */
+@media (max-width: 992px) {
+    .home-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
 }

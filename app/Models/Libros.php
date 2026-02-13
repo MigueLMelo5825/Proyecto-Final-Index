@@ -10,19 +10,16 @@ class Libros {
         $this->pdo = Database::getConnection();
     }
 
-    /*public function obtenerLibrosAleatorios(int $limite = 4): array {
+    
+public function obtenerLibrosAleatorios(int $limite = 4): array
+{
+    $sql = "SELECT * FROM libros ORDER BY RAND() LIMIT :limite";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-        $sql = "SELECT id, titulo, autores, categoria, imagen_url 
-                FROM libros
-                ORDER BY RAND()
-                LIMIT :limite";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }*/
 
 
     // Obtener top 5 libros
@@ -37,60 +34,134 @@ class Libros {
     }
 
    // Guardar libros importados desde API
+
 public function guardarLibros(array $libros, int $cantidad): bool {
 
     $libros = array_slice($libros, 0, $cantidad);
 
-    $sql = "INSERT INTO libros (id, titulo, autores, categoria, imagen_url)
-            VALUES (:id, :titulo, :autores, :categoria, :imagen_url)
+    $sql = "INSERT INTO libros 
+            (id, titulo, subtitulo, autores, editorial, fecha_publicacion, descripcion, 
+             isbn_10, isbn_13, paginas, categoria, imagen_url, idioma, preview_link, fecha_importacion)
+            VALUES 
+            (:id, :titulo, :subtitulo, :autores, :editorial, :fecha_publicacion, :descripcion,
+             :isbn_10, :isbn_13, :paginas, :categoria, :imagen_url, :idioma, :preview_link, NOW())
             ON DUPLICATE KEY UPDATE 
                 titulo = VALUES(titulo),
+                subtitulo = VALUES(subtitulo),
                 autores = VALUES(autores),
+                editorial = VALUES(editorial),
+                fecha_publicacion = VALUES(fecha_publicacion),
+                descripcion = VALUES(descripcion),
+                isbn_10 = VALUES(isbn_10),
+                isbn_13 = VALUES(isbn_13),
+                paginas = VALUES(paginas),
                 categoria = VALUES(categoria),
-                imagen_url = VALUES(imagen_url)";
+                imagen_url = VALUES(imagen_url),
+                idioma = VALUES(idioma),
+                preview_link = VALUES(preview_link)";
 
     $stmt = $this->pdo->prepare($sql);
 
     foreach ($libros as $l) {
 
-        // ID REAL de Google Books
+        $info = $l['volumeInfo'] ?? [];
+
+        // ID
         $id = $l['id'] ?? null;
-        if (!$id) continue; // si no tiene ID, lo saltamos
+        if (!$id) continue;
 
-        $titulo = $l['volumeInfo']['title'] ?? 'Sin título';
+        // FILTROS DE CALIDAD
+        if (!isset($info['imageLinks']['thumbnail'])) continue;
+        if (!isset($info['description'])) continue;
+        if (!isset($info['publishedDate'])) continue;
 
-        $autores = isset($l['volumeInfo']['authors'])
-            ? implode(', ', $l['volumeInfo']['authors'])
-            : 'Autor desconocido';
+        // Año mínimo 2000
+        $year = intval(substr($info['publishedDate'], 0, 4));
+        if ($year < 2000) continue;
 
-        $categoria = $l['volumeInfo']['categories'][0] ?? 'Sin categoría';
+        // Autores
+        if (!isset($info['authors'])) continue;
 
-        $imagen = $l['volumeInfo']['imageLinks']['thumbnail']
-            ?? 'web/img/fallback.png';
+        // Categoría
+        if (!isset($info['categories'])) continue;
 
+        $categoria = $info['categories'][0];
+
+        // FILTRO POR CATEGORÍAS PERMITIDAS (solo novelas)
+        $categoriasPermitidas = [
+            'Fiction',
+            'Juvenile Fiction',
+            'Young Adult Fiction',
+            'Romance',
+            'Fantasy',
+            'Science Fiction',
+            'Horror',
+            'Thriller',
+            'Mystery',
+            'Adventure',
+            'Comics & Graphic Novels'
+        ];
+
+        if (!in_array($categoria, $categoriasPermitidas)) {
+            continue;
+        }
+
+        // DATOS
+        $titulo = $info['title'] ?? 'Sin título';
+        $subtitulo = $info['subtitle'] ?? null;
+        $autores = implode(', ', $info['authors']);
+        $editorial = $info['publisher'] ?? null;
+        $fecha_publicacion = $info['publishedDate'] ?? null;
+        $descripcion = $info['description'] ?? null;
+
+        // ISBN
+        $isbn_10 = null;
+        $isbn_13 = null;
+
+        if (isset($info['industryIdentifiers'])) {
+            foreach ($info['industryIdentifiers'] as $idn) {
+                if ($idn['type'] === 'ISBN_10') $isbn_10 = $idn['identifier'];
+                if ($idn['type'] === 'ISBN_13') $isbn_13 = $idn['identifier'];
+            }
+        }
+
+        $paginas = $info['pageCount'] ?? null;
+        $imagen_url = $info['imageLinks']['thumbnail'];
+        $idioma = $info['language'] ?? null;
+        $preview_link = $info['previewLink'] ?? null;
+
+        // INSERTAR
         $stmt->execute([
             ':id' => $id,
             ':titulo' => $titulo,
+            ':subtitulo' => $subtitulo,
             ':autores' => $autores,
+            ':editorial' => $editorial,
+            ':fecha_publicacion' => $fecha_publicacion,
+            ':descripcion' => $descripcion,
+            ':isbn_10' => $isbn_10,
+            ':isbn_13' => $isbn_13,
+            ':paginas' => $paginas,
             ':categoria' => $categoria,
-            ':imagen_url' => $imagen
+            ':imagen_url' => $imagen_url,
+            ':idioma' => $idioma,
+            ':preview_link' => $preview_link
         ]);
     }
 
     return true;
 }
-    
-    public function obtenerTodos(): array {
-    $sql = "SELECT id, titulo, autores, categoria, imagen_url 
-            FROM libros 
-            ORDER BY titulo ASC";
+public function obtenerPorIds(array $ids): array
+{
+    if (empty($ids)) {
+        return [];
+    }
 
-    $stmt = $this->pdo->query($sql);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    $ids = array_filter($ids, fn($id) => is_string($id) && $id !== '');
 
-public function obtenerPorIds(array $ids): array {
-    if (empty($ids)) return [];
+    if (empty($ids)) {
+        return [];
+    }
 
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
     $sql = "SELECT * FROM libros WHERE id IN ($placeholders)";
@@ -98,6 +169,14 @@ public function obtenerPorIds(array $ids): array {
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute($ids);
 
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+public function obtenerTodos(): array
+{
+    $sql = "SELECT * FROM libros ORDER BY titulo ASC";
+    $stmt = $this->pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 

@@ -14,178 +14,179 @@ class UsuarioController
     // -------------------------------------------------------------
     // REGISTRO
     // -------------------------------------------------------------
-   public function registro(){
-   
+    public function registro()
+    {
 
-    $pdo     = Database::getConnection();
-    $paises  = $pdo->query("SELECT * FROM paises ORDER BY nombre")->fetchAll();
 
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        require __DIR__ . '/../templates/registro.php';
-        return;
-    }
+        $pdo     = Database::getConnection();
+        $paises  = $pdo->query("SELECT * FROM paises ORDER BY nombre")->fetchAll();
 
-    $username   = $_POST['username']   ?? '';
-    $nombre     = $_POST['name']       ?? '';
-    $email      = $_POST['email']      ?? '';
-    $password   = $_POST['password']   ?? '';
-    $password2  = $_POST['password2']  ?? '';
-    $pais_id    = $_POST['pais_id']    ?? null;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            require __DIR__ . '/../templates/registro.php';
+            return;
+        }
 
-    $errores = [];
+        $username   = $_POST['username']   ?? '';
+        $nombre     = $_POST['name']       ?? '';
+        $email      = $_POST['email']      ?? '';
+        $password   = $_POST['password']   ?? '';
+        $password2  = $_POST['password2']  ?? '';
+        $pais_id    = $_POST['pais_id']    ?? null;
 
-    if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $username)) {
-        $errores["username"] = "El nombre de usuario no es válido.";
-    }
+        $errores = [];
 
-    if (strlen($nombre) < 2) {
-        $errores["name"] = "El nombre es demasiado corto.";
-    }
+        if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $username)) {
+            $errores["username"] = "El nombre de usuario no es válido.";
+        }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errores["email"] = "El correo no es válido.";
-    }
+        if (strlen($nombre) < 2) {
+            $errores["name"] = "El nombre es demasiado corto.";
+        }
 
-    if (strlen($password) < 6) {
-        $errores["password"] = "La contraseña debe tener al menos 6 caracteres.";
-    }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errores["email"] = "El correo no es válido.";
+        }
 
-    if ($password !== $password2) {
-        $errores["password2"] = "Las contraseñas no coinciden.";
-    }
+        if (strlen($password) < 6) {
+            $errores["password"] = "La contraseña debe tener al menos 6 caracteres.";
+        }
 
-    // Email duplicado
-    $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
-    $stmt->execute([$email]);
-    if ($stmt->fetch()) {
-        $errores["email"] = "El correo ya está registrado.";
-    }
+        if ($password !== $password2) {
+            $errores["password2"] = "Las contraseñas no coinciden.";
+        }
 
-    // Username duplicado
-    $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE username = ?");
-    $stmt->execute([$username]);
-    if ($stmt->fetch()) {
-        $errores["username"] = "El nombre de usuario ya está en uso.";
-    }
+        // Email duplicado
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $errores["email"] = "El correo ya está registrado.";
+        }
 
-    if (!empty($errores)) {
-        $params = [
-            "errores"  => $errores,
-            "username" => $username,
-            "name"     => $nombre,
-            "email"    => $email,
-            "paises"   => $paises
-        ];
-        require __DIR__ . '/../templates/registro.php';
-        return;
-    }
+        // Username duplicado
+        $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE username = ?");
+        $stmt->execute([$username]);
+        if ($stmt->fetch()) {
+            $errores["username"] = "El nombre de usuario ya está en uso.";
+        }
 
-    // ============================
-    // INSERTAR USUARIO (CORREGIDO)
-    // ============================
+        if (!empty($errores)) {
+            $params = [
+                "errores"  => $errores,
+                "username" => $username,
+                "name"     => $nombre,
+                "email"    => $email,
+                "paises"   => $paises
+            ];
+            require __DIR__ . '/../templates/registro.php';
+            return;
+        }
 
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+        // ============================
+        // INSERTAR USUARIO (CORREGIDO)
+        // ============================
 
-    $sql = "INSERT INTO usuarios (username, nombre, email, contrasena, rol, nivel, pais, activo)
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO usuarios (username, nombre, email, contrasena, rol, nivel, pais, activo)
             VALUES (?, ?, ?, ?, 'usuario', 1, ?, 0)";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$username, $nombre, $email, $hash, $pais_id]);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$username, $nombre, $email, $hash, $pais_id]);
 
-    $idUser = $pdo->lastInsertId();
+        $idUser = $pdo->lastInsertId();
 
-    // Evento
-    $eventoModel = new EventoModel();
-    $eventoModel->registrarEvento(
-        $idUser,
-        "registro",
-        "Nuevo usuario registrado",
-        "El usuario se ha registrado en la plataforma"
-    );
+        // Evento
+        $eventoModel = new EventoModel();
+        $eventoModel->registrarEvento(
+            $idUser,
+            "registro",
+            "Nuevo usuario registrado",
+            "El usuario se ha registrado en la plataforma"
+        );
 
-    // Token activación
-    $token = bin2hex(random_bytes(32));
-    $validoHasta = time() + 3600;
+        // Token activación
+        $token = bin2hex(random_bytes(32));
+        $validoHasta = time() + 3600;
 
-    $this->usuarioModel->guardarTokenActivacion($idUser, $token, $validoHasta);
+        $this->usuarioModel->guardarTokenActivacion($idUser, $token, $validoHasta);
 
-    // Enlace activación
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $base   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        // Enlace activación
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $base   = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
-    $link = "{$scheme}://{$host}{$base}/index.php?ctl=activar&token=" . urlencode($token);
+        $link = "{$scheme}://{$host}{$base}/index.php?ctl=activar&token=" . urlencode($token);
 
-    $subject = "Activa tu cuenta";
-    $htmlBody = "
+        $subject = "Activa tu cuenta";
+        $htmlBody = "
         <h2>Activación de cuenta</h2>
         <p>Hola " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . ",</p>
         <p>Gracias por registrarte. Para activar tu cuenta, haz clic en el siguiente enlace:</p>
         <p><a href='{$link}'>{$link}</a></p>
         <p>Este enlace es válido por 1 hora.</p>";
-    $altBody = "Activa tu cuenta: {$link} (válido por 1 hora)";
+        $altBody = "Activa tu cuenta: {$link} (válido por 1 hora)";
 
-    Mailer::enviar($email, $nombre, $subject, $htmlBody, $altBody);
+        Mailer::enviar($email, $nombre, $subject, $htmlBody, $altBody);
 
-    $_SESSION['swal'] = [
-    'title' => 'Registro completado',
-    'text'  => 'Tu cuenta ha sido creada. Revisa tu correo para activar tu cuenta.',
-    'icon'  => 'success'
-];
-    
+        $_SESSION['swal'] = [
+            'title' => 'Registro completado',
+            'text'  => 'Tu cuenta ha sido creada. Revisa tu correo para activar tu cuenta.',
+            'icon'  => 'success'
+        ];
 
-    header("Location: index.php?ctl=login");
-    exit;
-}
+
+        header("Location: index.php?ctl=login");
+        exit;
+    }
 
 
     // -------------------------------------------------------------
     // LOGIN
     // -------------------------------------------------------------
     public function login()
-{
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        require __DIR__ . '/../templates/login.php';
-        return;
-    }
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            require __DIR__ . '/../templates/login.php';
+            return;
+        }
 
-    $email    = $_POST['email']    ?? '';
-    $password = $_POST['password'] ?? '';
+        $email    = $_POST['email']    ?? '';
+        $password = $_POST['password'] ?? '';
 
-    $usuario = $this->usuarioModel->validarLogin($email, $password);
+        $usuario = $this->usuarioModel->validarLogin($email, $password);
 
-    if ($usuario && !isset($usuario['__inactivo__'])) {
+        if ($usuario && !isset($usuario['__inactivo__'])) {
 
-        // ⭐ Usa el nivel REAL de la BD
-        $nivel = $usuario['nivel'];
+            // ⭐ Usa el nivel REAL de la BD
+            $nivel = $usuario['nivel'];
 
-        // ⭐ LOGIN OFICIAL DEL SISTEMA (guarda nivel, id, nombre, etc.)
-        $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
+            // ⭐ LOGIN OFICIAL DEL SISTEMA (guarda nivel, id, nombre, etc.)
+            $this->session->login($usuario['id'], $usuario['nombre'], $nivel);
 
-        CookieManager::set('usuarioNombre', $usuario['nombre']);
+            CookieManager::set('usuarioNombre', $usuario['nombre']);
 
-        header("Location: index.php?ctl=perfil");
-        exit;
-    }
+            header("Location: index.php?ctl=perfil");
+            exit;
+        }
 
-    if (is_array($usuario) && isset($usuario['__inactivo__'])) {
+        if (is_array($usuario) && isset($usuario['__inactivo__'])) {
+            $_SESSION['swal'] = [
+                'title' => 'Cuenta inactiva',
+                'text'  => 'Tu cuenta no está activa. Revisa tu correo para activar tu cuenta.',
+                'icon'  => 'warning'
+            ];
+            header("Location: index.php?ctl=login");
+            exit;
+        }
+
         $_SESSION['swal'] = [
-            'title' => 'Cuenta inactiva',
-            'text'  => 'Tu cuenta no está activa. Revisa tu correo para activar tu cuenta.',
-            'icon'  => 'warning'
+            'title' => 'Error de login',
+            'text'  => 'Contraseña incorrecta. Inténtalo de nuevo.',
+            'icon'  => 'error'
         ];
         header("Location: index.php?ctl=login");
         exit;
     }
-
-    $_SESSION['swal'] = [
-        'title' => 'Error de login',
-        'text'  => 'Contraseña incorrecta. Inténtalo de nuevo.',
-        'icon'  => 'error'
-    ];
-    header("Location: index.php?ctl=login");
-    exit;
-}
 
 
     // -------------------------------------------------------------
@@ -219,8 +220,23 @@ class UsuarioController
 
         // Cargar top libros
         $librosModel = new Libros();
+
         $topLibrosIds = json_decode($usuario['top_libros'] ?? '[]', true);
+
+        if (!is_array($topLibrosIds)) {
+            $topLibrosIds = [];
+        }
+
         $topLibros = $librosModel->obtenerPorIds($topLibrosIds);
+
+
+        // Si json_decode falla o no devuelve un array → lo convertimos en array vacío
+        if (!is_array($topLibrosIds)) {
+            $topLibrosIds = [];
+        }
+
+        $topLibros = $librosModel->obtenerPorIds($topLibrosIds);
+
 
         // Cargar top películas
         $pelisModel = new Peliculas();

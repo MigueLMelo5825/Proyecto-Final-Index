@@ -154,5 +154,5 @@ function seleccionarLibro(li) {
 
     const url = `${urlRedireccion}&id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`;
     console.log("Redirigiendo a:", url);
-    //window.location.href = url;
+    window.location.href = url;
 }

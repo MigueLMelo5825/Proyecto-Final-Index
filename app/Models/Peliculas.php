@@ -46,19 +46,15 @@ class Peliculas {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-public function obtenerPeliculasAleatorias(int $limite = 4): array {
-
-    $sql = "SELECT id, titulo, genero, portada, descripcion, anio
-            FROM peliculas
-            ORDER BY RAND()
-            LIMIT :limite";
-
+public function obtenerPeliculasAleatorias(int $limite = 4): array
+{
+    $sql = "SELECT * FROM peliculas ORDER BY RAND() LIMIT :limite";
     $stmt = $this->pdo->prepare($sql);
     $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
     $stmt->execute();
-
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 
     // ------------------------------------------------------
