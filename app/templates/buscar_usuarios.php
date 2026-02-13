@@ -12,7 +12,7 @@
 
       <input type="text"
              name="q"
-             placeholder="Buscar por usuario o email..."
+             placeholder="Buscar por usuario..."
              value="<?= htmlspecialchars($termino ?? '') ?>">
 
       <button type="submit">Buscar</button>
@@ -21,21 +21,36 @@
     <!-- Lista de usuarios -->
     <?php if (!empty($usuarios)): ?>
       <ul class="usuarios-list list-group">
+
         <?php foreach ($usuarios as $u): ?>
+
+          <!-- Ocultar tu propia cuenta -->
+          <?php if ($u['id'] == $_SESSION['id_usuario']) continue; ?>
+
           <li class="usuario-item list-group-item">
-            <img src="<?= $u['foto'] ?>" width="40" height="40" alt="@<?= htmlspecialchars($u['username']) ?>">
+
+            <!-- Foto -->
+            <img src="<?= htmlspecialchars($u['foto']) ?>"
+                 width="40" height="40"
+                 alt="@<?= htmlspecialchars($u['username']) ?>">
+
+            <!-- Solo username -->
             <div class="usuario-info">
               <a href="index.php?ctl=perfil&id=<?= $u['id'] ?>">
                 @<?= htmlspecialchars($u['username']) ?>
               </a>
-              <small><?= htmlspecialchars($u['email']) ?></small>
             </div>
+
           </li>
+
         <?php endforeach; ?>
+
       </ul>
+
     <?php elseif (!empty($termino)): ?>
-      <p class="no-results">No se encontraron usuarios con ese email.</p>
+      <p class="no-results">No se encontraron usuarios con ese nombre.</p>
     <?php endif; ?>
+
   </div>
 </div>
 
