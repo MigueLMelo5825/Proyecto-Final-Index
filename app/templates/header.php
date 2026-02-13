@@ -27,6 +27,7 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= $base_url ?>web/css/styles.css">
+    <link rel="stylesheet" href="web/css/styleFuentes.css">
     <link rel="icon" type="image/png" href="web/img/INDEX-01_favicon.png">
 
     <!-- Bootstrap CSS -->
@@ -64,35 +65,24 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
                 </ul>
 
                 <!-- BUSCADOR -->
-<?php if(isset($_SESSION['id_usuario'])): ?>
-<form class="d-flex me-3 position-relative" role="search" method="GET" action="index.php">
-    <input type="hidden" name="ctl" value="buscar">
-
-    <input 
-        class="form-control" 
-        type="search" 
-        placeholder="Buscar..." 
-        id="inputLibro" 
-        name="texto"
-    >
-
-    <div id="resultadosBusqueda"
-        class="list-group position-absolute w-100 mt-5"
-        style="z-index: 2000;">
-    </div>
-</form>
-<?php endif; ?>
-
+                <?php if (isset($_SESSION['id_usuario'])): ?>
+                    <form class="d-flex me-3 position-relative" role="search" method="GET" action="index.php">
+                        <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
+                        <div id="resultadosBusqueda"
+                            class="list-group position-absolute w-100 mt-5"
+                            style="z-index: 2000;"></div>
+                    </form>
+                <?php endif; ?>
 
                 <!-- EXPLORAR COMUNIDAD (solo si está logueado) -->
                 <?php if ($loggedIn): ?>
-                <ul class="navbar-nav me-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $base_url ?>index.php?ctl=buscarUsuarios">
-                            Explorar comunidad
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="navbar-nav me-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $base_url ?>index.php?ctl=buscarUsuarios">
+                                Explorar comunidad
+                            </a>
+                        </li>
+                    </ul>
                 <?php endif; ?>
 
                 <!-- DERECHA (según sesión) -->

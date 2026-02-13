@@ -124,6 +124,7 @@ if (!$urlImagenPortada) {
     <meta charset="UTF-8">
     <title><?= escaparHTML($libroPelicula['titulo']) ?></title>
     <link rel="stylesheet" href="<?php echo $root ?>web/css/fichaLibroPelicula.css">
+    <link rel="stylesheet" href="web/css/styleFuentes.css">
 </head>
 
 <body>
@@ -256,59 +257,59 @@ if (!$urlImagenPortada) {
                         <button id="btn-leer-mas" class="btn-expandir">Leer más</button>
                     </div>
                 <?php endif; ?>
-                
+
                 <!-- La comunidad se crea dinámicamente -->
-                <?php if(count($comentarios) > 0): ?>
+                <?php if (count($comentarios) > 0): ?>
                     <section class="panel-comunidad" style="display: block;">
-                <?php else: ?>
-                    <section class="panel-comunidad" style="display: none;">
-                <?php endif; ?>
-                <?php if (!empty($comentarios)): ?>
-                        <div class="comunidad">
-                            <h3>Comunidad</h3>
-                            <div class="lista-comentarios">
-                                <?php foreach ($comentarios as $c): ?>
-                                    <div class="comentario-item" data-id="<?= $c['id_comentario'] ?>">
-                                        <img src="<?= $root . $c['foto'] ?>" class="img-perfil-mini">
-                                        <div class="comentario-cuerpo">
-                                            <strong><?= htmlspecialchars($c['username']) ?></strong>
-                                            <small><?= htmlspecialchars($c['pais']) ?></small>
-                                            <p class="texto-comentario"><?= htmlspecialchars($c['texto']) ?></p>
-                                            <small class="tiempo-relativo" data-fecha="<?= $c['fecha'] ?>"><?= $c['fecha'] ?></small>
-                                            <?php if ($c['esPropio']): ?>
-                                            <div class="acciones-comentario">
-                                                <button class="btn-editar" data-id="<?= $c['id_comentario'] ?>">Editar</button>
-                                                <button class="btn-eliminar" data-id="<?= $c['id_comentario'] ?>">Eliminar</button>
+                    <?php else: ?>
+                        <section class="panel-comunidad" style="display: none;">
+                        <?php endif; ?>
+                        <?php if (!empty($comentarios)): ?>
+                            <div class="comunidad">
+                                <h3>Comunidad</h3>
+                                <div class="lista-comentarios">
+                                    <?php foreach ($comentarios as $c): ?>
+                                        <div class="comentario-item" data-id="<?= $c['id_comentario'] ?>">
+                                            <img src="<?= $root . $c['foto'] ?>" class="img-perfil-mini">
+                                            <div class="comentario-cuerpo">
+                                                <strong><?= htmlspecialchars($c['username']) ?></strong>
+                                                <small><?= htmlspecialchars($c['pais']) ?></small>
+                                                <p class="texto-comentario"><?= htmlspecialchars($c['texto']) ?></p>
+                                                <small class="tiempo-relativo" data-fecha="<?= $c['fecha'] ?>"><?= $c['fecha'] ?></small>
+                                                <?php if ($c['esPropio']): ?>
+                                                    <div class="acciones-comentario">
+                                                        <button class="btn-editar" data-id="<?= $c['id_comentario'] ?>">Editar</button>
+                                                        <button class="btn-eliminar" data-id="<?= $c['id_comentario'] ?>">Eliminar</button>
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
-                                            <?php endif; ?>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
-                <?php endif; ?>
-                </section>
-                
+                        <?php endif; ?>
+                        </section>
 
-                <!-- SECCIÓN COMENTARIOS DARK -->
-                <section class="panel-comentarios">
-                    <h3>Haz un comentario</h3>
 
-                    <form class="form-post">
-                        <textarea placeholder="¿Qué te ha parecido?..." required></textarea>
-                        <button type="submit" class="btn-publicar">Publicar</button>
-                    </form>
+                        <!-- SECCIÓN COMENTARIOS DARK -->
+                        <section class="panel-comentarios">
+                            <h3>Haz un comentario</h3>
 
-                    <p class="msj-vacio" style="display: <?= !$comentarios ? 'block' : 'none' ?>;">Sé el primero en comentar</p>
+                            <form class="form-post">
+                                <textarea placeholder="¿Qué te ha parecido?..." required></textarea>
+                                <button type="submit" class="btn-publicar">Publicar</button>
+                            </form>
 
-                </section>
+                            <p class="msj-vacio" style="display: <?= !$comentarios ? 'block' : 'none' ?>;">Sé el primero en comentar</p>
+
+                        </section>
             </div>
         </div>
     </main>
 
     <?php include_once __DIR__ . '/../templates/footer.php'; ?>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-               
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="<?php echo $root ?>web/js/fichaLibroPelicula.js"></script>
 </body>
 

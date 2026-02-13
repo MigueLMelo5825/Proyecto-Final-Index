@@ -1,28 +1,57 @@
-/* =========================
-   VARIABLES TIMELINE
-   ========================= */
-:root {
-   
-    --bg-card: #ffffff;           /* contenedor blanco */
-    --bg-card-propio: #e0f0ff;    /* azul muy claro para propios */
-    --border-soft: #d1d5db;       /* gris claro */
-    --text-main: #111111;         /* negro fuerte */
-    --text-soft: #4b5563;         /* gris oscuro para textos secundarios */
-    --accent: #3b82f6;            /* azul eléctrico */
+/* ============================================
+   AISLAMIENTO DE ESTILOS PARA ESTA PÁGINA
+   ============================================ */
+.home-page {
+    font-family: inherit;
 }
 
-/* =========================
+/* ============================================
+   PALETA ACTUALIZADA (GRISES + AZULADO SUAVE)
+   ============================================ */
+:root {
+    --bg-card: #ffffff;
+    --bg-card-propio: #eef1f5;
+    --border-soft: #d1d5db;
+    --text-main: #111111;
+    --text-soft: #4b5563;
+    --accent: #6b7a8f;
+}
+
+/* ============================================
+   TITULARES PRINCIPALES (MISMA TIPOGRAFÍA QUE ACTIVIDAD RECIENTE)
+   ============================================ */
+.home-page h2,
+.home-page h3 {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--text-main);
+    letter-spacing: -0.2px;
+    margin-bottom: 0.8rem;
+}
+
+/* Línea decorativa igual que timeline */
+.home-page h2::after,
+.home-page h3::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--accent);
+    margin-top: 6px;
+    border-radius: 2px;
+}
+
+/* ============================================
    CONTENEDOR TIMELINE
-   ========================= */
+   ============================================ */
 body, main {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-
 }
 
 .timeline {
-    position: relative; /* necesario para las imágenes laterales */
+    position: relative;
     max-width: 1200px;
     width: 95%;
     margin: 0 auto;
@@ -32,9 +61,9 @@ body, main {
     gap: 16px;
 }
 
-/* =========================
+/* ============================================
    EVENTO (ITEM FEED)
-   ========================= */
+   ============================================ */
 .evento {
     display: flex;
     gap: 16px;
@@ -44,8 +73,8 @@ body, main {
 
     border-radius: 8px;
     border: 1px solid var(--border-soft);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     background-color: var(--bg-card);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 
@@ -64,9 +93,9 @@ body, main {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* =========================
+/* ============================================
    AVATAR
-   ========================= */
+   ============================================ */
 .evento-avatar img {
     width: 48px;
     height: 48px;
@@ -75,9 +104,9 @@ body, main {
     border: 2px solid var(--accent);
 }
 
-/* =========================
+/* ============================================
    CABECERA
-   ========================= */
+   ============================================ */
 .evento-header {
     display: flex;
     align-items: center;
@@ -107,9 +136,9 @@ body, main {
     color: var(--text-soft);
 }
 
-/* =========================
+/* ============================================
    CONTENIDO
-   ========================= */
+   ============================================ */
 .evento-contenido h4 {
     margin: 0;
     font-size: 0.95rem;
@@ -124,22 +153,22 @@ body, main {
     color: var(--text-soft);
 }
 
-/* =========================
-   TÍTULO Y LÍNEA DECORATIVA
-   ========================= */
+/* ============================================
+   TÍTULO TIMELINE
+   ============================================ */
 .timeline h2::after {
     content: "";
     display: block;
-    width: 60px;          
-    height: 3px;          
+    width: 60px;
+    height: 3px;
     background-color: var(--accent);
-    margin-top: 8px;      
+    margin-top: 8px;
     border-radius: 2px;
 }
 
-/* =========================
+/* ============================================
    ETIQUETAS
-   ========================= */
+   ============================================ */
 .evento .tag {
     display: inline-block;
     font-size: 0.7rem;
@@ -151,9 +180,9 @@ body, main {
     margin-left: 8px;
 }
 
-/* =========================
+/* ============================================
    ANIMACIONES
-   ========================= */
+   ============================================ */
 @keyframes appear {
     to {
         opacity: 1;
@@ -175,22 +204,53 @@ body, main {
     }
 }
 
-/* =========================
-   IMÁGENES LATERALES
-   ========================= */
+/* ============================================
+   TARJETAS DE PELÍCULAS (REDISEÑADAS)
+   ============================================ */
+.recom-card {
+    border: 1px solid var(--border-soft);
+    background-color: #f9fafb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
 
+.recom-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
 
-/* =========================
+.recom-card img {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.recom-card .card-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.recom-card .btn {
+    background-color: var(--accent);
+    border: none;
+    padding: 4px 10px;
+}
+
+.recom-card .btn:hover {
+    background-color: #556070;
+}
+
+/* ============================================
    RESPONSIVE
-   ========================= */
+   ============================================ */
 @media (max-width: 768px) {
     .timeline::before,
     .timeline::after {
         display: none;
     }
 }
-    
-/* OPCIONAL: ocultarlas en móvil */
+
 @media (max-width: 768px) {
     body::before,
     body::after {

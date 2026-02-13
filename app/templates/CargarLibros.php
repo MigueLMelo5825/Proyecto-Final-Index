@@ -1,8 +1,4 @@
 <?php
-
-require_once dirname(__DIR__).'/Core/Database.php';
-require_once dirname(__DIR__).'/Core/ConexionApiLibros.php';
-
 try {
     $pdo = Database::getConnection();
 

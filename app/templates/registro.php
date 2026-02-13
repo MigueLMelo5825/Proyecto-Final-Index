@@ -1,5 +1,6 @@
 <?php require __DIR__ . "/header.php"; ?>
 <link rel="stylesheet" href="web/css/forms.css">
+<link rel="stylesheet" href="web/css/styleFuentes.css">
 
 <div class="form-page">
 

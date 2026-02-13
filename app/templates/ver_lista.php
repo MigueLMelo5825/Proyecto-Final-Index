@@ -28,6 +28,7 @@ if (!isset($items)) {
     <title><?= htmlspecialchars($lista['nombre']) ?> – Lista</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="web/css/styleperfil.css">
+    <link rel="stylesheet" href="web/css/styleFuentes.css">
 </head>
 <body>
 

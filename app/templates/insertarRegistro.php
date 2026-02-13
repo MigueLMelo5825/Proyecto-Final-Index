@@ -1,6 +1,5 @@
 <?php
 
-require_once '../../app/libs/bGeneral.php'; 
 
 function registro()
 {

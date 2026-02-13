@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recuperar contraseña</title>
   <link rel="stylesheet" href="web/css/forms.css">
+  <link rel="stylesheet" href="web/css/styleFuentes.css">
 </head>
 <body>
 

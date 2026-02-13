@@ -41,6 +41,11 @@ require_once __DIR__ . '/app/Controllers/UsuarioController.php';
 require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/Exception.php';
 require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/PHPMailer.php';
 require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
+// ============================================================
+// HELPERS
+// ============================================================
+require_once __DIR__ . '/app/helpers/formatearEventos.php';
+
 
 
 // ============================================================

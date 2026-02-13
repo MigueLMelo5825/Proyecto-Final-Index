@@ -1,5 +1,6 @@
 <?php include_once __DIR__ . '/header.php'; ?>
 <link rel="stylesheet" href="web/css/forms.css">
+<link rel="stylesheet" href="web/css/styleFuentes.css">
 
 <div class="list-page">
   <div class="list-container">

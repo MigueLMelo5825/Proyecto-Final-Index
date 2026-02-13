@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="web/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="web/css/style.css">
+    <link rel="stylesheet" href="web/css/styleFuentes.css">
 
     <style>
         .top-item img {

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contraseña actualizada</title>
-
-  <link rel="stylesheet" href="web/css/activar_cuenta.css">
+<link rel="stylesheet" href="web/css/forms.css">
+<link rel="stylesheet" href="web/css/styleFuentes.css">
 </head>
 
 <body>

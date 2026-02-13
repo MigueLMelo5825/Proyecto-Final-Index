@@ -26,6 +26,7 @@ if (!isset($listas)) $listas = [];
     <title>Perfil</title>
 
     <link rel="stylesheet" href="web/css/stylePerfil.css">
+    <link rel="stylesheet" href="web/css/styleFuentes.css">
 </head>
 
 <body>

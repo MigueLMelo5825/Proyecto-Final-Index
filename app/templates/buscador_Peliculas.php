@@ -2,8 +2,6 @@
 
 //añadimos el archivo Database
 
-require_once dirname(__DIR__).'/Core/Database.php';
-
 try {
 
     $pdo = Database::getConnection();
