@@ -28,7 +28,7 @@
       <div class="container">
         <div class="p-4 rounded-4 welcome-card">
           <h2 class="fw-bold">
-            Bienvenido, <?= htmlspecialchars($_SESSION['usuarioNombre'] ?? 'Usuario') ?> 👋
+            Bienvenid@, <?= htmlspecialchars($_SESSION['usuarioNombre'] ?? 'Usuario') ?> 👋
           </h2>
         </div>
       </div>

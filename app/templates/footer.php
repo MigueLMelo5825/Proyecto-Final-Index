@@ -30,7 +30,6 @@
         <div class="row align-items-start">
 
             <div class="col-md-4 mb-3">
-                <h3 class="h5">INDEX</h3>
                 <p>Tu biblioteca personal de libros y películas.</p>
 
                 <img src="<?= $base_url ?>web/img/INDEX-02.png" 
