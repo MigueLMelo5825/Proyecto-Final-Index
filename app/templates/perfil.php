@@ -34,8 +34,6 @@ if ($fotoPerfil === '' || !file_exists($fotoPerfil)) {
     <title>Perfil - <?= htmlspecialchars($usuario['username']) ?></title>
     <link rel="stylesheet" href="web/css/stylePerfil.css">
     <link rel="stylesheet" href="web/css/styleFuentes.css">
-    <!-- Agregamos el CSS del Dashboard para el Sidebar -->
-    <link rel="stylesheet" href="web/css/style_dashboard.css">
 </head>
 <body class="perfil-page">
 
