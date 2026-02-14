@@ -1,4 +1,28 @@
 <?php
+
+// Configuración segura de sesión
+if (session_status() === PHP_SESSION_NONE) {
+    // Configuraciones seguras recomendadas
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure', '0');           // Cambia a '1' en producción con HTTPS
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+    ini_set('session.gc_maxlifetime', '3600');       // 1 hora
+
+    // Verificación de depuración (comenta esto después de solucionar el problema)
+    if (headers_sent($file, $line)) {
+        die("ERROR: Las cabeceras ya fueron enviadas en el archivo: <b>$file</b> línea <b>$line</b><br>"
+          . "Revisa espacios, líneas en blanco o echo/print antes de este punto.");
+    }
+
+    session_start();
+
+    // Nivel por defecto si no existe
+    if (!isset($_SESSION['usuarioNivel'])) {
+        $_SESSION['usuarioNivel'] = 0; // ROLE_GUEST
+    }
+}
 class SessionManager
 {
     private string $loginPage;
@@ -158,5 +182,3 @@ class SessionManager
         return $this->getUserLevel() >= $requiredLevel;
     }
 }
-
-?>
