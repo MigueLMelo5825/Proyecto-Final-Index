@@ -30,11 +30,6 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# ====================
-# Configuración de apache
-# ====================
-COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
-
 # exponemos el puerto
 EXPOSE 80
 
