@@ -9,7 +9,8 @@
 
   <link rel="stylesheet" href="web/css/styleTimeline.css">
   <link rel="stylesheet" href="web/css/styleFuentes.css">
-
+  
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -242,18 +243,30 @@
 </div>
  
 <!-- FRASE LITERARIA -->
-<div class="ext-card p-4 text-center curiosidad-card">
+
+<div id="quoteApp" class="ext-card p-4 text-center curiosidad-card">
   <h3>Frase literaria</h3>
 
-  <blockquote id="quoteText" class="mb-3 fs-5"></blockquote>
-  <div id="quoteAuthor" class="text-secondary small"></div>
+  <blockquote v-if="currentQuote" class="mb-3 fs-5">
+    “{{ currentQuote.text }}”
+  </blockquote>
 
-  <button class="btn btn-sm mt-3"
-          style="background-color: var(--accent); color: white;"
-          id="newQuoteBtn">
+  <div v-if="currentQuote" class="text-secondary small">
+    — {{ currentQuote.author }}
+  </div>
+
+  <button
+    class="btn btn-sm mt-3"
+    style="background-color: var(--accent); color: white;"
+    @click="displayRandomQuote"
+    type="button"
+  >
     Otra frase
   </button>
 </div>
+ 
+
+
 
 
     </aside>
