@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-=======
-/* 
-   TIPOGRAFÍAS (LORA + SOURCE SANS PRO)
- */
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&display=swap');
-
-
-/* SE IMPORTAN LOS ARCHIVOS GENERALES DE STYLES.CSS */
-@import url("../css/styles.css"); 
-
-
-/* 
-   FICHA DE DETALLE PROFESIONAL 
-   Fuentes: Lora para títulos (elegancia), Source Sans Pro para datos (lectura limpia)
-*/
-@import url('https://fonts.googleapis.com');
-
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 :root {
     --dark-base: rgb(33, 37, 41);
     --dark-hover: #2c3034;
@@ -30,10 +11,6 @@
 
 body {
     background-color: var(--white);
-<<<<<<< HEAD
-=======
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
     color: var(--dark-base);
     line-height: 1.6;
 }
@@ -208,11 +185,7 @@ body {
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-<<<<<<< HEAD
 /* Contador de Likes */
-=======
-/* Contador de Likes junto al botón Like */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 .badge-likes {
     display: inline-block;
     background-color: var(--accent-red);
@@ -231,8 +204,6 @@ body {
     transform: scale(1.1);
 }
 
-<<<<<<< HEAD
-=======
 /* Ajuste para el contenedor del botón Like y badge */
 .rating-social-bar #btn-favorito {
     position: relative; /* Para poder posicionar elementos internos si quieres */
@@ -242,7 +213,6 @@ body {
     position: relative; /* Mantener dentro del flujo, pero permitir ajustes */
 }
 
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 /* Info Técnica */
 .info-tecnica {
     display: grid;
@@ -259,11 +229,7 @@ body {
     margin: 0;
 }
 
-<<<<<<< HEAD
 /* Descripción */
-=======
-/* Descripción con Leer Más */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 .seccion-descripcion h3 {
     font-size: 22px;
     margin-bottom: 15px;
@@ -304,7 +270,6 @@ body {
     font-size: 14px;
 }
 
-<<<<<<< HEAD
 /* ============================= */
 /* PANEL COMENTARIOS (ANTES DARK → AHORA CLARO) */
 /* ============================= */
@@ -316,39 +281,19 @@ body {
     border-radius: 16px;
     margin-top: 50px;
     border: 1px solid #e5e7eb;
-=======
-/* --- PANEL COMENTARIOS (VERSIÓN CLARA Y LEGIBLE) --- */
-.panel-comentarios {
-    background-color: #f8f9fa; /* fondo claro */
-    color: #222;               /* texto oscuro */
-    padding: 30px;
-    border-radius: 16px;
-    margin-top: 50px;
-    border: 1px solid #e0e0e0;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 }
 
 .panel-comentarios h3 {
     margin-top: 0;
-<<<<<<< HEAD
     border-bottom: 1px solid #d0d5dd;
     padding-bottom: 15px;
     color: #1e293b;
 }
 
-=======
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 15px;
-    color: #222;
-}
-
-/* FORMULARIO */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 .form-post {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-<<<<<<< HEAD
     gap: 10px;
 }
 
@@ -358,30 +303,10 @@ body {
     background: #ffffff;
     border: 1px solid #cbd5e1;
     color: #1e293b;
-=======
-    gap: 12px;
-}
-
-/* TEXTAREA CLARO */
-.form-post textarea {
-    width: 100%;
-    max-width: 800px;
-    background: #ffffff;          /* fondo blanco */
-    border: 1px solid #ccc;       /* borde suave */
-    color: #222;                  /* texto oscuro */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
     border-radius: 8px;
     padding: 15px;
     font-family: inherit;
     resize: none;
-<<<<<<< HEAD
-    height: 100px;
-}
-
-.btn-publicar {
-    background-color: #252526;
-    color: #ffffff;
-=======
     height: 120px;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -394,13 +319,10 @@ body {
 .btn-publicar {
     background-color: #2f3338; /* gris oscuro elegante */
     color: white;
-    font-weight: 700;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
     border: none;
     padding: 10px 25px;
     border-radius: 20px;
     cursor: pointer;
-<<<<<<< HEAD
     transition: transform 0.2s ease;
 }
 
@@ -419,35 +341,11 @@ body {
 .panel-comunidad {
     margin-top: 50px;
     background: #fff;
-=======
-    transition: background 0.2s, transform 0.2s;
-}
-
-.btn-publicar:hover {
-    background-color: #1f2225;
-    transform: translateY(-2px);
-}
-
-
-/* MENSAJE VACÍO */
-.msj-vacio {
-    text-align: center;
-    color: #666;
-    margin-top: 20px;
-    font-style: italic;
-}
-
-/* LISTA DE COMENTARIOS (VERSIÓN CLARA) */
-.panel-comunidad {
-    margin-top: 50px;
-    background: #ffffff;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
-<<<<<<< HEAD
 .comunidad h3 {
     font-size: 24px;
     color: #1e293b;
@@ -463,26 +361,17 @@ body {
     gap: 20px;
 }
 
-=======
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 .comentario-item {
     display: flex;
     gap: 15px;
     padding: 20px;
-<<<<<<< HEAD
     background: #f9f9fbcb;
     border-radius: 12px;
     transition: transform 0.2s ease;
-=======
-    background: #f3f4f6;
-    border-radius: 12px;
-    transition: transform 0.2s ease, background 0.2s;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 }
 
 .comentario-item:hover {
     transform: translateX(5px);
-<<<<<<< HEAD
     background: #f1f1f5dc;
 }
 
@@ -560,154 +449,15 @@ body {
 }
 
 /* TEXTAREA EDICIÓN */
-=======
-    background: #e9eaed;
-}
-
-.texto-comentario {
-    color: #333;
-}
-/* ============================
-   ESTILO GENERAL DE COMENTARIOS
-   ============================ */
-
-.panel-comunidad {
-    margin-top: 50px;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-}
-
-/* Cada comentario */
-.comentario-item {
-    display: flex;
-    gap: 15px;
-    padding: 20px;
-    background: #f3f4f6;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    transition: transform 0.2s ease, background 0.2s;
-}
-
-.comentario-item:hover {
-    transform: translateX(5px);
-    background: #e9eaed;
-}
-
-/* Avatar */
-.comentario-item img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-    border: 2px solid #ddd;
-}
-
-/* Contenido del comentario */
-.texto-comentario {
-    flex: 1;
-    color: #333;
-}
-
-/* Nombre + país */
-.texto-comentario .meta-usuario {
-    font-weight: 700;
-    color: #222;
-    margin-bottom: 5px;
-    font-size: 15px;
-}
-
-/* Texto del comentario */
-.texto-comentario p {
-    margin: 5px 0 10px 0;
-    font-size: 15px;
-}
-
-/* Fecha */
-.fecha-comentario {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 10px;
-}
-
-/* ============================
-   BOTONES EDITAR / ELIMINAR (DISEÑO MODERNO)
-   ============================ */
-
-.btn-comentario {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-}
-
-/* Botón Editar */
-.btn-editar {
-    background-color: #eef6ff;
-    color: #0b5cab;
-    border-color: #bcd9ff;
-}
-
-.btn-editar:hover {
-    background-color: #d9ebff;
-    border-color: #a8cfff;
-    transform: translateY(-1px);
-}
-
-/* Botón Eliminar */
-.btn-eliminar {
-    background-color: #fff2f2;
-    color: #c62828;
-    border-color: #f5b5b5;
-}
-
-.btn-eliminar:hover {
-    background-color: #ffe3e3;
-    border-color: #f29a9a;
-    transform: translateY(-1px);
-}
-
-
-.btn-comentario {
-    display: inline-block;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    margin-right: 8px;
-}
-
-/* TEXTAREA DE EDICIÓN (CLARO) */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 .edit-text {
     width: 100%;
     min-height: 80px;
     padding: 12px;
-<<<<<<< HEAD
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     font-family: inherit;
     font-size: 15px;
     color: #1e293b;
-=======
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 15px;
-    color: #222;
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
     background-color: #ffffff;
     resize: vertical;
     margin-bottom: 10px;
@@ -716,7 +466,6 @@ body {
 }
 
 .edit-text:focus {
-<<<<<<< HEAD
     border-color: #5007af;
     box-shadow: 0 0 0 4px rgba(80, 7, 175, 0.1);
 }
@@ -761,16 +510,6 @@ body {
 }
 
 /* RESPONSIVE */
-=======
-    border-color: #6b7a8f;
-    box-shadow: 0 0 0 4px rgba(107, 122, 143, 0.15);
-}
-
-
-
-
-/* --- RESPONSIVE --- */
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
 @media (max-width: 850px) {
     .detalle-grid { grid-template-columns: 1fr; }
     .portada { position: static; max-width: 300px; margin: 0 auto; }
@@ -787,7 +526,3 @@ body {
         margin-top: 5px;
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> d060b9d0418427e19b028525360d5cf0bde265a7
