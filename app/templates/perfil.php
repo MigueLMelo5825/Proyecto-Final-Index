@@ -149,9 +149,15 @@ if (!isset($listas)) $listas = [];
                     <strong><?= htmlspecialchars($lista['nombre']) ?></strong>
                     <p><?= htmlspecialchars($lista['descripcion']) ?></p>
                 </div>
-                <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" class="btn-lista">
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="index.php?ctl=verLista&id=<?= $lista['id'] ?>" class="btn-success">
                     Ver lista
                 </a>
+                <a href="index.php?ctl=eliminarLista&id=<?= $lista['id'] ?>" class="btn btn-danger rounded-5 ps-3 pe-3 fw-semibold">
+                    Eliminar
+                </a>
+                </div>
+                
             </div>
         <?php endforeach; ?>
     </div>

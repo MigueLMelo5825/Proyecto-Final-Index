@@ -89,7 +89,8 @@
 }
 
 .form-group textarea {
-    height: 40px;          /* igual que los inputs */
+    height:auto;       
+    /* igual que los inputs */
     resize: vertical;       /* permite al usuario agrandarlo solo verticalmente */
     line-height: 1.4;       /* para que el texto no se vea aplastado */
     padding: 12px 14px;     /* mismo padding que inputs */

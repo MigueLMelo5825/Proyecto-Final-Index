@@ -112,6 +112,8 @@ class ListaController
             $descripcion = isset($data['anio']) ? "Año: " . $data['anio'] : "Sin información disponible";
         }
 
+    
+
         // Insertar en la lista
         $sql = "INSERT INTO listas_items (id_lista, titulo, descripcion, id_libro, id_pelicula, añadido_en)
                 VALUES (?, ?, ?, ?, ?, NOW())";
@@ -174,5 +176,26 @@ class ListaController
         $items = ListaItemsModel::obtenerItems($conexion, $idLista);
 
         require __DIR__ . '/../templates/ver_lista.php';
+    }
+    public function eliminar(){
+        $this->session->checkSecurity();
+        $idLista = $_GET['id'] ?? null;
+
+        if (!$idLista) {
+            echo "<h2>Error: lista no encontrada.</h2>";
+            return;
+        }
+
+        $conexion = Database::getConnection();
+
+        // Obtener datos de la lista
+        $sql = "DELETE FROM listas WHERE id = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->execute([$idLista]);
+        $lista = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        header("Location: index.php?ctl=perfil");
+        exit;
     }
 }

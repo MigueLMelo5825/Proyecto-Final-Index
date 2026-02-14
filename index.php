@@ -120,6 +120,7 @@ $map = [
         'action'     => 'perfil',
         'nivel'      => 1
     ],
+    
 
     'seguir' => [
     'controller' => 'UsuarioController',
@@ -207,6 +208,12 @@ $map = [
     'anadirALista' => ['controller' => 'ListaController', 'action' => 'anadir', 'nivel' => 1],
     'verLista' => ['controller' => 'ListaController', 'action' => 'ver', 'nivel' => 1],
 
+     'eliminarLista' => [
+        'controller' => 'ListaController',
+        'action'     => 'eliminar',
+        'nivel'      => 1
+    ],
+    
     // FICHA LIBRO/PELÍCULA
     'ficha' => ['controller' => 'fichaLibroPeliculaController', 'action' => 'index', 'nivel' => 0],
 

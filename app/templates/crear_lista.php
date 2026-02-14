@@ -28,7 +28,9 @@
 
                 <div class="form-group">
                     <label>Descripción</label>
-                    <textarea name="descripcion" rows="2" placeholder="Agrega una descripción"></textarea>
+                 
+                    <textarea name="descripcion" placeholder="Agrega una descripción"></textarea>
+
                 </div>
 
                 <div class="form-group">

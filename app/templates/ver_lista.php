@@ -41,21 +41,49 @@ if (!isset($items)) {
 
     <hr>
 
-    <h3>Elementos de la lista</h3>
+    <h3 class="mb-4">Elementos de la lista</h3>
 
     <?php if (empty($items)): ?>
         <p>No hay elementos en esta lista.</p>
     <?php else: ?>
-        <ul class="list-group">
-            <?php foreach ($items as $item): ?>
-                <li class="list-group-item">
-                    <strong><?= htmlspecialchars($item['titulo'] ?? 'Sin título') ?></strong><br>
-                    <?= htmlspecialchars($item['descripcion'] ?? '') ?><br>
-                    <small>Creado en: <?= htmlspecialchars($item['creado_en'] ?? 'N/A') ?></small>
-                </li>
-            <?php endforeach; ?>
-        </ul>
+    <div class="list-group">
+        <?php foreach ($items as $item): ?>
+        <div class="list-group-item">
+            <div class="d-flex gap-3 align-items-start">
+
+            <!-- Imagen -->
+            <div class="flex-shrink-0">
+                <img
+                src="<?= htmlspecialchars($item['imagen'] ?? '') ?>"
+                alt="<?= htmlspecialchars($item['titulo'] ?? 'Sin título') ?>"
+                class="rounded-3 shadow-sm"
+                style="width: 90px; height: 135px; object-fit: cover;"
+                onerror="this.style.display='none';"
+                >
+            </div>
+
+            <!-- Texto -->
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start">
+                <h6 class="mb-1 fw-bold">
+                    <?= htmlspecialchars($item['titulo'] ?? 'Sin título') ?>
+                </h6>
+                <small class="text-muted ms-3 text-nowrap">
+                    <?= htmlspecialchars($item['añadido_en'] ?? '') ?>
+                </small>
+                </div>
+
+                <p class="mb-0 text-muted descripcion-clamp">
+                <?= htmlspecialchars($item['descripcion'] ?? '') ?>
+                </p>
+            </div>
+
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
     <?php endif; ?>
+
 
 </main>
 
