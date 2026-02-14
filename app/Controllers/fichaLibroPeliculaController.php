@@ -1,4 +1,6 @@
 <?php
+
+
 class fichaLibroPeliculaController {
 
     public function ficha() {
@@ -82,7 +84,8 @@ class fichaLibroPeliculaController {
                 // Calculamos el nuevo promedio tras insertar
                 $cons = $pdo->prepare("SELECT AVG(puntuacion) FROM calificaciones WHERE $tipoId = ?");
                 $cons->execute([$idLibroPelicula]);
-                $nuevoPromedio = round($cons->fetchColumn(), 1);
+                $nuevoPromedio = $cons->fetchColumn();
+                $nuevoPromedio = $nuevoPromedio === null ? 0.0 : round((float)$nuevoPromedio, 1);
 
                 echo json_encode([
                     "status" => "success", 
@@ -112,7 +115,14 @@ class fichaLibroPeliculaController {
         $input = json_decode(file_get_contents("php://input"), true);
         $idLibroPelicula = $input['id'] ?? null;
         $tipo = $input['type'] ?? null; // 'libro' o 'pelicula'
-        $comentario = $input['texto'] ?? null; //comentario registrado por el usuario
+        $comentario = $input['texto'] ?? null; //comentario
+
+        $comentario = htmlspecialchars(trim($input['texto'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        if (strlen($comentario) < 2 || strlen($comentario) > 2000) {
+            echo json_encode(["status" => "error", "mensaje" => "Comentario inválido (longitud)"]);
+            exit;
+        }
 
         if (!$idLibroPelicula || !$tipo) {
             echo json_encode(["status" => "error", "mensaje" => "Datos incompletos"]);
@@ -127,15 +137,13 @@ class fichaLibroPeliculaController {
 
             // Usamos marcadores con nombre para evitar confusiones
             $insertSql = "INSERT INTO comentarios (usuario_id, $tipoId, texto, fecha) 
-                    VALUES (:usuario_id, :idLibroPeliula, :comentario, NOW())
-                    ON DUPLICATE KEY UPDATE texto = :nuevo_comentario, fecha = NOW()";
+                    VALUES (:usuario_id, :idLibroPeliula, :comentario, NOW())";
             
             $stmt = $pdo->prepare($insertSql);
             $stmt->execute([
                 ':usuario_id'    => $idUsuario,
                 ':idLibroPeliula' => $idLibroPelicula,
-                ':comentario'    => $comentario,
-                ':nuevo_comentario' => $comentario
+                ':comentario'    => $comentario
             ]);
 
             // OBTENEMOS LOS DATOS DEL USUARIO (para mostrar el nombre en el feed dinámico)
@@ -163,6 +171,41 @@ class fichaLibroPeliculaController {
 
         } catch(PDOException $e) {
             echo json_encode(["status" => "error", "mensaje" => "Error al guardar"]);
+            exit;
+        }
+    }
+
+    public static function guardarEdicionComentario() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $idUsuario = $_SESSION['id_usuario'] ?? null;
+
+        $input = json_decode(file_get_contents("php://input"), true);
+        $idComentario = $input['id_comentario'] ?? null;
+        $nuevoTexto = $input['texto'] ?? null;
+
+        $nuevoTexto = htmlspecialchars(trim($input['texto'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        if (strlen($nuevoTexto) < 2 || strlen($nuevoTexto) > 2000) {
+            echo json_encode(["status" => "error", "mensaje" => "Comentario inválido (longitud)"]);
+            exit;
+        }
+
+        if (!$idUsuario || !$idComentario || !$nuevoTexto) {
+            echo json_encode(["status" => "error", "mensaje" => "Datos insuficientes"]);
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+        try {
+            // SEGURIDAD: Solo editamos si el ID del comentario coincide con el usuario logueado
+            $sql = "UPDATE comentarios SET texto = ?, fecha = NOW() WHERE id = ? AND usuario_id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$nuevoTexto, $idComentario, $idUsuario]);
+
+            echo json_encode(["status" => "success", "nuevoTexto" => $nuevoTexto]);
+            exit;
+        } catch (PDOException $e) {
+            echo json_encode(["status" => "error", "mensaje" => $e->getMessage()]);
             exit;
         }
     }

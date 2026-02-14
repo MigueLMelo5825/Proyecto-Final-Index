@@ -18,6 +18,7 @@ const urlLikeCalificacion = `/${url}/index.php?ctl=guardarLikesYCalificacion`;
 //guardar comentario, modificar y eliminar
 const urlComentario = `/${url}/index.php?ctl=guardarComentario`;
 const urlEliminarComentario = `/${url}/index.php?ctl=eliminarComentario`;
+const urlGuardarEdicionComentario = `/${url}/index.php?ctl=guardarEdicionComentario`;
 const urlFotoUsuario = `/${url}/`;
 
 
@@ -30,6 +31,7 @@ const formComentario = document.querySelector('.form-post');
 const listaComentarios = document.querySelector('.lista-comentarios');
 const infoComentario = document.getElementById('info-comentario');
 let panelComunidad = document.querySelector(".panel-comunidad");
+const msjVacio = document.querySelector(".msj-vacio");
 
 
 //funcion para enviar like y guardarlo
@@ -168,6 +170,9 @@ async function agregarComentario() {
             //  Insertamos el comentario
             const lista = comunidad.querySelector('.lista-comentarios');
             lista.insertAdjacentHTML("afterbegin", renderComentario(datos.comentario));
+            formatearTiempoRelativo();
+            msjVacio.style.display = "none";
+
 
         } catch (error) {
             console.error("Error en el fetch al agregar comentario: ", error);
@@ -198,30 +203,6 @@ function renderComentario(c) {
         </div>
     `;
 }
-
-document.addEventListener('click', async e => {
-
-    if (e.target.classList.contains('btn-eliminar')) {
-
-        const idComentario = e.target.dataset.id;
-
-        const res = await fetch(urlEliminarComentario, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id: idLibroPelicula,
-                type: tipo,
-                id_comentario: idComentario
-            })
-        });
-
-        const data = await res.json();
-
-        if (data.status === 'success') {
-            document.querySelector(`.comentario-item[data-id="${idComentario}"]`).remove();
-        }
-    }
-});
 
 //funcion para dar al boton leer mas en descripcion
 document.addEventListener("DOMContentLoaded", () => {
@@ -278,20 +259,19 @@ document.addEventListener('click', async (e) => {
 
     // GUARDAR
     if (e.target.classList.contains('btn-guardar')) {
-        const comentario = e.target.closest('.comentario-item');
-        const textarea = comentario.querySelector('.edit-text');
+        const comentarioItem = e.target.closest('.comentario-item');
+        const idComentario = comentarioItem.dataset.id; // OBTENEMOS EL ID ÚNICO
+        const textarea = comentarioItem.querySelector('.edit-text');
         const nuevoTexto = textarea.value.trim();
 
         if (!nuevoTexto) return;
 
         try {
-            const res = await fetch(`/${url}/index.php?ctl=guardarComentario`, {
+            const res = await fetch(urlGuardarEdicionComentario, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    id: idLibroPelicula,
-                    type: tipo,
-                    id_comentario: comentario.dataset.id,
+                    id_comentario: idComentario,
                     texto: nuevoTexto
                 })
             });
@@ -299,13 +279,15 @@ document.addEventListener('click', async (e) => {
             const data = await res.json();
 
             if (data.status === 'success') {
-                const texto = comentario.querySelector('.texto-comentario');
-                texto.textContent = nuevoTexto; // Actualizamos el DOM
-            } else {
-                alert(data.mensaje || "No se pudo guardar el comentario");
+                // Reemplazamos el área de edición por el nuevo texto plano
+                const contenedorTexto = comentarioItem.querySelector('.texto-comentario');
+                contenedorTexto.innerHTML = `<p class="texto-comentario">${data.nuevoTexto}</p>`;
+                // Actualizamos también el dataset original por si quiere volver a editar
+                contenedorTexto.dataset.original = data.nuevoTexto;
+                formatearTiempoRelativo();
             }
         } catch (error) {
-            console.error("Error al guardar comentario:", error);
+            console.error("Error al editar:", error);
         }
     }
 
@@ -322,8 +304,6 @@ document.addEventListener('click', async (e) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    id: idLibroPelicula,
-                    type: tipo,
                     id_comentario: idComentario
                 })
             });
@@ -346,12 +326,11 @@ document.addEventListener('click', async (e) => {
 
                 // Si se borró la última comunidad, mostramos mensaje de "Sé el primero en comentar"
                 const panelComentarios = document.querySelector('.panel-comentarios');
+
                 if (panelComentarios && !document.querySelector('.comunidad')) {
-                    const msjVacio = document.createElement('p');
-                    msjVacio.classList.add('msj-vacio');
-                    msjVacio.textContent = "Sé el primero en comentar";
-                    panelComentarios.appendChild(msjVacio);
+                    msjVacio.style.display = "block";
                 }
+
             } else {
                 console.error(data.mensaje || "No se pudo eliminar el comentario");
             }

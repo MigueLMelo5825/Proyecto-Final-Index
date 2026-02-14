@@ -26,7 +26,7 @@
           </label>
         </div>
 
-        <button type="submit">Entrar</button>
+        <button type="submit" id="entrar">Entrar</button>
       </form>
 
       <div class="footer">
@@ -42,6 +42,20 @@
 
 <?php if (!empty($_SESSION['swal'])): ?>
 <script> 
+
+    //agrego funcionalidad para al momento de dar "ENTER" al poner la contraseña simule el click en el buton Entrar Miguel Melo
+    const password = document.getElementById("password");
+    const entrar = document.getElementById("entrar");
+
+    password.addEventListener("keydown", event =>{
+      
+      if(event.key === "Enter"){
+          
+        event.preventDefault();
+        entrar.click();
+      }
+    });
+
     Swal.fire({
         icon: <?= json_encode($_SESSION['swal']['icon']) ?>,
         title: <?= json_encode($_SESSION['swal']['title']) ?>,

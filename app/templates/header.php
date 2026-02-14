@@ -36,6 +36,9 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
+<!--Solucion fallo en el inicio de sesion -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <title>INDEX</title>
 </head>
 
@@ -57,15 +60,16 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
             <!-- Contenido -->
             <div class="collapse navbar-collapse" id="navbarNav">
 
-                <!-- IZQUIERDA -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $inicioUrl ?>">Inicio</a>
-                    </li>
-                </ul>
-
-                <!-- BUSCADOR -->
+                
                 <?php if (isset($_SESSION['id_usuario'])): ?>
+                    <!-- IZQUIERDA -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $inicioUrl ?>">Inicio</a>
+                        </li>
+                    </ul>
+
+                    <!-- BUSCADOR -->
                     <form class="d-flex me-3 position-relative" role="search" method="GET" action="index.php">
                         <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
                         <div id="resultadosBusqueda"

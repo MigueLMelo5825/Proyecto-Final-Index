@@ -196,6 +196,12 @@ $map = [
         'action'     => 'guardarComentario',
         'nivel'      => 1
     ],
+    
+    'guardarEdicionComentario' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'guardarEdicionComentario',
+        'nivel'      => 1
+    ],
 
     'eliminarComentario' => [
         'controller' => 'fichaLibroPeliculaController',

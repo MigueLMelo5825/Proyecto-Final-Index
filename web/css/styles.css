@@ -75,7 +75,7 @@ body {
 /* contenedor colapsable (nav items + buscador) */
 .navbar-collapse {
     display: flex;
-    justify-content: space-between; /* izquierda y derecha separadas */
+    justify-content: flex-end; /* izquierda y derecha separadas */
     flex-grow: 1;
     align-items: center;
 }
