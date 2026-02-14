@@ -11,6 +11,8 @@
             justify-content:center;
             text-align:center;
             padding: 80px 20px;
+            background: radial-gradient(circle at top right, rgba(33,37,41,0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(255,183,3,0.05), transparent);
         }
 
         .hero h1{
@@ -143,52 +145,59 @@
             margin: 0 auto 30px;
         }
 
-/* --- SECCIÓN RANKING DE PELICULAS --- */
-
+/* --- CONTENEDORES DE RANKING --- */
 .seccion-ranking {
-    padding: 60px 0;
-    background: #f8f9fa;
-    border-radius: 20px;
-    margin: 40px 0;
+    padding: 40px 0;
+    margin: 30px 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.03);
 }
 
-#contenedor-top-peliculas {
+#contenedor-top-peliculas, 
+#contenedor-top-libros {
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Alinea abajo para que el #1 sobresalga */
-    gap: 25px;
+    align-items: flex-end;
+    gap: 30px;
     padding: 20px;
     flex-wrap: wrap;
+    min-height: 350px;
 }
 
+/* --- TARJETAS (CARDS) COMUNES --- */
 .top-card {
-    background: white;
-    width: 200px;
-    border-radius: 15px;
+    background: #fff;
+    width: 190px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
     position: relative;
+    border: 1px solid #eee;
 }
 
 .top-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 30px 60px -12px rgba(33, 37, 41, 0.25), 
+                0 18px 36px -18px rgba(0, 0, 0, 0.3);
 }
 
-/* Resalte para el Top 1 */
+/* Efecto especial para el Puesto #1 */
 .top-card.gold-rank {
-    width: 240px; /* Más grande */
-    border: 3px solid #ffb703;
+    width: 230px;
+    border: 2px solid #ffb703;
+    z-index: 10;
 }
 
+/* Medallas de puesto */
 .medalla-puesto {
     position: absolute;
     top: 15px;
     left: 15px;
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     background: rgb(33, 37, 41);
     color: white;
     border-radius: 50%;
@@ -196,40 +205,74 @@
     align-items: center;
     justify-content: center;
     font-weight: 900;
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-size: 18px;
+    z-index: 20;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .gold-rank .medalla-puesto {
-    background: #ffb703;
-    color: #000;
+    background: linear-gradient(135deg, #ffb703, #ff8e00);
+    color: #fff;
 }
 
+/* --- IMÁGENES NÍTIDAS --- */
 .top-card img {
     width: 100%;
-    height: 300px;
+    height: 280px;
     object-fit: cover;
-    transition: 0.3s;
+    /* Mejora la nitidez en navegadores */
+    image-rendering: -webkit-optimize-contrast; 
 }
 
+.gold-rank img {
+    height: 330px;
+}
+
+/* --- TEXTOS E INFO --- */
 .info-top {
     padding: 15px;
     text-align: center;
+    background: white;
 }
 
 .info-top h4 {
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
     color: rgb(33, 37, 41);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 700;
 }
 
-.info-top p {
-    color: #ff4d6d;
+/* Diferenciación por tipo */
+#contenedor-top-peliculas .info-top p {
+    color: #ff4d6d; /* Rojo para Likes */
     font-weight: 700;
-    margin: 5px 0 0 0;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+#contenedor-top-libros .info-top p {
+    color: #ffb703; /* Dorado para Estrellas */
+    font-weight: 700;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    #contenedor-top-peliculas, 
+    #contenedor-top-libros {
+        align-items: center;
+        gap: 15px;
+    }
+    .top-card, .top-card.gold-rank {
+        width: 160px;
+    }
+    .top-card img, .gold-rank img {
+        height: 220px;
+    }
 }
 
 /* --- REVEAL ANIMATIONS --- */
@@ -243,8 +286,18 @@
     transform: translateY(0);
 }
 
-       
-        @keyframes fadeUp{
-            from{opacity:0; transform:translateY(30px);}
-            to{opacity:1; transform:translateY(0);}
-        }
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes brillo {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.3); transform: scale(1.1); }
+    100% { filter: brightness(1); }
+}
+
+.gold-rank .medalla-puesto {
+    animation: brillo 2s infinite ease-in-out;
+    border: 2px solid white;
+}

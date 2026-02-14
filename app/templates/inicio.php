@@ -42,6 +42,11 @@ include_once __DIR__ . '/header.php';
         <h2 class="section-title">Libros</h2>
         <p class="section-subtitle">Encuentra tu próxima lectura</p>
 
+        <section class="seccion-ranking">
+            <h2 style="text-align: center; margin-top: 20px;">⭐ Los mejores Libros valorados por lectores</h2>
+            <div id="contenedor-top-libros"></div>
+        </section>
+
         <div class="grid">
             <div class="card-item reveal">
                 <div class="big-icon">📚</div>
@@ -71,7 +76,7 @@ include_once __DIR__ . '/header.php';
         <p class="section-subtitle">Todo el cine que te gusta</p>
 
         <section class="seccion-ranking">
-            <h2 style="text-align: center; margin-top: 50px;">🔥El contenido que más gusta en nuestra comunidad</h2>
+            <h2 style="text-align: center; margin-top: 50px;">🔥Las Peliculas que más gustan en nuestra comunidad</h2>
             <div id="contenedor-top-peliculas">
             </div>
         </section>

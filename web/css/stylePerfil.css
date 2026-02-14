@@ -499,3 +499,179 @@ body {
 }
 
 }
+
+/* --- LAYOUT DE DOBLE COLUMNA --- */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px; /* Perfil ancho | Sidebar tendencias */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    align-items: start;
+}
+
+/* --- STICKY SIDEBAR --- */
+.sidebar-tendencias {
+    position: sticky;
+    top: 85px; /* Ajusta según la altura de tu header */
+}
+
+.card-sidebar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.card-sidebar h2 {
+    font-size: 18px; 
+    font-weight: 900; 
+    color: rgb(33, 37, 41);
+    margin: 0 0 20px 10px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    letter-spacing: -0.02em;
+}
+
+/* Línea decorativa vertical a la izquierda del título */
+.card-sidebar h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(to bottom, #ff4d6d, #ffb703); /* Gradiente que une tus dos colores (Like y Estrellas) */
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+/* Efecto para el Emoji/Icono dentro del H2 */
+.card-sidebar h2 span.emoji {
+    font-size: 22px;
+    animation: pulse-fire 2s infinite;
+}
+
+@keyframes pulse-fire {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 183, 3, 0)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 5px rgba(255, 183, 3, 0.5)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 183, 3, 0)); }
+}
+
+/* Opcional: Subrayado sutil que no llega al final */
+.card-sidebar h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 15px;
+    width: 40px;
+    height: 3px;
+    background: rgba(33, 37, 41, 0.1);
+    border-radius: 2px;
+}
+.card-sidebar h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: rgb(33, 37, 41);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- MINI ITEMS (RANKING) --- */
+.mini-ranking {
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+.mini-item:last-child {
+    border-bottom: none;
+}
+
+.mini-item:hover {
+    background-color: #f9f9f9;
+    transform: translateX(5px);
+}
+
+/* Número del Ranking */
+.mini-rank-number {
+    font-size: 18px;
+    font-weight: 900;
+    color: #cbd5e0; /* Gris azulado suave */
+    min-width: 25px;
+    text-align: center;
+}
+
+/* Imagen Miniatura */
+.mini-img {
+    width: 45px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #eee;
+}
+
+/* Información del Item */
+.mini-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.mini-info h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+    color: #1a202c;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Corta el texto largo con puntos suspensivos */
+}
+
+.mini-info p {
+    font-size: 12px;
+    margin: 3px 0 0 0;
+    font-weight: 800;
+}
+
+/* --- FOOTER DEL SIDEBAR --- */
+.footer-mini {
+    padding: 10px;
+    font-size: 11px;
+    color: #a0aec0;
+    text-align: center;
+}
+
+.footer-mini a {
+    color: #718096;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.footer-mini a:hover {
+    text-decoration: underline;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+    .sidebar-tendencias {
+        display: none; /* Ocultamos el sidebar en móviles para dar prioridad al perfil */
+    }
+}

@@ -103,15 +103,22 @@ $map = [
         'action'     => 'reset',
         'nivel'      => 0
     ],
+    
     'logout' => [
     'controller' => 'UsuarioController',
     'action'     => 'logout',
     'nivel'      => 0 
-],
+    ],
 
-    'buscar' => [
-        'controller' => 'BuscadorController',
-        'action'     => 'buscar',
+    'topTresPeliculas' => [
+        'controller' => 'PeliculasController',
+        'action'     => 'topTresPeliculas',
+        'nivel'      => 0
+    ],
+
+    'topTresLibros' => [
+        'controller' => 'fichaLibroPeliculaController',
+        'action'     => 'topTresLibros',
         'nivel'      => 0
     ],
 
@@ -126,31 +133,31 @@ $map = [
     'controller' => 'UsuarioController',
     'action'     => 'seguir',
     'nivel'      => 1
-],
+    ],
 
-'dejarseguir' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'dejarSeguir',
-    'nivel'      => 1
-],
+    'dejarseguir' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'dejarSeguir',
+        'nivel'      => 1
+    ],
 
-'verSeguidores' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'verSeguidores',
-    'nivel'      => 1
-],
+    'verSeguidores' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'verSeguidores',
+        'nivel'      => 1
+    ],
 
-'verSeguidos' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'verSeguidos',
-    'nivel'      => 1
-],
+    'verSeguidos' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'verSeguidos',
+        'nivel'      => 1
+    ],
 
-'buscarUsuarios' => [
-    'controller' => 'UsuarioController',
-    'action'     => 'buscarUsuarios',
-    'nivel'      => 1
-],
+    'buscarUsuarios' => [
+        'controller' => 'UsuarioController',
+        'action'     => 'buscarUsuarios',
+        'nivel'      => 1
+    ],
 
 
     'timeline' => [
@@ -166,6 +173,12 @@ $map = [
         'nivel'      => 1
     ],
 
+    'buscar' => [
+        'controller' => 'BuscadorController',
+        'action'     => 'buscar',
+        'nivel'      => 1
+    ],
+
     'fichaLibroPelicula' => [
         'controller' => 'fichaLibroPeliculaController',
         'action'     => 'ficha',
@@ -176,12 +189,6 @@ $map = [
         'controller' => 'fichaLibroPeliculaController',
         'action'     => 'guardarLikesYCalificacion',
         'nivel'      => 1
-    ],
-
-    'topTresPeliculas' => [
-        'controller' => 'fichaLibroPeliculaController',
-        'action'     => 'topTresPeliculas',
-        'nivel'      => 0
     ],
 
     // AJUSTES DE PERFIL

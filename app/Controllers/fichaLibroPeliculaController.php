@@ -248,36 +248,33 @@ class fichaLibroPeliculaController {
         exit;
     }
 
-    public static function topTresPeliculas(){
+    public static function topTresLibros() {
+
         $pdo = Database::getConnection();
-
+        
         try {
-            // 1. Contamos los likes agrupando por el ID de la película
-            // 2. Unimos con la tabla 'peliculas' para traer sus datos visuales
-            $consultaSql = "SELECT p.id, p.titulo, p.portada, COUNT(l.id_pelicula) as total_likes 
-                            FROM likes l
-                            INNER JOIN peliculas p ON l.id_pelicula = p.id
-                            WHERE l.id_pelicula IS NOT NULL
-                            GROUP BY p.id, p.titulo, p.portada
-                            ORDER BY total_likes DESC 
-                            LIMIT 3";
+            // Obtenemos el promedio de estrellas y el total de votos por cada libro
+            $sql = "SELECT l.id, l.titulo, l.imagen_url, 
+                        AVG(c.puntuacion) as promedio, 
+                        COUNT(c.puntuacion) as total_votos
+                    FROM calificaciones c
+                    INNER JOIN libros l ON c.id_libro = l.id
+                    WHERE c.id_libro IS NOT NULL
+                    GROUP BY l.id, l.titulo, l.imagen_url
+                    ORDER BY promedio DESC, total_votos DESC 
+                    LIMIT 3";
 
-            $stmt = $pdo->prepare($consultaSql);
+            $stmt = $pdo->prepare($sql);
             $stmt->execute();
-            
-            $topPeliculas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+            $topLibros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             echo json_encode([
                 "status" => "success",
-                "peliculas" => $topPeliculas // Enviamos el array con los datos reales
+                "libros" => $topLibros
             ]);
             exit;
-
         } catch(PDOException $e) {
-            echo json_encode([
-                "status" => "error", 
-                "mensaje" => "Error al obtener el top 3: " . $e->getMessage()
-            ]);
+            echo json_encode(["status" => "error", "mensaje" => $e->getMessage()]);
             exit;
         }
     }
