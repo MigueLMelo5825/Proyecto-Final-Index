@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: index_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"               
+    volumes:
+      # logs
+      - ./logs/apache:/var/log/apache2
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=indexproyecto
+      - DB_USERNAME=root
+      - DB_PASSWORD=indexLIM_5825.
+      - APP_ENV=production
+      - APP_DEBUG=false
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - index-net
+
+  db:
+    image: mysql:8.0
+    container_name: index_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: indexproyecto
+      MYSQL_ROOT_PASSWORD: indexLIM_5825.
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - db_data:/var/lib/mysql
+      # Script de inicialización
+      - ./database.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - index-net
+
+volumes:
+  db_data:
+
+networks:
+  index-net:
+    driver: bridge
