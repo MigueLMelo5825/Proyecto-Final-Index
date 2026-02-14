@@ -1,17 +1,4 @@
 <?php
-
-/**
- * ================================================================
- *  SessionManager
- *  ---------------------------------------------------------------
- *  Gestión segura de sesiones con:
- *    - Cookie hardening
- *    - Fingerprint (IP + User-Agent)
- *    - Timeout por inactividad
- *    - RBAC numérico (Guest/User)
- *    - Regeneración antifijación
- */
-
 class SessionManager
 {
     private string $loginPage;
@@ -171,3 +158,5 @@ class SessionManager
         return $this->getUserLevel() >= $requiredLevel;
     }
 }
+
+?>
