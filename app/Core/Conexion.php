@@ -8,10 +8,10 @@ class Conexion {
 
         if (self::$conexion === null) {
 
-            $host = "localhost";
-            $dbname = "indexproyecto";   // Cambia si tu BD tiene otro nombre
-            $user = "root";
-            $pass = "";
+            $host = getenv('DB_HOST') ?: 'db';
+            $dbname = getenv('DB_DATABASE') ?: 'indexproyecto';
+            $user = getenv('DB_USERNAME') ?: 'root';
+            $pass = getenv('DB_PASSWORD') ?: 'indexLIM_5825.';
 
             try {
 
