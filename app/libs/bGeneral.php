@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /****
  * Librería con funciones generales y de validación
@@ -172,36 +172,35 @@ function cTexto(string $text, string $campo, array &$errores, int $max = 30, int
  */
 
 
- function cUser(string $text, string $campo, array &$errores, int $max = 30, int $min = 1): bool
- {
-     
-     if ((preg_match("/^[a-zA-Z0-9_]{" . $min . "," . $max . "}$/u", sinTildes($text)))) {
-         return true;
-     }
-     $errores[$campo] = "Error en el campo $campo";
-     return false;
- }
- 
+function cUser(string $text, string $campo, array &$errores, int $max = 30, int $min = 1): bool
+{
 
-
-
-
-
-function unixFechaAAAAMMDD($fecha,$campo,&$errores){
-
-    $arrayfecha=explode("-",$fecha);
-if (count($arrayfecha)==3){
-    $fechavalida=checkdate($arrayfecha[1], $arrayfecha[2], $arrayfecha[0]);
-
-    if( $fechavalida){
-
-        return mktime(0,0,0,$arrayfecha[2],$arrayfecha[1],$arrayfecha[0]);
-
+    if ((preg_match("/^[a-zA-Z0-9_]{" . $min . "," . $max . "}$/u", sinTildes($text)))) {
+        return true;
     }
+    $errores[$campo] = "Error en el campo $campo";
+    return false;
 }
-        $errores[$campo]="Fecha no valida";
-        return false;
-    
+
+
+
+
+
+
+function unixFechaAAAAMMDD($fecha, $campo, &$errores)
+{
+
+    $arrayfecha = explode("-", $fecha);
+    if (count($arrayfecha) == 3) {
+        $fechavalida = checkdate($arrayfecha[1], $arrayfecha[2], $arrayfecha[0]);
+
+        if ($fechavalida) {
+
+            return mktime(0, 0, 0, $arrayfecha[2], $arrayfecha[1], $arrayfecha[0]);
+        }
+    }
+    $errores[$campo] = "Fecha no valida";
+    return false;
 }
 
 
@@ -336,7 +335,7 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
              * Calculamos el tamaño del fichero
             */
         $tamanyoFile = filesize($directorioTemp);
-        
+
         /*
             * Extraemos la extensión del fichero, desde el último punto.
             */
@@ -365,10 +364,10 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
              */
             if (is_dir($directorio)) {
                 /**
-             * Tenemos que buscar un nombre único para guardar el fichero de manera definitiva.
-             * Podemos hacerlo de diferentes maneras, en este caso se hace añadiendo microtime() al nombre del fichero 
-             * si ya existe un archivo guardado con ese nombre.
-             * */
+                 * Tenemos que buscar un nombre único para guardar el fichero de manera definitiva.
+                 * Podemos hacerlo de diferentes maneras, en este caso se hace añadiendo microtime() al nombre del fichero 
+                 * si ya existe un archivo guardado con ese nombre.
+                 * */
                 $nombreArchivo = is_file($directorio . DIRECTORY_SEPARATOR . $nombreArchivo) ? time() . $nombreArchivo : $nombreArchivo;
                 $nombreCompleto = $directorio . DIRECTORY_SEPARATOR . $nombreArchivo;
                 /**
@@ -385,7 +384,7 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
                     $errores["$nombre"] = "Ha habido un error al subir el fichero";
                     return false;
                 }
-            }else {
+            } else {
                 $errores["$nombre"] = "Ha habido un error al subir el fichero";
                 return false;
             }
@@ -394,11 +393,11 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
 }
 
 
-function crypt_blowfish($password) {
+function crypt_blowfish($password)
+{
 
     $salt = '$2a$07$usesomesillystringforsalt$';
-    $pass= crypt($password, $salt);
-    
+    $pass = crypt($password, $salt);
+
     return $pass;
-    }
-    ?>
+}
