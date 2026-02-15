@@ -7,8 +7,8 @@ const nombrePath = path[1]; // Esto tomará el nombre de proyecto que cada uno t
 const url = nombrePath;
 
 //guardar likes y calificacion
-const urlTopTresPeliculas = `/${url}/index.php?ctl=topTresPeliculas`;
-const urlTopTresLibros = `/${url}/index.php?ctl=topTresLibros`;
+const urlTopTresPeliculas = `/index.php?ctl=topTresPeliculas`;
+const urlTopTresLibros = `/index.php?ctl=topTresLibros`;
 
 async function mostrarTopTresLibros() {
     
@@ -84,7 +84,7 @@ async function mostrarTopTresPeliculas() {
 
 // Función para redirigir a la ficha técnica
 function irARegistro() {
-    window.location.href = `/${url}/index.php?ctl=registro`;
+    window.location.href = `/index.php?ctl=registro`;
 }
 
 window.onload = function(){
