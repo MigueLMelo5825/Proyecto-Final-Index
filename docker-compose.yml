@@ -9,7 +9,9 @@ services:
       - "8080:80"
     dns:
       - 8.8.8.8
-      - 1.1.1.1               
+      - 1.1.1.1
+    extra_hosts:
+      - "github.com:140.82.121.3"               
     volumes:
       # Sincroniza tu código para ver cambios en tiempo real durante el testeo
       - .:/var/www/html
