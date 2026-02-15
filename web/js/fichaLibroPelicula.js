@@ -191,7 +191,7 @@ function renderComentario(c) {
 
     return `
         <div class="comentario-item" data-id="${c.id_comentario}">
-            <img src="${c.foto}" class="img-perfil-mini">
+            <img src="/${c.foto}" class="img-perfil-mini" alt="Foto de ${c.username || 'Usuario'}">
             <div class="comentario-cuerpo">
                 <strong>${c.username}</strong>
                 <small>${c.pais}</small>

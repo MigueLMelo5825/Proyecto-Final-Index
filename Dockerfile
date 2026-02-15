@@ -28,7 +28,8 @@ COPY . /var/www/html
 # damos permisos
 # ====================
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/web/img/perfil
 
 # exponemos el puerto
 EXPOSE 80
