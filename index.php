@@ -3,7 +3,6 @@
 // AUTOLOAD Y CONFIGURACIÓN GLOBAL
 // ============================================================
 require_once __DIR__ . '/app/Core/autoload.php';
-require_once __DIR__ . '/app/Core/Config.php';
 require_once __DIR__ . '/app/libs/bGeneral.php';
 require_once __DIR__ . '/app/libs/bSeguridad.php';
 
