@@ -7,7 +7,7 @@ $idUsuario = $_SESSION['id_usuario'] ?? null;
 
 //codigo php para obtener las rutas y darles la direccion correcta
 $root = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', dirname(__DIR__, 2)));
-$root = '/' . trim($root, '/') . '/';
+$root = '/';
 
 //url para cargar las rutas de stylos e imagenes
 $urlImgFallback = $root . 'web/img/fallback.png';

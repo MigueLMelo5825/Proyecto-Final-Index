@@ -2,7 +2,7 @@
 
 //codigo php para obtener las rutas y darles la direccion correcta
 $root = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', dirname(__DIR__, 2)));
-$root = '/' . trim($root, '/') . '/';
+$root = '/';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
