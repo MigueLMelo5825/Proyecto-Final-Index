@@ -19,7 +19,6 @@ const urlLikeCalificacion = `/${url}/index.php?ctl=guardarLikesYCalificacion`;
 const urlComentario = `/${url}/index.php?ctl=guardarComentario`;
 const urlEliminarComentario = `/${url}/index.php?ctl=eliminarComentario`;
 const urlGuardarEdicionComentario = `/${url}/index.php?ctl=guardarEdicionComentario`;
-const urlFotoUsuario = `/${url}/`;
 
 
 //obtenemos los botones e inputs del DOM
@@ -192,7 +191,7 @@ function renderComentario(c) {
 
     return `
         <div class="comentario-item" data-id="${c.id_comentario}">
-            <img src="${urlFotoUsuario}${c.foto}" class="img-perfil-mini">
+            <img src="${c.foto}" class="img-perfil-mini">
             <div class="comentario-cuerpo">
                 <strong>${c.username}</strong>
                 <small>${c.pais}</small>
