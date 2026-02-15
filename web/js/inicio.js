@@ -1,14 +1,14 @@
 //creamos variables para enviar peticion
 // Detecta la carpeta del proyecto (la primera parte de la ruta después de localhost)
-const path = window.location.pathname.split('/');
+//const path = window.location.pathname.split('/');
 
-const nombrePath = path[1]; // Esto tomará el nombre de proyecto que cada uno tenga
+//const nombrePath = path[1]; // Esto tomará el nombre de proyecto que cada uno tenga
 
-const url = nombrePath;
+const BASE_URL = '/';
 
 //guardar likes y calificacion
-const urlTopTresPeliculas = `/index.php?ctl=topTresPeliculas`;
-const urlTopTresLibros = `/index.php?ctl=topTresLibros`;
+const urlTopTresPeliculas = `${BASE_URL}index.php?ctl=topTresPeliculas`;
+const urlTopTresLibros = `${BASE_URL}index.php?ctl=topTresLibros`;
 
 async function mostrarTopTresLibros() {
     
@@ -84,7 +84,7 @@ async function mostrarTopTresPeliculas() {
 
 // Función para redirigir a la ficha técnica
 function irARegistro() {
-    window.location.href = `/index.php?ctl=registro`;
+    window.location.href = `${BASE_URL}index.php?ctl=registro`;
 }
 
 window.onload = function(){
