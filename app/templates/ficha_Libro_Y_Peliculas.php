@@ -55,7 +55,8 @@ if ($idUsuario && $id) {
 //calculamos el promedio de las calificaciones
 $consultaPromedio = $conexionBD->prepare("SELECT AVG(puntuacion) FROM calificaciones WHERE $tipoId = ?");
 $consultaPromedio->execute([$id]);
-$promedio = round($consultaPromedio->fetchColumn(), 1);
+$promedioRaw = $consultaPromedio->fetchColumn();
+$promedio = $promedioRaw === null ? 0.0 : round((float)$promedioRaw, 1);
 
 //calculamos total likes
 $conusltaTotalLikes = $conexionBD->prepare("SELECT COUNT(*) FROM likes WHERE $tipoId = ?");
@@ -200,7 +201,7 @@ if (!$urlImagenPortada) {
                             <label for="star<?= $i ?>">★</label>
                         <?php endfor; ?>
                     </div>
-                    <span class="puntuacion-texto" id="calificacion"><?= $promedio ?: '0.0' ?> de 5</span>
+                    <span class="puntuacion-texto" id="calificacion"><?= number_format($promedio, 1) ?> de 5</span>
 
                     <button id="btn-favorito" class="btn-interaccion-like <?= $usuarioHaDadoLike ? 'active' : '' ?>" title="Añadir a mis favoritos">
                         <span class="corazon-icono">❤</span>
