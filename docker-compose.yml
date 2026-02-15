@@ -6,7 +6,10 @@ services:
     container_name: index_app
     restart: unless-stopped
     ports:
-      - "8080:80"               
+      - "8080:80"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1               
     volumes:
       # Sincroniza tu código para ver cambios en tiempo real durante el testeo
       - .:/var/www/html
