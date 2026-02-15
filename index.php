@@ -47,6 +47,24 @@ require_once __DIR__ . '/app/libs/ejemploPHPMailer/PHPMailer/src/SMTP.php';
 require_once __DIR__ . '/app/helpers/formatearEventos.php';
 
 
+// Configuración segura de sesión ANTES de iniciar
+if (session_status() === PHP_SESSION_NONE) {
+    //ini_set('session.cookie_domain', '.tu-dominio.com');   // para subdominios si los tienes
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure', '0');           // 0 = desarrollo (http), 1 = producción (https)
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+    ini_set('session.gc_maxlifetime', '3600');
+
+    session_start();
+
+    // Nivel por defecto si no existe
+    if (!isset($_SESSION['usuarioNivel'])) {
+        $_SESSION['usuarioNivel'] = 0;
+    }
+}
+
 
 // ============================================================
 // SESIÓN SEGURA
