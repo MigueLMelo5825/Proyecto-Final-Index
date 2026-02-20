@@ -8,7 +8,7 @@ services:
     ports:
       - "8080:80"               
     volumes:
-      # Sincroniza tu código para ver cambios en tiempo real durante el testeo
+      # Sincronizamos el código para ver cambios en tiempo real durante el testeo
       - .:/var/www/html
       - ./logs/apache:/var/log/apache2
     environment:
@@ -31,14 +31,14 @@ services:
     environment:
       MYSQL_DATABASE: indexproyecto
       MYSQL_ROOT_PASSWORD: indexLIM_5825.
-      # Permite conexiones desde cualquier host para que tus amigos se conecten remotamente
+      # Permito conexiones desde cualquier host para que mis compañeras se puedan conectar
       MYSQL_ROOT_HOST: '%' 
     volumes:
       - db_data:/var/lib/mysql
-      # Asegúrate de que el archivo sql se llame exactamente así en tu carpeta
+      # importamos la base de datos indexproyecto.sql
       - ./indexproyecto.sql:/docker-entrypoint-initdb.d/importar.sql
     ports:
-      - "3306:3306" # Abierto para que usen MySQL Workbench o DBeaver
+      - "3306:3306" # Abierto para que se pueda usar MySQL Workbench o DBeaver
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pindexLIM_5825."]
       interval: 10s
