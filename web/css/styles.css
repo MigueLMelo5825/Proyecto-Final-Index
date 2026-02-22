@@ -117,6 +117,12 @@ body {
     border-bottom: none;
 }
 
+#resultadosBusqueda .list-group-item.active {
+    background-color: #f0f2f5 !important;
+    color: #000 !important; 
+    border-left: 4px solid #007bff; 
+}
+
 /* nav items derecha */
 .navbar-nav:last-child {
     display: flex;

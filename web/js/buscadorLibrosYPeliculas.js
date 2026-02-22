@@ -11,13 +11,13 @@ const nombreProyecto = pathSegments[1]; // Esto tomará el nombre de proyecto qu
 
 const baseUrl = nombreProyecto;
 
-// URL del backend del buscador (controlador MVC)
+// URL del backend del buscador
 const urlPhp = `/${baseUrl}/index.php?ctl=buscar`;
 
-// Imagen fallback (asegúrate de que existe en /Proyecto/web/img/)
+// Imagen fallback
 const fallback = `/${baseUrl}/web/img/fallback.png`;
 
-// Redirección a la ficha (AJUSTA si tienes otra ruta)
+// Redirección a la ficha
 const urlRedireccion = `/${baseUrl}/index.php?ctl=fichaLibroPelicula`;
 
 // Elementos del DOM
@@ -27,6 +27,8 @@ const divEncontrados =
     document.getElementById("resultadosBusqueda");
 
 const cache = {};
+let indexSeleccionado = -1;
+let timeoutBusqueda;
 
 
 // ---------------- INICIALIZACIÓN ----------------
@@ -41,19 +43,68 @@ document.addEventListener("DOMContentLoaded", () => {
 // ---------------- EVENTO PRINCIPAL ----------------
 
 function mostrarLibroPelicula() {
-    inputLibro.addEventListener("keyup", event => {
-        event.preventDefault();
+    //hacemos uso de la funcion teclado para determinar que realizar segun la peticion dentro del buscador
+    inputLibro.addEventListener("keyup", funcionesTeclado);
 
-        const texto = inputLibro.value.trim();
-
-        if (texto.length > 0) {
-            divEncontrados.style.display = "block";
-            cargarLibroPelicula(texto);
-        } else {
-            divEncontrados.innerHTML = "";
-            divEncontrados.style.display = "none";
+    //cerramos la ventana si el usuario da click fuera del buscador
+    document.addEventListener("click", (e) => {
+        if (!inputLibro.contains(e.target) && !divEncontrados.contains(e.target)) {
+            cerrarBuscador();
         }
     });
+
+    // reabrimos el buscador si tiene texto en el input
+    inputLibro.addEventListener("focus", () => {
+        if (inputLibro.value.trim().length > 0) {
+            divEncontrados.style.display = "block";
+        }
+    });
+}
+
+//se crea las funciones para interpretar la navegacion del usuario dentro del buscador
+function funcionesTeclado(e) {
+
+    const texto = inputLibro.value.trim();
+    const items = divEncontrados.querySelectorAll(".list-group-item");
+
+    if (items.length > 0) {
+        // Lógica para flechas y Enter
+        if (e.key === "ArrowDown") {
+            indexSeleccionado = (indexSeleccionado + 1) % items.length;
+            resaltarItem(items);
+            return;
+        } 
+        if (e.key === "ArrowUp") {
+            indexSeleccionado = (indexSeleccionado - 1 + items.length) % items.length;
+            resaltarItem(items);
+            return;
+        }
+        if (e.key === "Enter") {
+            if (indexSeleccionado > -1 && items[indexSeleccionado]) {
+                items[indexSeleccionado].click();
+            }
+            return;
+        }
+    }
+        
+    if (e.key === "Escape") {
+        cerrarBuscador();
+        return;
+    }
+    
+    // Lógica para que el buscador tarde un poco, y no muestre resultados inmediatamente
+    clearTimeout(timeoutBusqueda);
+    if (texto.length > 0) {
+        timeoutBusqueda = setTimeout(() => {
+            if (cache[texto]) {
+                cache[texto].crearLista(); //creamos la lista desde el cache guardado
+            } else {
+                cargarLibroPelicula(texto);
+            }
+        }, 300);
+    } else {
+        cerrarBuscador();
+    }
 }
 
 
@@ -67,7 +118,7 @@ async function cargarLibroPelicula(texto) {
         divEncontrados.innerHTML = "";
 
         if (!Array.isArray(datos) || datos.length === 0) {
-            divEncontrados.innerHTML = "<p>No se encontraron resultados</p>";
+            divEncontrados.innerHTML = "<p class='p-3'>No se encontraron resultados</p>";
             return;
         }
 
@@ -80,6 +131,9 @@ async function cargarLibroPelicula(texto) {
             type: item.tipo
         }));
 
+        // --- GUARDAMOS EN EL CACHÉ ---
+        cache[texto] = lista;
+
         lista.crearLista();
 
     } catch (error) {
@@ -91,7 +145,10 @@ async function cargarLibroPelicula(texto) {
 // ---------------- CREAR LISTA ----------------
 
 Array.prototype.crearLista = function () {
+
+    indexSeleccionado = -1; //reseteamos el index del buscador
     divEncontrados.innerHTML = "";
+    divEncontrados.style.display = "block";
 
     const ul = document.createElement("div");
     ul.className = "list-group w-100";
@@ -155,4 +212,23 @@ function seleccionarLibro(li) {
     const url = `${urlRedireccion}&id=${encodeURIComponent(id)}&type=${encodeURIComponent(type)}`;
     console.log("Redirigiendo a:", url);
     window.location.href = url;
+}
+
+//funcion para resaltas los libros y peliculas al navegar
+function resaltarItem(items) {
+    items.forEach((item, i) => {
+        if (i === indexSeleccionado) {
+            item.classList.add("active");
+            item.scrollIntoView({ block: "nearest" });
+        } else {
+            item.classList.remove("active");
+        }
+    });
+}
+
+// funcion para cerrar el buscador
+function cerrarBuscador() {
+    divEncontrados.innerHTML = "";
+    divEncontrados.style.display = "none";
+    indexSeleccionado = -1;
 }
