@@ -104,7 +104,7 @@ function funcionesTeclado(e) {
             } else {
                 cargarLibroPelicula(texto);
             }
-        }, 300);
+        }, 200);
     } else {
         cerrarBuscador();
     }
@@ -121,7 +121,7 @@ async function cargarLibroPelicula(texto) {
         divEncontrados.innerHTML = "";
 
         if (!Array.isArray(datos) || datos.length === 0) {
-            divEncontrados.innerHTML = "<p class='p-3'>No se encontraron resultados</p>";
+            divEncontrados.innerHTML = "<p>No se encontraron resultados</p>";
             return;
         }
 
@@ -231,7 +231,6 @@ function resaltarItem(items) {
 
 // funcion para cerrar el buscador
 function cerrarBuscador() {
-    divEncontrados.innerHTML = "";
     divEncontrados.style.display = "none";
     indexSeleccionado = -1;
 }

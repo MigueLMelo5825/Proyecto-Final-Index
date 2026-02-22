@@ -98,8 +98,8 @@ body {
     position: absolute;
     top: 100%;
     right: 0; 
-    min-width: 450px; 
-    max-height: 450px;
+    min-width: 400px; 
+    max-height: 400px;
     overflow-y: auto;
     background: #fff;
     border: 1px solid #ddd;
