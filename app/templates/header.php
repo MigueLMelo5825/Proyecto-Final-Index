@@ -70,10 +70,10 @@ $logoUrl = $base_url . 'web/img/INDEX-02.png';
                     </ul>
 
                     <!-- BUSCADOR -->
-                    <form class="d-flex me-3 position-relative" role="search" method="GET" action="index.php">
+                    <form class="d-flex me-3 position-relative" role="search" method="GET" action="index.php" onsubmit="return false;">
                         <input class="form-control" type="search" placeholder="Buscar..." id="inputLibro">
                         <div id="resultadosBusqueda"
-                            class="list-group position-absolute w-100 mt-5"
+                            class="list-group position-absolute w-200 mt-5"
                             style="z-index: 2000;"></div>
                     </form>
                 <?php endif; ?>

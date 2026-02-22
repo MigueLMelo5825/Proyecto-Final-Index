@@ -80,6 +80,9 @@ function funcionesTeclado(e) {
             return;
         }
         if (e.key === "Enter") {
+
+            e.preventDefault(); 
+            
             if (indexSeleccionado > -1 && items[indexSeleccionado]) {
                 items[indexSeleccionado].click();
             }
