@@ -231,6 +231,7 @@ function resaltarItem(items) {
 
 // funcion para cerrar el buscador
 function cerrarBuscador() {
+    divEncontrados.innerHTML = "";
     divEncontrados.style.display = "none";
     indexSeleccionado = -1;
 }
