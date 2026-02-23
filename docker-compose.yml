@@ -10,7 +10,7 @@ services:
     volumes:
       # Sincronizamos el código para ver cambios en tiempo real durante el testeo
       - .:/var/www/html
-      - ./logs/apache:/var/log/apache2
+      - ./logs/apache:/var/app/logs/apache2
     environment:
       DB_HOST: db
       DB_DATABASE: indexproyecto
