@@ -2,7 +2,7 @@
 FROM php:8.2-apache-bullseye
 
 # ====================
-# Instalamos dependencias del sistema + extensiones PHP
+# Instalamos dependencias del sistema + las extensiones de PHP
 # ====================
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ====================
-# Copiamos el código de la aplicación
+# Copiamos el código de nuestra aplicación
 # ====================
 WORKDIR /var/www/html
 
@@ -25,9 +25,13 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # ====================
-# damos permisos
+# Fase de permisos
 # ====================
-RUN chown -R www-data:www-data /var/www/html \
+# 1. Creamos la carpeta
+# 2. Asignamos al usuario de apache (www-data) como dueño
+# 3. Damos permisos 775 para que el servidor pueda escribir las fotos
+RUN mkdir -p /var/www/html/web/img/perfil \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/web/img/perfil
 
