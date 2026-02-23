@@ -32,7 +32,8 @@ COPY . /var/www/html
 # 3. Damos permisos 775 para que el servidor pueda escribir las fotos
 RUN mkdir -p /var/www/html/web/img/perfil \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
+    && find /var/www/html -type d -exec chmod 755 {} \; \
+    && find /var/www/html -type f -exec chmod 644 {} \; \
     && chmod -R 775 /var/www/html/web/img/perfil
 
 # exponemos el puerto
