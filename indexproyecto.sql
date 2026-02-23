@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `calificaciones` (
   UNIQUE KEY `unique_puntos_pelicula` (`id_usuario`,`id_pelicula`),
   CONSTRAINT `calificaciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   CONSTRAINT `calificaciones_chk_1` CHECK ((`puntuacion` between 1 and 5))
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.calificaciones: ~10 rows (aproximadamente)
 INSERT INTO `calificaciones` (`id_calificacion`, `id_usuario`, `id_libro`, `id_pelicula`, `puntuacion`, `fecha_calificacion`) VALUES
@@ -52,7 +52,8 @@ INSERT INTO `calificaciones` (`id_calificacion`, `id_usuario`, `id_libro`, `id_p
 	(15, 1, NULL, 265, 4, '2026-02-22 16:37:56'),
 	(17, 4, NULL, 8, 5, '2026-02-23 16:23:14'),
 	(18, 4, NULL, 335, 2, '2026-02-23 16:23:56'),
-	(19, 4, NULL, 1, 5, '2026-02-23 16:24:15');
+	(19, 4, NULL, 1, 5, '2026-02-23 16:24:15'),
+	(20, 5, NULL, 265, 3, '2026-02-23 17:14:19');
 
 -- Volcando estructura para tabla indexproyecto.comentarios
 CREATE TABLE IF NOT EXISTS `comentarios` (
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   KEY `usuario_id` (`usuario_id`),
   KEY `id_libro` (`id_libro`),
   KEY `id_pelicula` (`id_pelicula`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.comentarios: ~9 rows (aproximadamente)
 INSERT INTO `comentarios` (`id`, `usuario_id`, `id_libro`, `id_pelicula`, `texto`, `fecha`) VALUES
@@ -81,7 +82,8 @@ INSERT INTO `comentarios` (`id`, `usuario_id`, `id_libro`, `id_pelicula`, `texto
 	(12, 1, NULL, 265, 'hola', '2026-02-22 16:37:53'),
 	(13, 4, NULL, 8, 'Me fascina esta pelicula, super wao !!', '2026-02-23 16:23:37'),
 	(14, 4, NULL, 335, 'Muy mala no me gusto para nada', '2026-02-23 16:24:07'),
-	(15, 4, NULL, 1, 'Luisa estoy en desacuerdo contido, esta pelicula me encanta', '2026-02-23 16:24:49');
+	(15, 4, NULL, 1, 'Luisa estoy en desacuerdo contido, esta pelicula me encanta', '2026-02-23 16:24:49'),
+	(16, 5, NULL, 265, 'Que pelicula mas mala', '2026-02-23 17:14:44');
 
 -- Volcando estructura para tabla indexproyecto.eventos
 CREATE TABLE IF NOT EXISTS `eventos` (
@@ -94,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `eventos` (
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.eventos: ~7 rows (aproximadamente)
 INSERT INTO `eventos` (`id`, `id_usuario`, `tipo`, `titulo`, `descripcion`, `fecha`) VALUES
@@ -106,7 +108,8 @@ INSERT INTO `eventos` (`id`, `id_usuario`, `tipo`, `titulo`, `descripcion`, `fec
 	(6, 1, 'lista_creada', 'Lista creada', 'Has creado la lista \'Miguel Fernando\'', '2026-02-15 00:43:05'),
 	(7, 1, 'pelicula', 'Añadida película a lista', 'Has añadido \'La bella y la bestia\' a la lista', '2026-02-15 00:43:31'),
 	(9, 3, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-15 15:09:35'),
-	(10, 4, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-23 15:42:58');
+	(10, 4, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-23 15:42:58'),
+	(11, 5, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-23 17:12:45');
 
 -- Volcando estructura para tabla indexproyecto.libros
 CREATE TABLE IF NOT EXISTS `libros` (
@@ -575,7 +578,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   UNIQUE KEY `unique_like_libro` (`id_usuario`,`id_libro`),
   UNIQUE KEY `unique_like_pelicula` (`id_usuario`,`id_pelicula`),
   CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.likes: ~10 rows (aproximadamente)
 INSERT INTO `likes` (`id_like`, `id_usuario`, `id_libro`, `id_pelicula`, `fecha_like`) VALUES
@@ -1307,13 +1310,14 @@ CREATE TABLE IF NOT EXISTS `token_validacion` (
   UNIQUE KEY `token` (`token`),
   KEY `fk_token_user` (`id_user`),
   CONSTRAINT `fk_token_user` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.token_validacion: ~1 rows (aproximadamente)
 INSERT INTO `token_validacion` (`id`, `id_user`, `token`, `valido_hasta`) VALUES
 	(1, 1, 'e5c3f96190649efd5bda602760dfbf5d465b1c0315dbc76ae1e89e3ec33f3151', 1771091791),
 	(3, 3, '2dbf77830bcec079543705fe8c6f6a444331e5b1d8b38b6cd57a788b4061162c', 1771171775),
-	(4, 4, '6f2c65121bef91a2967b48706f1047a345abb9b5185baf500c3c06c79b1dc8f9', 1771864978);
+	(4, 4, '6f2c65121bef91a2967b48706f1047a345abb9b5185baf500c3c06c79b1dc8f9', 1771864978),
+	(5, 5, '7bf4e95491c833168386289fe465068824c30afaba6a35a41f79295f4a08ef28', 1771870365);
 
 -- Volcando estructura para tabla indexproyecto.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -1335,13 +1339,14 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email_unique` (`email`),
   UNIQUE KEY `username_unique` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.usuarios: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.usuarios: ~4 rows (aproximadamente)
 INSERT INTO `usuarios` (`id`, `username`, `nombre`, `apellido`, `bio`, `foto`, `email`, `contrasena`, `rol`, `pais`, `nivel`, `activo`, `top_libros`, `top_peliculas`) VALUES
 	(1, 'Miguelmelo.10', 'MIGUEL FERNANDO MELO CAICEDO', NULL, NULL, 'web/img/perfil/default.png', 'miguelfdo5825@gmail.com', '$2y$10$j8dUozMDI0lXET95/AICBObyOL.ia7NM1Spr3zGKd2BQjwri6Dtoe', 'usuario', '35', 1, 1, NULL, NULL),
 	(3, 'luisaAlfaro', 'Luisa Alfaro', NULL, NULL, 'web/img/perfil/foto_3.jpg', 'fernandaalfaro1599@gmail.com', '$2y$10$R5fBgDLwgybeyzj4hQv82.AOfZND0brbIYT/3gtsqO5Rzx1FctkSK', 'usuario', '35', 1, 1, NULL, NULL),
-	(4, 'MadisonBeer.7', 'Madison Beer', NULL, 'Me encanta cantar y mi cantante favorito es Maluma', 'web/img/perfil/foto_4.jpg', 'Madison@gmail.com', '$2y$10$H.8UTtRyxK9b0djJQPiNkO8dZ7O7neGTcm6tsTWnFCmiVz2i8y/tG', 'usuario', '53', 1, 1, '["cuU3EQAAQBAJ","ZcmnEAAAQBAJ","EMdzEQAAQBAJ","UdenEAAAQBAJ"]', '["28","226","266","93"]');
+	(4, 'MadisonBeer.7', 'Madison Beer', NULL, 'Me encanta cantar y mi cantante favorito es Maluma', 'web/img/perfil/foto_4.jpg', 'Madison@gmail.com', '$2y$10$H.8UTtRyxK9b0djJQPiNkO8dZ7O7neGTcm6tsTWnFCmiVz2i8y/tG', 'usuario', '53', 1, 1, '["cuU3EQAAQBAJ","ZcmnEAAAQBAJ","EMdzEQAAQBAJ","UdenEAAAQBAJ"]', '["28","226","266","93"]'),
+	(5, 'PaulaGomez', 'Paula Andrea Gomez', NULL, 'Me enacntan las peliculas de suspenso y las peliculas de terror', 'web/img/perfil/foto_5.jpg', 'paulagomez@gmail.com', '$2y$10$scGSuqjw6w9uQ6.AoD97e.zAer4JZDr5Va0.m2tbaeFOFdsJrMBaS', 'usuario', '52', 1, 1, NULL, NULL);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
