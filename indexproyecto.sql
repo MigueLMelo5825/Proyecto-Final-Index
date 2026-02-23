@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.4.32-MariaDB - mariadb.org binary distribution
--- SO del servidor:              Win64
+-- Versión del servidor:         8.0.45 - MySQL Community Server - GPL
+-- SO del servidor:              Linux
 -- HeidiSQL Versión:             12.14.0.7165
 -- --------------------------------------------------------
 
@@ -16,24 +16,25 @@
 
 
 -- Volcando estructura de base de datos para indexproyecto
-CREATE DATABASE IF NOT EXISTS `indexproyecto` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE IF NOT EXISTS `indexproyecto` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `indexproyecto`;
 
 -- Volcando estructura para tabla indexproyecto.calificaciones
 CREATE TABLE IF NOT EXISTS `calificaciones` (
-  `id_calificacion` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `id_libro` varchar(50) DEFAULT NULL,
-  `id_pelicula` int(11) DEFAULT NULL,
-  `puntuacion` tinyint(4) DEFAULT NULL CHECK (`puntuacion` between 1 and 5),
-  `fecha_calificacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_calificacion` int NOT NULL AUTO_INCREMENT,
+  `id_usuario` int NOT NULL,
+  `id_libro` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_pelicula` int DEFAULT NULL,
+  `puntuacion` tinyint DEFAULT NULL,
+  `fecha_calificacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_calificacion`),
   UNIQUE KEY `unique_puntos_libro` (`id_usuario`,`id_libro`),
   UNIQUE KEY `unique_puntos_pelicula` (`id_usuario`,`id_pelicula`),
-  CONSTRAINT `calificaciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `calificaciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `calificaciones_chk_1` CHECK ((`puntuacion` between 1 and 5))
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.calificaciones: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.calificaciones: ~10 rows (aproximadamente)
 INSERT INTO `calificaciones` (`id_calificacion`, `id_usuario`, `id_libro`, `id_pelicula`, `puntuacion`, `fecha_calificacion`) VALUES
 	(1, 1, NULL, 349, 4, '2026-02-14 16:59:48'),
 	(2, 1, NULL, 414, 5, '2026-02-14 16:59:55'),
@@ -42,70 +43,92 @@ INSERT INTO `calificaciones` (`id_calificacion`, `id_usuario`, `id_libro`, `id_p
 	(5, 1, '8I_rEAAAQBAJ', NULL, 5, '2026-02-14 17:00:54'),
 	(6, 1, '-769EAAAQBAJ', NULL, 5, '2026-02-14 17:01:06'),
 	(7, 1, NULL, 330, 5, '2026-02-14 18:16:34'),
-	(8, 1, 'duXYDwAAQBAJ', NULL, 5, '2026-02-14 18:29:39');
+	(8, 1, 'duXYDwAAQBAJ', NULL, 5, '2026-02-14 18:29:39'),
+	(9, 1, NULL, 1, 5, '2026-02-15 00:30:30'),
+	(10, 3, NULL, 1, 4, '2026-02-15 15:10:08'),
+	(12, 3, 'eycsEQAAQBAJ', NULL, 5, '2026-02-15 15:20:06'),
+	(13, 1, NULL, 8, 5, '2026-02-22 13:52:23'),
+	(14, 1, 'x5rfEAAAQBAJ', NULL, 4, '2026-02-22 16:33:30'),
+	(15, 1, NULL, 265, 4, '2026-02-22 16:37:56'),
+	(17, 4, NULL, 8, 5, '2026-02-23 16:23:14'),
+	(18, 4, NULL, 335, 2, '2026-02-23 16:23:56'),
+	(19, 4, NULL, 1, 5, '2026-02-23 16:24:15');
 
 -- Volcando estructura para tabla indexproyecto.comentarios
 CREATE TABLE IF NOT EXISTS `comentarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` int(11) NOT NULL,
-  `id_libro` varchar(20) DEFAULT NULL,
-  `id_pelicula` int(11) DEFAULT NULL,
-  `texto` text NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario_id` int NOT NULL,
+  `id_libro` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_pelicula` int DEFAULT NULL,
+  `texto` text COLLATE utf8mb4_general_ci NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `id_libro` (`id_libro`),
   KEY `id_pelicula` (`id_pelicula`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.comentarios: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.comentarios: ~9 rows (aproximadamente)
 INSERT INTO `comentarios` (`id`, `usuario_id`, `id_libro`, `id_pelicula`, `texto`, `fecha`) VALUES
 	(1, 1, NULL, 349, 'esta pelicula es muy buena solo que deberia haber mas accion', '2026-02-14 18:16:05'),
 	(2, 1, NULL, 330, 'muy top', '2026-02-14 18:16:32'),
-	(3, 1, 'duXYDwAAQBAJ', NULL, 'jollll', '2026-02-14 18:29:43');
+	(3, 1, 'duXYDwAAQBAJ', NULL, 'jollll', '2026-02-14 18:29:43'),
+	(4, 1, NULL, 1, 'soy miguel', '2026-02-15 00:39:10'),
+	(5, 3, NULL, 1, 'hola yo soy luisa la pelicula esta buena pero no alcanza las 5 estrellas', '2026-02-15 15:10:33'),
+	(6, 3, 'eycsEQAAQBAJ', NULL, 'hola', '2026-02-15 15:20:13'),
+	(7, 3, 'eycsEQAAQBAJ', NULL, 'soy luisa', '2026-02-15 15:22:00'),
+	(8, 3, NULL, 106, 'hola', '2026-02-15 15:35:04'),
+	(12, 1, NULL, 265, 'hola', '2026-02-22 16:37:53'),
+	(13, 4, NULL, 8, 'Me fascina esta pelicula, super wao !!', '2026-02-23 16:23:37'),
+	(14, 4, NULL, 335, 'Muy mala no me gusto para nada', '2026-02-23 16:24:07'),
+	(15, 4, NULL, 1, 'Luisa estoy en desacuerdo contido, esta pelicula me encanta', '2026-02-23 16:24:49');
 
 -- Volcando estructura para tabla indexproyecto.eventos
 CREATE TABLE IF NOT EXISTS `eventos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `tipo` varchar(50) NOT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `descripcion` text DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_usuario` int NOT NULL,
+  `tipo` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `titulo` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
   `fecha` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.eventos: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.eventos: ~7 rows (aproximadamente)
 INSERT INTO `eventos` (`id`, `id_usuario`, `tipo`, `titulo`, `descripcion`, `fecha`) VALUES
 	(1, 1, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-14 17:56:31'),
 	(2, 1, 'lista_creada', 'Lista creada', 'Has creado la lista \'Miguel Fernando\'', '2026-02-14 19:18:01'),
 	(3, 1, 'pelicula', 'Añadida película a lista', 'Has añadido \'La bella y la bestia\' a la lista', '2026-02-14 19:18:11'),
 	(4, 1, 'lista_creada', 'Lista creada', 'Has creado la lista \'luisa\'', '2026-02-14 19:30:06'),
-	(5, 1, 'libro', 'Añadido libro a lista', 'Has añadido \'El Agente Secreto\' a la lista', '2026-02-14 19:30:13');
+	(5, 1, 'libro', 'Añadido libro a lista', 'Has añadido \'El Agente Secreto\' a la lista', '2026-02-14 19:30:13'),
+	(6, 1, 'lista_creada', 'Lista creada', 'Has creado la lista \'Miguel Fernando\'', '2026-02-15 00:43:05'),
+	(7, 1, 'pelicula', 'Añadida película a lista', 'Has añadido \'La bella y la bestia\' a la lista', '2026-02-15 00:43:31'),
+	(9, 3, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-15 15:09:35'),
+	(10, 4, 'registro', 'Nuevo usuario registrado', 'El usuario se ha registrado en la plataforma', '2026-02-23 15:42:58');
 
 -- Volcando estructura para tabla indexproyecto.libros
 CREATE TABLE IF NOT EXISTS `libros` (
-  `id` varchar(20) NOT NULL,
-  `titulo` varchar(255) NOT NULL,
-  `subtitulo` varchar(255) DEFAULT NULL,
-  `autores` text DEFAULT NULL,
-  `editorial` varchar(100) DEFAULT NULL,
-  `fecha_publicacion` varchar(20) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `isbn_10` varchar(10) DEFAULT NULL,
-  `isbn_13` varchar(13) DEFAULT NULL,
-  `paginas` int(11) DEFAULT NULL,
-  `categoria` varchar(100) DEFAULT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL,
-  `idioma` varchar(10) DEFAULT NULL,
-  `preview_link` varchar(255) DEFAULT NULL,
-  `fecha_importacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `titulo` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `subtitulo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `autores` text COLLATE utf8mb4_general_ci,
+  `editorial` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `fecha_publicacion` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
+  `isbn_10` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isbn_13` varchar(13) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `paginas` int DEFAULT NULL,
+  `categoria` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `imagen_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `idioma` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `preview_link` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `fecha_importacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.libros: ~389 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.libros: ~415 rows (aproximadamente)
 INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fecha_publicacion`, `descripcion`, `isbn_10`, `isbn_13`, `paginas`, `categoria`, `imagen_url`, `idioma`, `preview_link`, `fecha_importacion`) VALUES
 	('-769EAAAQBAJ', 'Keep Your Family Close (A Detective Honeywell Mystery, Book 2)', NULL, 'Annette Dashofy', 'HarperCollins UK', '2023-12-08', 'A brand new atmospheric mystery thriller set on the shores of Lake Erie, Pennsylvania. Perfect for fans of Louise Penny, LJ Ross and Ann Cleeves.', '0008579814', '9780008579814', 394, 'Fiction', 'http://books.google.com/books/content?id=-769EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'en', 'http://books.google.es/books?id=-769EAAAQBAJ&pg=PT3&dq=mystery+novel+2023+after:2000&hl=&as_brr=6&as_pt=BOOKS&cd=4&source=gbs_api', '2026-02-13 16:42:57'),
 	('-MV0EAAAQBAJ', 'The Blackhouse', 'A Novel', 'Carole Johnstone', 'Simon and Schuster', '2023-01-03', 'From the author of the “dark and devious...beautifully written” (Stephen King) Mirrorland comes an “atmospheric, thrilling, and utterly captivating” (Booklist) gothic tale set on a remote Scottish island where the locals are hiding a deadly secret. Maggie Mackay has been haunted her entire life. No matter what she does, she can’t shake the sense that something is wrong with her. And maybe something is… When she was five years old, Maggie announced that a man on the remote island of Kilmeray in Scotland’s Outer Hebrides—a place she’d never visited—was murdered. Her unfounded claim drew media attention and turned the locals against each other, creating rifts that never mended. Now, nearly twenty years later, Maggie is determined to discover what really happened, and what the villagers are hiding. But everyone has secrets, and some are deadly. As she gets closer to the horrifying truth, the island’s legendary and violent storms begin to rage again and Maggie’s own life is in danger… Unnerving, enthralling, and filled with gothic suspense, The Blackhouse is a spectacularly sinister tale readers won’t soon forget.', '1982199695', '9781982199692', 352, 'Fiction', 'http://books.google.com/books/content?id=-MV0EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'en', 'http://books.google.es/books?id=-MV0EAAAQBAJ&pg=PT421&dq=mystery+novel+2023+after:2000&hl=&as_brr=6&as_pt=BOOKS&cd=13&source=gbs_api', '2026-02-13 16:42:57'),
@@ -543,18 +566,18 @@ INSERT INTO `libros` (`id`, `titulo`, `subtitulo`, `autores`, `editorial`, `fech
 
 -- Volcando estructura para tabla indexproyecto.likes
 CREATE TABLE IF NOT EXISTS `likes` (
-  `id_like` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `id_libro` varchar(50) DEFAULT NULL,
-  `id_pelicula` int(11) DEFAULT NULL,
-  `fecha_like` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_like` int NOT NULL AUTO_INCREMENT,
+  `id_usuario` int NOT NULL,
+  `id_libro` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_pelicula` int DEFAULT NULL,
+  `fecha_like` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_like`),
   UNIQUE KEY `unique_like_libro` (`id_usuario`,`id_libro`),
   UNIQUE KEY `unique_like_pelicula` (`id_usuario`,`id_pelicula`),
   CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.likes: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.likes: ~10 rows (aproximadamente)
 INSERT INTO `likes` (`id_like`, `id_usuario`, `id_libro`, `id_pelicula`, `fecha_like`) VALUES
 	(1, 1, NULL, 349, '2026-02-14 16:59:49'),
 	(2, 1, NULL, 414, '2026-02-14 16:59:55'),
@@ -563,54 +586,60 @@ INSERT INTO `likes` (`id_like`, `id_usuario`, `id_libro`, `id_pelicula`, `fecha_
 	(5, 1, '8I_rEAAAQBAJ', NULL, '2026-02-14 17:00:54'),
 	(6, 1, '-769EAAAQBAJ', NULL, '2026-02-14 17:01:07'),
 	(7, 1, NULL, 330, '2026-02-14 18:16:35'),
-	(8, 1, 'duXYDwAAQBAJ', NULL, '2026-02-14 18:29:38');
+	(8, 1, 'duXYDwAAQBAJ', NULL, '2026-02-14 18:29:38'),
+	(9, 1, NULL, 1, '2026-02-15 00:30:32'),
+	(10, 3, NULL, 1, '2026-02-15 15:10:04'),
+	(11, 3, 'eycsEQAAQBAJ', NULL, '2026-02-15 15:20:05'),
+	(12, 1, NULL, 8, '2026-02-22 13:52:22'),
+	(13, 1, 'x5rfEAAAQBAJ', NULL, '2026-02-22 16:33:29'),
+	(14, 1, NULL, 265, '2026-02-22 16:38:01'),
+	(15, 4, NULL, 8, '2026-02-23 16:23:14'),
+	(16, 4, NULL, 1, '2026-02-23 16:24:13');
 
 -- Volcando estructura para tabla indexproyecto.listas
 CREATE TABLE IF NOT EXISTS `listas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `nombre` varchar(150) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `tipo` varchar(50) DEFAULT 'personal',
-  `creada_en` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_usuario` int NOT NULL,
+  `nombre` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
+  `tipo` varchar(50) COLLATE utf8mb4_general_ci DEFAULT 'personal',
+  `creada_en` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `listas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.listas: ~2 rows (aproximadamente)
 INSERT INTO `listas` (`id`, `id_usuario`, `nombre`, `descripcion`, `tipo`, `creada_en`) VALUES
-	(1, 1, 'Miguel Fernando', 'peliculas 2026', 'pelicula', '2026-02-14 18:18:01'),
-	(2, 1, 'luisa', 'Amor', 'libro', '2026-02-14 18:30:06');
+	(3, 1, 'Miguel Fernando', 'quiero motivarme en una maraton de libros y peliculas', 'mixta', '2026-02-15 00:43:05');
 
 -- Volcando estructura para tabla indexproyecto.listas_items
 CREATE TABLE IF NOT EXISTS `listas_items` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_lista` int(11) NOT NULL,
-  `titulo` varchar(255) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `id_libro` varchar(20) DEFAULT NULL,
-  `id_pelicula` int(11) DEFAULT NULL,
-  `añadido_en` datetime NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_lista` int NOT NULL,
+  `titulo` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
+  `id_libro` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_pelicula` int DEFAULT NULL,
+  `añadido_en` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `id_lista` (`id_lista`),
   CONSTRAINT `fk_listas_items_listas` FOREIGN KEY (`id_lista`) REFERENCES `listas` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.listas_items: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.listas_items: ~0 rows (aproximadamente)
 INSERT INTO `listas_items` (`id`, `id_lista`, `titulo`, `descripcion`, `id_libro`, `id_pelicula`, `añadido_en`) VALUES
-	(1, 1, 'La bella y la bestia', 'Año: 2017', NULL, 330, '2026-02-14 19:18:11'),
-	(2, 2, 'El Agente Secreto', 'Autor: Joseph Conrad', 'duXYDwAAQBAJ', NULL, '2026-02-14 19:30:13');
+	(3, 3, 'La bella y la bestia', 'Año: 2017', NULL, 330, '2026-02-15 00:43:31');
 
 -- Volcando estructura para tabla indexproyecto.paises
 CREATE TABLE IF NOT EXISTS `paises` (
-  `id_pais` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  `codigo_iso` varchar(5) NOT NULL,
+  `id_pais` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `codigo_iso` varchar(5) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id_pais`)
 ) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.paises: ~179 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.paises: ~0 rows (aproximadamente)
 INSERT INTO `paises` (`id_pais`, `nombre`, `codigo_iso`) VALUES
 	(1, 'Afganistán', 'AF'),
 	(2, 'Albania', 'AL'),
@@ -794,16 +823,16 @@ INSERT INTO `paises` (`id_pais`, `nombre`, `codigo_iso`) VALUES
 
 -- Volcando estructura para tabla indexproyecto.peliculas
 CREATE TABLE IF NOT EXISTS `peliculas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(255) NOT NULL,
-  `anio` int(11) DEFAULT NULL,
-  `portada` varchar(255) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `genero` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `anio` int DEFAULT NULL,
+  `portada` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci,
+  `genero` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=435 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.peliculas: ~434 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.peliculas: ~0 rows (aproximadamente)
 INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `genero`) VALUES
 	(1, 'Zootrópolis 2', 2025, 'https://image.tmdb.org/t/p/w300/4fRdfQPjHiuDSkzaxFAV44k7Iem.jpg', 'Después de resolver el caso más importante en la historia de Zootrópolis, los policías novatos Judy Hopps y Nick Wilde descubren que su asociación no es tan sólida como pensaban cuando el Jefe Bogo les ordena unirse al programa de consejería "Compañeros en Crisis". Pero no pasa mucho tiempo para que su asociación se ponga a prueba al máximo, cuando la llegada de Gary, la serpiente, pone la ciudad patas arriba.', 16),
 	(2, 'El botín', 2026, 'https://image.tmdb.org/t/p/w300/28hTjQCq0ul6WUR22qRsWEeuxlj.jpg', 'El descubrimiento de varios millones de dólares en efectivo en un zulo abandonado de Miami quiebra la confianza de un grupo de policías. Ahora, todo y todos están bajo sospecha.', 28),
@@ -1242,10 +1271,10 @@ INSERT INTO `peliculas` (`id`, `titulo`, `anio`, `portada`, `descripcion`, `gene
 
 -- Volcando estructura para tabla indexproyecto.seguidores
 CREATE TABLE IF NOT EXISTS `seguidores` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `seguidor_id` int(11) NOT NULL,
-  `seguido_id` int(11) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` int NOT NULL AUTO_INCREMENT,
+  `seguidor_id` int NOT NULL,
+  `seguido_id` int NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `seguidor_id` (`seguidor_id`,`seguido_id`),
   KEY `seguido_id` (`seguido_id`),
@@ -1257,10 +1286,10 @@ CREATE TABLE IF NOT EXISTS `seguidores` (
 
 -- Volcando estructura para tabla indexproyecto.token_recuperacion
 CREATE TABLE IF NOT EXISTS `token_recuperacion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `valido_hasta` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
+  `valido_hasta` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_recuperacion_user` (`id_user`),
   CONSTRAINT `fk_recuperacion_user` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
@@ -1270,45 +1299,49 @@ CREATE TABLE IF NOT EXISTS `token_recuperacion` (
 
 -- Volcando estructura para tabla indexproyecto.token_validacion
 CREATE TABLE IF NOT EXISTS `token_validacion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `valido_hasta` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_user` int NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
+  `valido_hasta` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `fk_token_user` (`id_user`),
   CONSTRAINT `fk_token_user` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla indexproyecto.token_validacion: ~1 rows (aproximadamente)
 INSERT INTO `token_validacion` (`id`, `id_user`, `token`, `valido_hasta`) VALUES
-	(1, 1, 'e5c3f96190649efd5bda602760dfbf5d465b1c0315dbc76ae1e89e3ec33f3151', 1771091791);
+	(1, 1, 'e5c3f96190649efd5bda602760dfbf5d465b1c0315dbc76ae1e89e3ec33f3151', 1771091791),
+	(3, 3, '2dbf77830bcec079543705fe8c6f6a444331e5b1d8b38b6cd57a788b4061162c', 1771171775),
+	(4, 4, '6f2c65121bef91a2967b48706f1047a345abb9b5185baf500c3c06c79b1dc8f9', 1771864978);
 
 -- Volcando estructura para tabla indexproyecto.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `nombre` varchar(100) DEFAULT NULL,
-  `apellido` varchar(100) DEFAULT NULL,
-  `bio` text DEFAULT NULL,
-  `foto` varchar(255) DEFAULT 'web/img/perfil/default.png',
-  `email` varchar(150) NOT NULL,
-  `contrasena` varchar(200) NOT NULL,
-  `rol` enum('admin','usuario') NOT NULL DEFAULT 'usuario',
-  `pais` varchar(100) DEFAULT NULL,
-  `nivel` int(11) NOT NULL DEFAULT 1,
-  `activo` int(11) NOT NULL DEFAULT 0,
-  `top_libros` text DEFAULT NULL,
-  `top_peliculas` text DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `apellido` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `bio` text COLLATE utf8mb4_general_ci,
+  `foto` varchar(255) COLLATE utf8mb4_general_ci DEFAULT 'web/img/perfil/default.png',
+  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `contrasena` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `rol` enum('admin','usuario') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'usuario',
+  `pais` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nivel` int NOT NULL DEFAULT '1',
+  `activo` int NOT NULL DEFAULT '0',
+  `top_libros` text COLLATE utf8mb4_general_ci,
+  `top_peliculas` text COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email_unique` (`email`),
   UNIQUE KEY `username_unique` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla indexproyecto.usuarios: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla indexproyecto.usuarios: ~3 rows (aproximadamente)
 INSERT INTO `usuarios` (`id`, `username`, `nombre`, `apellido`, `bio`, `foto`, `email`, `contrasena`, `rol`, `pais`, `nivel`, `activo`, `top_libros`, `top_peliculas`) VALUES
-	(1, 'Miguelmelo.10', 'MIGUEL FERNANDO MELO CAICEDO', NULL, NULL, 'web/img/perfil/default.png', 'miguelfdo5825@gmail.com', '$2y$10$j8dUozMDI0lXET95/AICBObyOL.ia7NM1Spr3zGKd2BQjwri6Dtoe', 'usuario', '35', 1, 1, NULL, NULL);
+	(1, 'Miguelmelo.10', 'MIGUEL FERNANDO MELO CAICEDO', NULL, NULL, 'web/img/perfil/default.png', 'miguelfdo5825@gmail.com', '$2y$10$j8dUozMDI0lXET95/AICBObyOL.ia7NM1Spr3zGKd2BQjwri6Dtoe', 'usuario', '35', 1, 1, NULL, NULL),
+	(3, 'luisaAlfaro', 'Luisa Alfaro', NULL, NULL, 'web/img/perfil/foto_3.jpg', 'fernandaalfaro1599@gmail.com', '$2y$10$R5fBgDLwgybeyzj4hQv82.AOfZND0brbIYT/3gtsqO5Rzx1FctkSK', 'usuario', '35', 1, 1, NULL, NULL),
+	(4, 'MadisonBeer.7', 'Madison Beer', NULL, 'Me encanta cantar y mi cantante favorito es Maluma', 'web/img/perfil/foto_4.jpg', 'Madison@gmail.com', '$2y$10$H.8UTtRyxK9b0djJQPiNkO8dZ7O7neGTcm6tsTWnFCmiVz2i8y/tG', 'usuario', '53', 1, 1, '["cuU3EQAAQBAJ","ZcmnEAAAQBAJ","EMdzEQAAQBAJ","UdenEAAAQBAJ"]', '["28","226","266","93"]');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
