@@ -131,4 +131,5 @@
 
 </div>
 
+<script src="./web/js/validacionRecupero.js"></script>
 <?php include_once __DIR__ . '/../templates/footer.php'; ?>
